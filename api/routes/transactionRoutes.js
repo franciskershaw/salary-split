@@ -91,4 +91,30 @@ router.put(
   })
 );
 
+router.delete(
+  '/:transactionId',
+  isLoggedIn,
+  isAuthorised,
+  asyncHandler(async (req, res, next) => {
+    try {
+      const { transactionId } = req.params;
+      const transaction = await Transaction.findById(transactionId);
+      if (!transaction) {
+        throw NotFoundError('Transaction not found');
+      }
+      await Transaction.findByIdAndDelete(transactionId);
+      await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $pull: { transactions: transactionId },
+        },
+        { new: true }
+      );
+      res.status(200).json({ msg: 'Transaction deleted' });
+    } catch (err) {
+      next(err);
+    }
+  })
+);
+
 module.exports = router;
