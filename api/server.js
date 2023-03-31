@@ -2,7 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const connectDB = require('./config/db');
 require('colors');
-// const { errorHandler } = require('./middleware/errorMiddleware');
+const { errorHandler } = require('./middleware/errorMiddleware');
 const cookieParser = require('cookie-parser');
 
 // Grab port info from config
@@ -23,7 +23,7 @@ app.use(cookieParser());
 // Routes
 
 // Error handler
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Salary Split API' });
