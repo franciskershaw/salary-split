@@ -49,7 +49,6 @@ const addTransaction = async (req, res, next) => {
 
 const editTransaction = async (req, res, next) => {
   try {
-    console.log(req.body);
     const transaction = await Transaction.findById(req.params.transactionId);
 
     if (!transaction) {

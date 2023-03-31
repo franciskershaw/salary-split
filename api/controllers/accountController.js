@@ -110,6 +110,9 @@ const deleteAccount = async (req, res, next) => {
     if (!account) {
       throw NotFoundError('Account not found');
     }
+    if (account.defaultAccount) {
+      throw new BadRequestError('You cannot delete the default account');
+    }
     await Account.findByIdAndDelete(accountId);
     await User.findByIdAndUpdate(
       req.user._id,
