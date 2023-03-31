@@ -1,21 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const {
-  generateAccessToken,
-  generateRefreshToken,
-  verifyToken,
-} = require('../helper/helper');
+const { generateAccessToken, generateRefreshToken, verifyToken } = require('../helper/helper');
 const asyncHandler = require('express-async-handler');
-const {
-  BadRequestError,
-  ConflictError,
-  UnauthorizedError,
-  NotFoundError,
-} = require('../errors/errors');
+const { BadRequestError, ConflictError, UnauthorizedError, NotFoundError } = require('../errors/errors');
 const { createUserSchema, loginUserSchema } = require('../validation/joiSchemas')
 
 const User = require('../models/User');
+const { isLoggedIn, isAuthorised } = require('../middleware/authMiddleware')
 
 router.post('/', asyncHandler(async (req, res, next) => {
 	try {
@@ -97,6 +89,48 @@ router.post('/login', asyncHandler(async (req, res, next) => {
 	} catch (err) {
 		next(err)
 	}
+}))
+
+router.get('/refreshToken', (req, res) => {
+	const cookies = req.cookies;
+	if (!cookies?.refreshToken) throw new UnauthorizedError('No refresh token', 'NO_TOKEN');
+	const refreshToken = cookies.refreshToken;
+	try {
+		const { _id } = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+		const accessToken = generateAccessToken(_id);
+		res.json({ token: accessToken, _id });
+	} catch (error) {
+		res.clearCookie('refreshToken');
+		throw new UnauthorizedError('Issues validating the token');
+	}
+}
+);
+
+router.post('/logout', (req, res) => {
+res.clearCookie('refreshToken')
+res.status(200).json({ message: 'User logged out'})
+})
+
+router.get('/:userId', isLoggedIn, isAuthorised, asyncHandler(async (req, res, next) => {
+  try {
+    if (!req.params.userId) {
+      throw new NotFoundError('User not found')
+    }
+    const user = await User.findById(req.params.userId)
+    res.status(200).json({
+      userInfo: {
+				_id: user._id,
+				username: user.username,
+				name: user.name,
+				monthlySalary: user.monthlySalary,
+				transactions: user.transactions,
+				accounts: user.accounts,
+			},
+			accessToken: generateAccessToken(user._id)
+    })
+  } catch (err) {
+    next(err)
+  }
 }))
 
 module.exports = router;
