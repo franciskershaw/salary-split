@@ -20,15 +20,15 @@ const User = require('../models/User');
 router.post('/', asyncHandler(async (req, res, next) => {
 	try {
 		const { error, value } = createUserSchema.validate(req.body);
-    if (error) {
-      throw new BadRequestError(error.details[0].message);
-    }
+		if (error) {
+			throw new BadRequestError(error.details[0].message);
+		}
 
-    const { username, name, password } = value;
+		const { username, name, password } = value;
 
-		const userExists = await User.findOne({username});
+		const userExists = await User.findOne({ username });
 		if (userExists) {
-			throw new ConflictError('User already exists')
+			throw new ConflictError('User already exists');
 		}
 		// Hash password
 		const salt = await bcrypt.genSalt(10);
@@ -39,17 +39,27 @@ router.post('/', asyncHandler(async (req, res, next) => {
 			name,
 			password: hashedPassword,
 		});
-		
+
+		// Send refresh token
+		const refreshToken = generateRefreshToken(user._id);
+		res.cookie('refreshToken', refreshToken, {
+			httpOnly: true,
+			maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+		});
+
 		res.status(201).json({
-			_id: user._id,
-			username: user.username,
-			name: user.name,
-			monthlySalary: user.monthlySalary,
-			transactions: user.transactions,
-			accounts: user.accounts
-		})
+			userInfo: {
+				_id: user._id,
+				username: user.username,
+				name: user.name,
+				monthlySalary: user.monthlySalary,
+				transactions: user.transactions,
+				accounts: user.accounts,
+			},
+			accessToken: generateAccessToken(user._id)
+		});
 	} catch (err) {
-		next(err)
+		next(err);
 	}
 }))
 
