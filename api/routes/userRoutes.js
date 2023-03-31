@@ -13,12 +13,18 @@ const {
   UnauthorizedError,
   NotFoundError,
 } = require('../errors/errors');
+const { createUserSchema } = require('../validation/joiSchemas')
 
 const User = require('../models/User');
 
 router.post('/', asyncHandler(async (req, res, next) => {
 	try {
-		const { username, name, password } = req.body;
+		const { error, value } = createUserSchema.validate(req.body);
+    if (error) {
+      throw new BadRequestError(error.details[0].message);
+    }
+
+    const { username, name, password } = value;
 
 		const userExists = await User.findOne({username});
 		if (userExists) {
