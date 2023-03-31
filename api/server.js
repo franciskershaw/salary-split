@@ -23,6 +23,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/accounts', require('./routes/accountRoutes'));
+app.use('/api/transactions', require('./routes/transactionRoutes'));
 
 // Error handler
 app.use(errorHandler);

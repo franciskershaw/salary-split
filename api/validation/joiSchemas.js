@@ -49,4 +49,19 @@ const updateAccountSchema = Joi.object({
   .min(1)
   .or('name', 'amount', 'defaultAccount', 'acceptsFunds', 'excludeFromTotal');
 
-module.exports = { createUserSchema, loginUserSchema, addAccountSchema, updateAccountSchema };
+const addTransactionSchema = Joi.object({
+  name: Joi.string().required(),
+  amount: Joi.number().required(),
+  sendToAccount: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required(),
+  type: Joi.string().valid('bill', 'savings').required(),
+});
+
+module.exports = {
+  createUserSchema,
+  loginUserSchema,
+  addAccountSchema,
+  updateAccountSchema,
+  addTransactionSchema,
+};
