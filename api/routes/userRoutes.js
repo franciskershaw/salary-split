@@ -13,7 +13,7 @@ const {
   UnauthorizedError,
   NotFoundError,
 } = require('../errors/errors');
-const { createUserSchema } = require('../validation/joiSchemas')
+const { createUserSchema, loginUserSchema } = require('../validation/joiSchemas')
 
 const User = require('../models/User');
 
@@ -60,6 +60,42 @@ router.post('/', asyncHandler(async (req, res, next) => {
 		});
 	} catch (err) {
 		next(err);
+	}
+}))
+
+router.post('/login', asyncHandler(async (req, res, next) => {
+	try {
+		const { error, value } = loginUserSchema.validate(req.body);
+		if (error) {
+			throw new BadRequestError(error.details[0].message);
+		}
+		const { username, password } = value;
+		const user = await User.findOne({ username });
+      if (!user) {
+        throw new BadRequestError('Username or password is incorrect');
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        throw new BadRequestError('Username or password is incorrect');
+      }
+			const refreshToken = generateRefreshToken(user._id);
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      });
+			res.status(200).json({
+				userInfo: {
+					_id: user._id,
+					username: user.username,
+					name: user.name,
+					monthlySalary: user.monthlySalary,
+					transactions: user.transactions,
+					accounts: user.accounts,
+				},
+				accessToken: generateAccessToken(user._id)
+			});
+	} catch (err) {
+		next(err)
 	}
 }))
 
