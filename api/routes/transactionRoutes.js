@@ -9,7 +9,10 @@ const { isLoggedIn, isAuthorised } = require('../middleware/authMiddleware');
 // Removed after refactor
 const Transaction = require('../models/Transaction');
 const User = require('../models/User');
-const { addTransactionSchema } = require('../validation/joiSchemas');
+const {
+  addTransactionSchema,
+  updateTransactionSchema,
+} = require('../validation/joiSchemas');
 const {
   BadRequestError,
   ConflictError,
@@ -51,6 +54,37 @@ router.post(
       await user.save();
 
       res.status(201).json({ transaction });
+    } catch (err) {
+      next(err);
+    }
+  })
+);
+
+router.put(
+  '/:transactionId',
+  isLoggedIn,
+  isAuthorised,
+  asyncHandler(async (req, res, next) => {
+    try {
+      console.log(req.body);
+      const transaction = await Transaction.findById(req.params.transactionId);
+
+      if (!transaction) {
+        throw new NotFoundError('Transaction not found');
+      }
+
+      const { error, value } = updateTransactionSchema.validate(req.body);
+      if (error) {
+        throw new BadRequestError(error.details[0].message);
+      }
+
+      const updatedTransaction = await Transaction.findByIdAndUpdate(
+        req.params.transactionId,
+        value,
+        { new: true }
+      );
+
+      res.status(200).json(updatedTransaction);
     } catch (err) {
       next(err);
     }
