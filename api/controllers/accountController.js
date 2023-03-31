@@ -66,20 +66,34 @@ const addAccount = async (req, res, next) => {
 
 const editAccount = async (req, res, next) => {
   try {
-    const { error, value } = updateAccountSchema.validate(req.body);
-    if (error) {
-      throw new BadRequestError(error.details[0].message);
-    }
-
     const account = await Account.findById(req.params.accountId);
 
     if (!account) {
       throw new NotFoundError('Account not found');
     }
 
+    // Merge existing account data with the request body
+    const mergedData = { ...account.toObject(), ...req.body };
+
+    // Remove unwanted properties from mergedData
+    delete mergedData._id;
+    delete mergedData.user;
+    delete mergedData.__v;
+
+    const { error, value } = updateAccountSchema.validate(mergedData);
+    if (error) {
+      throw new BadRequestError(error.details[0].message);
+    }
+
+    // Use only the updated fields from the request body
+    const updatedFields = {};
+    for (const key in req.body) {
+      updatedFields[key] = value[key];
+    }
+
     const updatedAccount = await Account.findByIdAndUpdate(
       req.params.accountId,
-      value,
+      updatedFields,
       { new: true }
     );
 
@@ -97,7 +111,7 @@ const deleteAccount = async (req, res, next) => {
       throw NotFoundError('Account not found');
     }
     await Account.findByIdAndDelete(accountId);
-    const user = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       req.user._id,
       {
         $pull: { accounts: accountId },
