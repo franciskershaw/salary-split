@@ -11,4 +11,18 @@ const loginUserSchema = Joi.object({
   password: Joi.string().required().min(6),
 });
 
-module.exports = { createUserSchema, loginUserSchema };
+const addAccountSchema = Joi.object({
+  name: Joi.string().required(),
+  amount: Joi.number().required(),
+  defaultAccount: Joi.boolean().required(),
+  acceptsFunds: Joi.boolean().required().when('defaultAccount', {
+    is: true,
+    then: Joi.boolean().valid(true),
+  }),
+  excludeFromTotal: Joi.boolean().required().when('defaultAccount', {
+    is: true,
+    then: Joi.boolean().valid(false),
+  }),
+});
+
+module.exports = { createUserSchema, loginUserSchema, addAccountSchema };

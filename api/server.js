@@ -22,6 +22,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/accounts', require('./routes/accountRoutes'));
 
 // Error handler
 app.use(errorHandler);
@@ -35,7 +36,8 @@ connectDB()
     app.listen(
       PORT,
       console.log(
-        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}\n`.yellow,
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}\n`
+          .yellow,
         '-----------------------------------------------------------'.yellow
       )
     );
