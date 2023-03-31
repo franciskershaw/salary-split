@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
+app.use('/api/users', require('./routes/userRoutes'));
 
 // Error handler
 app.use(errorHandler);
