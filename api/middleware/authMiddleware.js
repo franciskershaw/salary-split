@@ -45,18 +45,52 @@ const isLoggedIn = asyncHandler(async (req, res, next) => {
 
 const isAuthorised = asyncHandler(async (req, res, next) => {
   const loggedInUserId = req.user._id;
-  const { userId } = req.params;
+  const { userId, accountId, transactionId } = req.params;
+
   try {
     if (!loggedInUserId) {
       throw NotFoundError('User not found');
     }
-    if (loggedInUserId.equals(userId)) {
-      next();
-    } else {
-      throw new UnauthorizedError(
-        'You must be the owner of this account to continue',
-        'UNAUTHORIZED'
+
+    if (userId) {
+      if (loggedInUserId.equals(userId)) {
+        next();
+      } else {
+        throw new UnauthorizedError(
+          'You must be the owner of this account to continue',
+          'UNAUTHORIZED'
+        );
+      }
+    } else if (accountId) {
+      const loggedInUserAccounts = req.user.accounts;
+      const isAccountOwned = loggedInUserAccounts.some((account) =>
+        account.equals(accountId)
       );
+
+      if (isAccountOwned) {
+        next();
+      } else {
+        throw new UnauthorizedError(
+          'You must be the owner of this account to continue',
+          'UNAUTHORIZED'
+        );
+      }
+    } else if (transactionId) {
+      const loggedInUserTransactions = req.user.transactions;
+      const isTransactionOwned = loggedInUserTransactions.some((transaction) =>
+        transaction.equals(transactionId)
+      );
+
+      if (isTransactionOwned) {
+        next();
+      } else {
+        throw new UnauthorizedError(
+          'You must be the owner of this account to continue',
+          'UNAUTHORIZED'
+        );
+      }
+    } else {
+      throw new BadRequestError('Missing resource identifier in request');
     }
   } catch (err) {
     next(err);
