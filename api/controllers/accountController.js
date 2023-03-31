@@ -1,5 +1,6 @@
 const Account = require('../models/Account');
 const User = require('../models/User');
+const Transaction = require('../models/Transaction');
 const {
   addAccountSchema,
   updateAccountSchema,
@@ -113,6 +114,23 @@ const deleteAccount = async (req, res, next) => {
     if (account.defaultAccount) {
       throw new BadRequestError('You cannot delete the default account');
     }
+
+    // find transactions that have the account as 'sendToAccount'
+    const affectedTransactions = await Transaction.find({
+      sendToAccount: account._id,
+    });
+    const defaultAccount = await Account.findOne({
+      user: req.user._id,
+      defaultAccount: true,
+    });
+
+    if (affectedTransactions.length) {
+      for (let transaction of affectedTransactions) {
+        transaction.sendToAccount = defaultAccount._id;
+        await transaction.save();
+      }
+    }
+
     await Account.findByIdAndDelete(accountId);
     await User.findByIdAndUpdate(
       req.user._id,
@@ -121,7 +139,7 @@ const deleteAccount = async (req, res, next) => {
       },
       { new: true }
     );
-    res.status(200).json({ msg: 'Account deleted' });
+    res.status(200).json({ msg: 'hi' });
   } catch (err) {
     next(err);
   }
