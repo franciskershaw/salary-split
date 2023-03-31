@@ -75,7 +75,11 @@ router.post(
   })
 );
 
-router.put('/:accountId', isLoggedIn, isAuthorised, asyncHandler(async (req, res, next) => {
+router.put(
+  '/:accountId',
+  isLoggedIn,
+  isAuthorised,
+  asyncHandler(async (req, res, next) => {
     try {
       const { error, value } = updateAccountSchema.validate(req.body);
       if (error) {
@@ -98,6 +102,28 @@ router.put('/:accountId', isLoggedIn, isAuthorised, asyncHandler(async (req, res
     } catch (err) {
       next(err);
     }
+  })
+);
+
+router.delete(
+  '/:accountId',
+  isLoggedIn,
+  isAuthorised,
+  asyncHandler(async (req, res, next) => {
+    try {
+			const { accountId } = req.params
+			const account = await Account.findById(accountId)
+			if (!account) {
+				throw NotFoundError('Account not found');
+			}
+			await Account.findByIdAndDelete(accountId)
+			const user = await User.findByIdAndUpdate(req.user._id, {
+				$pull: { accounts: accountId }
+			}, { new: true })
+			res.status(200).json({msg: 'Account deleted'})
+		} catch (err) {
+			next(err)		
+		}
   })
 );
 
