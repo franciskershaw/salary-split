@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import 'styles/base';
+
+@layer utilities {
+  .training-wheels {
+    border: black 1px solid;
+    background: rgba(200, 200, 200, 0.2);
+  }
+}
