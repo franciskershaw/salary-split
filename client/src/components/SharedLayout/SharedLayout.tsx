@@ -8,13 +8,9 @@ const SharedLayout = (): ReactElement => {
   const { user } = useUser();
   return (
     <>
-      {user?.userInfo.accounts.length !== 0 && <Navbar />}
+      {user?.userInfo.accounts.length && <Navbar />}
       <main>
-        {user?.userInfo.accounts.length ? (
-          <Outlet />
-        ) : (
-          <AccountForm type="first" />
-        )}
+        <Outlet />
       </main>
     </>
   );

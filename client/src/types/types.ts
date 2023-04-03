@@ -15,6 +15,14 @@ export interface RegisterFormState extends RegisterFormData {
   confirmPassword: string;
 }
 
+export interface AddAccountState {
+  name: string;
+  amount: number;
+  defaultAccount: boolean;
+  acceptsFunds: boolean;
+  excludeFromTotal: boolean;
+}
+
 export interface User {
   userInfo: {
     _id: string;

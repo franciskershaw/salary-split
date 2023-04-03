@@ -1,17 +1,10 @@
 import { FC, ReactElement, useState } from 'react';
-import { FormType } from '../../../types/types';
+import { FormType, AddAccountState } from '../../../types/types';
+import { useAddAccount } from '../../../hooks/accounts/useAddAccount';
 
 interface AccountFormProps {
   setModalOpen?: (isOpen: boolean) => void;
   type: FormType;
-}
-
-interface AddAccountState {
-  name: string;
-  amount: number;
-  defaultAccount: boolean;
-  acceptsFunds: boolean;
-  excludeFromTotal: boolean;
 }
 
 const AccountForm: FC<AccountFormProps> = ({
@@ -25,8 +18,9 @@ const AccountForm: FC<AccountFormProps> = ({
     acceptsFunds: true,
     excludeFromTotal: false,
   });
-
   const { name, amount, defaultAccount } = formData;
+
+	const addAccount = useAddAccount()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -38,6 +32,7 @@ const AccountForm: FC<AccountFormProps> = ({
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+		addAccount(formData)
     if (setModalOpen) {
       setModalOpen(false);
     }
