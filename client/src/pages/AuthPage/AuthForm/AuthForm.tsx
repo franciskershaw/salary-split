@@ -8,7 +8,7 @@ const AuthForm = ({ page }: { page: PageType }): ReactElement => {
   const [formData, setFormData] = useState<RegisterFormState>({
     username: '',
     name: '',
-    monthlySalary: 0,
+    monthlySalary: '',
     password: '',
     confirmPassword: '',
   });
