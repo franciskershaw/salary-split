@@ -20,19 +20,19 @@ const AccountForm: FC<AccountFormProps> = ({
   });
   const { name, amount, defaultAccount } = formData;
 
-	const addAccount = useAddAccount()
+  const addAccount = useAddAccount();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevState: AddAccountState) => ({
       ...prevState,
-      [name]: type === 'radio' ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-		addAccount(formData)
+    addAccount(formData);
     if (setModalOpen) {
       setModalOpen(false);
     }
@@ -60,7 +60,7 @@ const AccountForm: FC<AccountFormProps> = ({
           <label>Make default account?</label>
           <input
             className="py-2 px-3 border-2 rounded-sm text-sm bg-transparent"
-            type="radio"
+            type="checkbox"
             checked={defaultAccount}
             name="defaultAccount"
             onChange={onChange}

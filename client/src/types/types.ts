@@ -32,5 +32,5 @@ export interface User {
     transactions: string[];
     accounts: string[];
   };
-  token: string;
+  accessToken: string;
 }

@@ -33,7 +33,7 @@ const useAxios = (): UseAxios => {
         try {
           const originalRequest = error.config;
           const response = await api.get('/api/users/refreshToken');
-          originalRequest.headers.Authorization = `Bearer ${response.data.token}`;
+          originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
           queryClient.setQueryData<User>([queryKeys.user], (oldData) => {
             if (!oldData) {
               return oldData;
