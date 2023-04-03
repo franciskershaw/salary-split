@@ -7,9 +7,15 @@ const SharedLayout = (): ReactElement => {
   const { user } = useUser();
   return (
     <>
-      {user && <Navbar />}
+      {user?.userInfo.accounts.length !== 0 && <Navbar />}
       <main>
-        <Outlet />
+        {user?.userInfo.accounts.length ? (
+          <Outlet />
+        ) : (
+          <form>
+            <h2>Add your first account</h2>
+          </form>
+        )}
       </main>
     </>
   );
