@@ -6,7 +6,7 @@ import AuthForm from './AuthForm/AuthForm';
 import { PageType } from '../../types/types';
 
 const AuthPage = ({ page }: { page: PageType }): ReactElement => {
-  document.title = `Budget App | ${
+  document.title = `Salary Split | ${
     page === 'register' ? 'Create Account' : 'Login'
   }`;
 

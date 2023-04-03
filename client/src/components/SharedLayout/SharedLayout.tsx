@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import { ReactElement } from 'react';
-// import Navbar from './Navbar/Navbar';
-// import { useUser } from '../../hooks/auth/useUser';
+import Navbar from '../Navbar/Navbar';
+import { useUser } from '../../hooks/auth/useUser';
 
 const SharedLayout = (): ReactElement => {
-  // const { user } = useUser();
+  const { user } = useUser();
   return (
     <>
-      {/* {user && <Navbar />} */}
+      {user && <Navbar />}
       <main>
         <Outlet />
       </main>
