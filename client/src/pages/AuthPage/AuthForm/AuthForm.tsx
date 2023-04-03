@@ -1,6 +1,6 @@
 import { ReactElement, useState } from 'react';
 import { RegisterFormState, PageType } from '../../../types/types';
-// import { useAuth } from '../../../hooks/auth/useAuth';
+import { useAuth } from '../../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import './_authForm.scss';
 
@@ -8,13 +8,13 @@ const AuthForm = ({ page }: { page: PageType }): ReactElement => {
   const [formData, setFormData] = useState<RegisterFormState>({
     username: '',
     name: '',
-    monthlySalary: '',
+    monthlySalary: 0,
     password: '',
     confirmPassword: '',
   });
   const { username, name, monthlySalary, password, confirmPassword } = formData;
 
-  // const auth = useAuth();
+  const auth = useAuth();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState: RegisterFormState) => ({
@@ -26,15 +26,20 @@ const AuthForm = ({ page }: { page: PageType }): ReactElement => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const loginData = { username, password };
-    const registerData = { username, name, monthlySalary, password };
+    const registerData = { 
+      username, 
+      name, 
+      monthlySalary, 
+      password 
+    };
     if (page === 'register') {
       if (password !== confirmPassword) {
         console.log('Passwords do not match');
       } else {
-        // auth.signup(registerData);
+        auth.signup(registerData);
       }
     } else if (page === 'login') {
-      // auth.signin(loginData);
+      auth.signin(loginData);
     }
   };
 

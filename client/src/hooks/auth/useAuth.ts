@@ -45,7 +45,6 @@ export function useAuth(): UseAuthResponse {
     try {
       const response = await api.post<User>('/api/users/', userData);
       updateUser(response.data);
-
       return response.data;
     } catch (error) {
       if (error) {

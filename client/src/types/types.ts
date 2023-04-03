@@ -7,7 +7,7 @@ export interface LoginFormData {
 
 export interface RegisterFormData extends LoginFormData {
   name: string;
-  monthlySalary: number | string;
+  monthlySalary: number;
 }
 
 export interface RegisterFormState extends RegisterFormData {
