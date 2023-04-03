@@ -13,3 +13,15 @@ export interface RegisterFormData extends LoginFormData {
 export interface RegisterFormState extends RegisterFormData {
   confirmPassword: string;
 }
+
+export interface User {
+  userInfo: {
+    _id: string;
+    username: string;
+    name: string;
+    monthlySalary: number;
+    transactions: string[];
+    accounts: string[];
+  };
+  token: string;
+}
