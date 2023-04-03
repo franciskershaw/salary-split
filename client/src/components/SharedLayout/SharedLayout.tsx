@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { ReactElement } from 'react';
 import Navbar from '../Navbar/Navbar';
+import AccountForm from '../../pages/AccountsPage/AccountForm/AccountForm';
 import { useUser } from '../../hooks/auth/useUser';
 
 const SharedLayout = (): ReactElement => {
@@ -12,9 +13,7 @@ const SharedLayout = (): ReactElement => {
         {user?.userInfo.accounts.length ? (
           <Outlet />
         ) : (
-          <form>
-            <h2>Add your first account</h2>
-          </form>
+          <AccountForm type="first" />
         )}
       </main>
     </>

@@ -1,4 +1,5 @@
 export type PageType = 'login' | 'register';
+export type FormType = 'add' | 'edit' | 'first';
 
 export interface LoginFormData {
   username: string;
