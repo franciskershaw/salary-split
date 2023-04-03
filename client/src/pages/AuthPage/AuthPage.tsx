@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-// import { useUser } from '../../hooks/auth/useUser';
+import { useUser } from '../../hooks/auth/useUser';
 import { ReactElement } from 'react';
 import AuthForm from './AuthForm/AuthForm';
 import { PageType } from '../../types/types';
@@ -11,13 +11,13 @@ const AuthPage = ({ page }: { page: PageType }): ReactElement => {
   }`;
 
   const navigate = useNavigate();
-  // const { user } = useUser();
+  const { user } = useUser();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     return navigate('/spaces');
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      return navigate('/split');
+    }
+  }, [user]);
 
   return (
     <div className="h-screen flex justify-center items-center training-wheels">
