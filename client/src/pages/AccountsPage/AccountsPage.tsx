@@ -1,6 +1,8 @@
 import { FC, ReactElement, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AccountForm from './AccountForm/AccountForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
 const AccountsPage: FC = (): ReactElement => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
@@ -10,10 +12,8 @@ const AccountsPage: FC = (): ReactElement => {
       <div className="training-wheels px-8">
         <div className="flex gap-3">
           <h2>Accounts</h2>
-          <button
-            onClick={() => setAddAccountModalOpen(true)}
-            className="border-2 px-2">
-            Add
+          <button onClick={() => setAddAccountModalOpen(true)}>
+            <FontAwesomeIcon className='text-xl' icon={faCirclePlus} />
           </button>
         </div>
       </div>
