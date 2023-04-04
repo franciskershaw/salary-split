@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { Account } from '../../types/types';
+import AccountRow from './AccountRow/AccountRow';
 
 const AccountsPage: FC = (): ReactElement => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
@@ -14,8 +15,8 @@ const AccountsPage: FC = (): ReactElement => {
 
   return (
     <>
-      <div className="training-wheels px-8">
-        <div className="flex gap-2">
+      <div className="px-8">
+        <div className="flex gap-2 mb-2">
           <h2 className="text-xl font-bold">Accounts</h2>
           <button onClick={() => setAddAccountModalOpen(true)}>
             <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
@@ -23,7 +24,9 @@ const AccountsPage: FC = (): ReactElement => {
         </div>
         <ul>
           {accounts.map((account: Account, i: number) => (
-            <li key={`account_${i}`}>{account.name}</li>
+            <li className="mb-2" key={`account_${i}`}>
+              <AccountRow account={account} index={i} />
+            </li>
           ))}
         </ul>
       </div>

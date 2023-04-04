@@ -40,6 +40,7 @@ export interface Account {
   amount: number;
   defaultAccount: boolean;
   excludeFromTotal: boolean;
+  acceptsFunds: boolean;
   name: string;
   user: string;
   __v: number;
