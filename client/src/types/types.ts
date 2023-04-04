@@ -23,6 +23,14 @@ export interface AddAccountState {
   excludeFromTotal: boolean;
 }
 
+export interface EditAccountState {
+  name?: string;
+  amount?: number;
+  defaultAccount?: boolean;
+  acceptsFunds?: boolean;
+  excludeFromTotal?: boolean;
+}
+
 export interface User {
   userInfo: {
     _id: string;
@@ -45,3 +53,6 @@ export interface Account {
   user: string;
   __v: number;
 }
+
+export type Accounts = Account[];
+

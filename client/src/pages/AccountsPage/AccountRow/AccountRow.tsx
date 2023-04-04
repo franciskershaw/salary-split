@@ -1,7 +1,8 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import { Account } from '../../../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useEditAccount } from '../../../hooks/accounts/useEditAccount';
 
 interface Props {
   account: Account;
@@ -9,6 +10,15 @@ interface Props {
 }
 
 const AccountRow: FC<Props> = ({ account, index }): ReactElement => {
+  const [amount, setAmount] = useState<number>(account.amount);
+
+  const editAccount = useEditAccount(account._id);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(parseFloat(e.target.value));
+    editAccount({ amount: parseFloat(e.target.value) });
+  };
+
   return (
     <div className="flex items-between">
       <div className="flex flex-col w-1/3 training-wheels">
@@ -18,12 +28,14 @@ const AccountRow: FC<Props> = ({ account, index }): ReactElement => {
         <input
           className="h-8 border border-black"
           type="number"
-          value={account.amount}
+          value={amount}
+          min={0}
+          onChange={onChange}
         />
       </div>
 
       <div className="flex items-end justify-center training-wheels gap-4 w-1/2">
-        <input name='defaultAccount' className="w-6 h-6" type="radio" />
+        <input name="defaultAccount" className="w-6 h-6" type="radio" />
         <input className="w-6 h-6" type="checkbox" />
         <input className="w-6 h-6" type="checkbox" />
       </div>
