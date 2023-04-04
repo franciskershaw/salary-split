@@ -34,3 +34,13 @@ export interface User {
   };
   accessToken: string;
 }
+
+export interface Account {
+  _id: string;
+  amount: number;
+  defaultAccount: boolean;
+  excludeFromTotal: boolean;
+  name: string;
+  user: string;
+  __v: number;
+}

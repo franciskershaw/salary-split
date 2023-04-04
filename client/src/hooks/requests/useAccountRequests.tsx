@@ -5,6 +5,7 @@ import { AddAccountState } from '../../types/types';
 
 interface AccountRequests {
   addAccount: (token: string, formData: AddAccountState) => Promise<any>;
+  getAccounts: (token: string) => Promise<any>;
 }
 
 export const useAccountRequests = (): AccountRequests => {
@@ -19,5 +20,11 @@ export const useAccountRequests = (): AccountRequests => {
     return response.data;
   };
 
-  return { addAccount };
+  const getAccounts = async (token: string): Promise<AxiosResponse> => {
+    const config = createConfig(token);
+    const response = await api.get('/api/accounts', config);
+    return response.data;
+  };
+
+  return { addAccount, getAccounts };
 };
