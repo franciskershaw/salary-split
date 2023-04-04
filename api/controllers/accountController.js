@@ -11,6 +11,16 @@ const {
   NotFoundError,
 } = require('../errors/errors');
 
+const getAccounts = async (req, res, next) => {
+  try {
+    const { accounts: accountIds } = await User.findById(req.user._id);
+    const accounts = await Account.find({ _id: { $in: accountIds } });
+    res.status(200).json(accounts);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const addAccount = async (req, res, next) => {
   try {
     const { error, value } = addAccountSchema.validate(req.body);
@@ -145,4 +155,4 @@ const deleteAccount = async (req, res, next) => {
   }
 };
 
-module.exports = { addAccount, editAccount, deleteAccount };
+module.exports = { getAccounts, addAccount, editAccount, deleteAccount };

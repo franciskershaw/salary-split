@@ -1,5 +1,9 @@
 const asyncHandler = require('express-async-handler');
-const { UnauthorizedError, NotFoundError } = require('../errors/errors');
+const {
+  UnauthorizedError,
+  NotFoundError,
+  BadRequestError,
+} = require('../errors/errors');
 const { verifyToken } = require('../helper/helper');
 
 const User = require('../models/User');
