@@ -9,31 +9,17 @@ export function useEditAccount(accountId: string) {
   const { editAccount } = useAccountRequests();
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
+  const { mutate, isLoading } = useMutation(
     (formData: EditAccountState) =>
       editAccount(user?.accessToken || '', accountId, formData),
     {
-      onSuccess: async (response) => {
-        queryClient.setQueryData(
-          [queryKeys.accounts],
-          (oldAccountsData: Accounts | undefined) => {
-            if (!oldAccountsData) {
-              return undefined;
-            }
-            return oldAccountsData.map((account) => {
-              if (account._id === response._id) {
-                return response;
-              }
-              return account;
-            });
-          }
-        );
-      },
+      onSuccess: async (response) =>
+        await queryClient.invalidateQueries([queryKeys.accounts]),
       onError: (error) => {
         console.log(error);
       },
     }
   );
 
-  return mutate;
+  return { mutate, isLoading };
 }

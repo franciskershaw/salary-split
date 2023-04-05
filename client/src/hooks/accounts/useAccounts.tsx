@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useUser } from '../auth/useUser';
 import { useAccountRequests } from '../requests/useAccountRequests';
 import { queryKeys } from '../../reactQuery/queryKeys';
+import { Account } from '../../types/types';
 
 export function useAccounts() {
   const { user } = useUser();
@@ -10,6 +11,9 @@ export function useAccounts() {
   const { data: accounts = [] } = useQuery([queryKeys.accounts], () =>
     getAccounts(user?.accessToken || '')
   );
+  const defaultAccountId = accounts.find(
+    (account: Account) => account.defaultAccount
+  )?._id;
 
-  return accounts;
+  return { accounts, defaultAccountId };
 }

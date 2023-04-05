@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useState, useEffect } from 'react';
 import { Account } from '../../../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -6,17 +6,30 @@ import { useEditAccount } from '../../../hooks/accounts/useEditAccount';
 
 interface Props {
   account: Account;
-  index: number;
+  isDefault: boolean;
+  onDefaultAccountChange: () => void;
 }
 
-const AccountRow: FC<Props> = ({ account, index }): ReactElement => {
+const AccountRow: FC<Props> = ({
+  account,
+  isDefault,
+  onDefaultAccountChange,
+}): ReactElement => {
   const [amount, setAmount] = useState<number>(account.amount);
-
-  const editAccount = useEditAccount(account._id);
+  const { mutate: editAccount, isLoading } = useEditAccount(account._id);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseFloat(e.target.value));
-    editAccount({ amount: parseFloat(e.target.value) });
+    const newAmount = parseFloat(e.target.value);
+    setAmount(newAmount);
+    editAccount({ amount: newAmount });
+  };
+
+  const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      onDefaultAccountChange();
+      editAccount({ defaultAccount: isChecked });
+    }
   };
 
   return (
@@ -35,7 +48,16 @@ const AccountRow: FC<Props> = ({ account, index }): ReactElement => {
       </div>
 
       <div className="flex items-end justify-center training-wheels gap-4 w-1/2">
-        <input name="defaultAccount" className="w-6 h-6" type="radio" />
+        <input
+          onChange={onChangeDefault}
+          checked={isDefault}
+          name="defaultAccount"
+          className="w-6 h-6"
+          type="radio"
+          id={`defaultAccount_${account._id}`}
+          // disabled={isLoading}
+        />
+
         <input className="w-6 h-6" type="checkbox" />
         <input className="w-6 h-6" type="checkbox" />
       </div>

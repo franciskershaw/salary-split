@@ -1,4 +1,5 @@
-import { FC, ReactElement, useState } from 'react';
+// In AccountsPage.tsx
+import { FC, ReactElement, useState, useEffect } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AccountForm from './AccountForm/AccountForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +12,17 @@ const AccountsPage: FC = (): ReactElement => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 
-  const accounts = useAccounts();
+  const { accounts, defaultAccountId } = useAccounts();
+
+  const [currentDefaultAccountId, setCurrentDefaultAccountId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentDefaultAccountId(defaultAccountId);
+  }, [defaultAccountId]);
+
+  const handleDefaultAccountChange = (accountId: string) => {
+    setCurrentDefaultAccountId(accountId);
+  };
 
   return (
     <>
@@ -23,9 +34,15 @@ const AccountsPage: FC = (): ReactElement => {
           </button>
         </div>
         <ul>
-          {accounts.map((account: Account, i: number) => (
-            <li className="mb-2" key={`account_${i}`}>
-              <AccountRow account={account} index={i} />
+          {accounts.map((account: Account) => (
+            <li className="mb-2" key={`account_${account._id}`}>
+              <AccountRow
+                account={account}
+                isDefault={account._id === currentDefaultAccountId}
+                onDefaultAccountChange={() =>
+                  handleDefaultAccountChange(account._id)
+                }
+              />
             </li>
           ))}
         </ul>
