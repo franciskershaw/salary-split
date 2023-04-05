@@ -102,6 +102,20 @@ const editAccount = async (req, res, next) => {
       updatedFields[key] = value[key];
     }
 
+    // Ensure there is only one defaultAccount
+    if (value.defaultAccount) {
+      const previousDefaults = await Account.find({
+        user: req.user._id,
+        defaultAccount: true,
+      });
+      if (previousDefaults.length) {
+        for (let account of previousDefaults) {
+          account.defaultAccount = false;
+          await account.save();
+        }
+      }
+    }
+
     const updatedAccount = await Account.findByIdAndUpdate(
       req.params.accountId,
       updatedFields,
