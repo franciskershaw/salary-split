@@ -16,18 +16,7 @@ const addAccountSchema = Joi.object({
   name: Joi.string().required(),
   amount: Joi.number().required(),
   defaultAccount: Joi.boolean().required(),
-  acceptsFunds: Joi.boolean()
-    .required()
-    .when('defaultAccount', {
-      is: true,
-      then: Joi.boolean().valid(true),
-    }),
-  excludeFromTotal: Joi.boolean()
-    .required()
-    .when('defaultAccount', {
-      is: true,
-      then: Joi.boolean().valid(false),
-    }),
+  acceptsFunds: Joi.boolean().required(),
 });
 
 const updateAccountSchema = Joi.object({
@@ -40,12 +29,7 @@ const updateAccountSchema = Joi.object({
       is: true,
       then: Joi.boolean().valid(true),
     }),
-  excludeFromTotal: Joi.boolean()
-    .optional()
-    .when('defaultAccount', {
-      is: true,
-      then: Joi.boolean().valid(false),
-    }),
+  excludeFromTotal: Joi.boolean().optional(),
 })
   .min(1)
   .or('name', 'amount', 'defaultAccount', 'acceptsFunds', 'excludeFromTotal');

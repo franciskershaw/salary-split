@@ -16,7 +16,14 @@ const AccountRow: FC<Props> = ({
   onDefaultAccountChange,
 }): ReactElement => {
   const [amount, setAmount] = useState<number>(account.amount);
-  const { mutate: editAccount, isLoading } = useEditAccount(account._id);
+  const [acceptsFunds, setAcceptsFunds] = useState<boolean>(
+    account.acceptsFunds
+  );
+  const [excludeFromTotal, setExcludeFromTotal] = useState<boolean>(
+    account.excludeFromTotal
+  );
+
+  const editAccount = useEditAccount(account._id);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
@@ -30,6 +37,16 @@ const AccountRow: FC<Props> = ({
       onDefaultAccountChange();
       editAccount({ defaultAccount: isChecked });
     }
+  };
+
+  const onChangeAcceptsFunds = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAcceptsFunds(e.target.checked);
+    editAccount({ acceptsFunds: e.target.checked });
+  };
+
+  const onChangeExcludeFromTotal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setExcludeFromTotal(e.target.checked);
+    editAccount({ excludeFromTotal: e.target.checked });
   };
 
   return (
@@ -55,11 +72,22 @@ const AccountRow: FC<Props> = ({
           className="w-6 h-6"
           type="radio"
           id={`defaultAccount_${account._id}`}
-          // disabled={isLoading}
+          disabled={!acceptsFunds}
         />
 
-        <input className="w-6 h-6" type="checkbox" />
-        <input className="w-6 h-6" type="checkbox" />
+        <input
+          onChange={onChangeAcceptsFunds}
+          checked={acceptsFunds}
+          className="w-6 h-6"
+          type="checkbox"
+          disabled={isDefault}
+        />
+        <input
+          onChange={onChangeExcludeFromTotal}
+          checked={excludeFromTotal}
+          className="w-6 h-6"
+          type="checkbox"
+        />
       </div>
 
       <div className="flex training-wheels items-end justify-end gap-4 w-1/4">

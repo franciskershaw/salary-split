@@ -13,7 +13,6 @@ const AccountsPage: FC = (): ReactElement => {
     useState<boolean>(false);
 
   const { accounts, defaultAccountId } = useAccounts();
-
   const [currentDefaultAccountId, setCurrentDefaultAccountId] = useState<string | null>(null);
 
   useEffect(() => {

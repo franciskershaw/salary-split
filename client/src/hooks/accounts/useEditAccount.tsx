@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccountRequests } from '../requests/useAccountRequests';
-import { Accounts, EditAccountState } from '../../types/types';
+import { EditAccountState } from '../../types/types';
 import { queryKeys } from '../../reactQuery/queryKeys';
 import { useUser } from '../auth/useUser';
 
@@ -9,11 +9,11 @@ export function useEditAccount(accountId: string) {
   const { editAccount } = useAccountRequests();
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading } = useMutation(
+  const { mutate } = useMutation(
     (formData: EditAccountState) =>
       editAccount(user?.accessToken || '', accountId, formData),
     {
-      onSuccess: async (response) =>
+      onSuccess: async () =>
         await queryClient.invalidateQueries([queryKeys.accounts]),
       onError: (error) => {
         console.log(error);
@@ -21,5 +21,5 @@ export function useEditAccount(accountId: string) {
     }
   );
 
-  return { mutate, isLoading };
+  return mutate;
 }
