@@ -22,7 +22,7 @@ export const useUserRequests = (): UserRequests => {
         return null;
       }
     } else {
-      const config = createConfig(user.token);
+      const config = createConfig(user.accessToken);
       const response = await api.get<User>(`/api/users/${user.userInfo._id}`, config);
       return response.data;
     }
