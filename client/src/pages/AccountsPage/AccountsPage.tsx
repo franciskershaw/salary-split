@@ -12,16 +12,7 @@ const AccountsPage: FC = (): ReactElement => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 
-  const { accounts, defaultAccountId, total } = useAccounts();
-  const [currentDefaultAccountId, setCurrentDefaultAccountId] = useState<string | null>(null);
-
-  useEffect(() => {
-    setCurrentDefaultAccountId(defaultAccountId);
-  }, [defaultAccountId]);
-
-  const handleDefaultAccountChange = (accountId: string) => {
-    setCurrentDefaultAccountId(accountId);
-  };
+  const { accounts, total } = useAccounts();
 
   return (
     <>
@@ -47,13 +38,7 @@ const AccountsPage: FC = (): ReactElement => {
           <ul>
             {accounts.map((account: Account) => (
               <li className="mb-2" key={`account_${account._id}`}>
-                <AccountRow
-                  account={account}
-                  isDefault={account._id === currentDefaultAccountId}
-                  onDefaultAccountChange={() =>
-                    handleDefaultAccountChange(account._id)
-                  }
-                />
+                <AccountRow account={account}/>
               </li>
             ))}
           </ul>

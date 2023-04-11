@@ -6,16 +6,13 @@ import { useEditAccount } from '../../../hooks/accounts/useEditAccount';
 
 interface Props {
   account: Account;
-  isDefault: boolean;
-  onDefaultAccountChange: () => void;
 }
 
-const AccountRow: FC<Props> = ({
-  account,
-  isDefault,
-  onDefaultAccountChange,
-}): ReactElement => {
+const AccountRow: FC<Props> = ({ account }): ReactElement => {
   const [amount, setAmount] = useState<number>(account.amount);
+  const [defaultAccount, setDefaultAccount] = useState<boolean>(
+    account.defaultAccount
+  );
   const [acceptsFunds, setAcceptsFunds] = useState<boolean>(
     account.acceptsFunds
   );
@@ -32,11 +29,8 @@ const AccountRow: FC<Props> = ({
   };
 
   const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    if (isChecked) {
-      onDefaultAccountChange();
-      editAccount({ defaultAccount: isChecked });
-    }
+    setDefaultAccount(e.target.checked);
+    editAccount({ defaultAccount: e.target.checked });
   };
 
   const onChangeAcceptsFunds = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +61,7 @@ const AccountRow: FC<Props> = ({
       <div className="flex items-end justify-between gap-4 w-1/2 mx-2">
         <input
           onChange={onChangeDefault}
-          checked={isDefault}
+          checked={defaultAccount}
           name="defaultAccount"
           className="w-6 h-6"
           type="radio"
@@ -80,7 +74,7 @@ const AccountRow: FC<Props> = ({
           checked={acceptsFunds}
           className="w-6 h-6"
           type="checkbox"
-          disabled={isDefault}
+          // disabled={isDefault}
         />
         <input
           onChange={onChangeExcludeFromTotal}
