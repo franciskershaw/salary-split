@@ -21,9 +21,7 @@ export const useAccountRequests = (): AccountRequests => {
   };
 
   const getAccounts = async (): Promise<AxiosResponse> => {
-    console.log(config)
     const response = await api.get('/api/accounts', config);
-    console.log(response)
     return response.data;
   };
 

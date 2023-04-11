@@ -12,7 +12,7 @@ const AccountsPage: FC = (): ReactElement => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 
-  const { accounts, defaultAccountId } = useAccounts();
+  const { accounts, defaultAccountId, total } = useAccounts();
   const [currentDefaultAccountId, setCurrentDefaultAccountId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const AccountsPage: FC = (): ReactElement => {
         </section>
         {/* Totals */}
         <section className='text-center training-wheels'>
-          {/* <h3 className='text-2xl'>Total: £{total}</h3> */}
+          <h3 className='text-2xl'>Total: £{total}</h3>
         </section>
       </div>
       <Modal setIsOpen={setAddAccountModalOpen} isOpen={addAccountModalOpen}>
