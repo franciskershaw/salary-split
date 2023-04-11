@@ -40,7 +40,7 @@ const useAxios = (): UseAxios => {
             }
             return {
               ...oldData,
-              token: response.data.token,
+              token: response.data.accessToken,
             };
           });
           return api(originalRequest);

@@ -107,7 +107,7 @@ const checkRefreshToken = (req, res) => {
   try {
     const { _id } = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const accessToken = generateAccessToken(_id);
-    res.json({ token: accessToken, _id });
+    res.json({ accessToken: accessToken, _id });
   } catch (error) {
     res.clearCookie('refreshToken');
     throw new UnauthorizedError('Issues validating the token');
