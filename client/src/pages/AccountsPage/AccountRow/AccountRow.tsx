@@ -50,13 +50,13 @@ const AccountRow: FC<Props> = ({
   };
 
   return (
-    <div className="flex items-between">
-      <div className="flex flex-col w-1/3 training-wheels">
-        <label className="text-xs" htmlFor="">
+    <div className="flex">
+      <div className="flex flex-col w-1/3">
+        <label className="text-xs w-26" htmlFor="">
           {account.name}
         </label>
         <input
-          className="h-8 border border-black"
+          className="h-8 w-24 border border-black"
           type="number"
           value={amount}
           min={0}
@@ -64,7 +64,7 @@ const AccountRow: FC<Props> = ({
         />
       </div>
 
-      <div className="flex items-end justify-center training-wheels gap-4 w-1/2">
+      <div className="flex items-end justify-between gap-4 w-1/2 mx-2">
         <input
           onChange={onChangeDefault}
           checked={isDefault}
@@ -90,7 +90,7 @@ const AccountRow: FC<Props> = ({
         />
       </div>
 
-      <div className="flex training-wheels items-end justify-end gap-4 w-1/4">
+      <div className="flex items-end justify-end gap-4 w-1/4">
         <button>
           <FontAwesomeIcon className="text-2xl" icon={faEdit} />
         </button>
