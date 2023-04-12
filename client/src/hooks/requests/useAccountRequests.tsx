@@ -33,7 +33,6 @@ export const useAccountRequests = (): AccountRequests => {
 
   const deleteAccount = async (accountId: string): Promise<AxiosResponse> => {
     const response = await api.delete(`/api/accounts/${accountId}`, config)
-    console.log(response)
     return response.data
   }
 
