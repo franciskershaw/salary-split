@@ -16,7 +16,6 @@ const AccountForm: FC<AccountFormProps> = ({
     amount: 0,
     defaultAccount: type === 'first' ? true : false,
     acceptsFunds: true,
-    excludeFromTotal: false,
   });
   const { name, amount, defaultAccount } = formData;
 

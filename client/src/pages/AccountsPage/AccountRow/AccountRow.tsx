@@ -3,6 +3,7 @@ import { Account } from '../../../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useEditAccount } from '../../../hooks/accounts/useEditAccount';
+import { useDeleteAccount } from '../../../hooks/accounts/useDeleteAccount';
 import Modal from '../../../components/Modal/Modal';
 
 interface Props {
@@ -23,6 +24,7 @@ const AccountRow: FC<Props> = ({ account }): ReactElement => {
   const [deleteRowModalOpen, setDeleteRowModalOpen] = useState<boolean>(false);
 
   const editAccount = useEditAccount(account._id);
+  const deleteAccount = useDeleteAccount(account._id);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
@@ -45,9 +47,10 @@ const AccountRow: FC<Props> = ({ account }): ReactElement => {
     editAccount({ excludeFromTotal: e.target.checked });
   };
 
-  const deleteAccount = () => {
-    setDeleteRowModalOpen(false)
-  }
+  const onClickDeleteButton = () => {
+    deleteAccount()
+    setDeleteRowModalOpen(false);
+  };
 
   return (
     <>
@@ -92,15 +95,23 @@ const AccountRow: FC<Props> = ({ account }): ReactElement => {
         </div>
 
         <div className="flex items-end justify-end gap-4 w-1/4">
-          <button disabled={account.defaultAccount} onClick={() => setDeleteRowModalOpen(true)}>
+          <button
+            disabled={account.defaultAccount}
+            onClick={() => setDeleteRowModalOpen(true)}>
             <FontAwesomeIcon className="text-2xl" icon={faTrash} />
           </button>
         </div>
       </div>
       <Modal isOpen={deleteRowModalOpen} setIsOpen={setDeleteRowModalOpen}>
-        <div className='text-center mb-3'>
-          <h2 className='mb-3 text-white'>Are you sure you'd like to delete this account?</h2>
-          <button onClick={deleteAccount} className='border px-2 bg-red-800 text-white'>Delete</button>
+        <div className="text-center mb-3">
+          <h2 className="mb-3 text-white">
+            Are you sure you'd like to delete this account?
+          </h2>
+          <button
+            onClick={onClickDeleteButton}
+            className="border px-2 bg-red-800 text-white">
+            Delete
+          </button>
         </div>
       </Modal>
     </>

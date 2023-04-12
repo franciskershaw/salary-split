@@ -1,19 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccountRequests } from '../requests/useAccountRequests';
-import { AddAccountState, User } from '../../types/types';
+import { AddAccountState, User, Account } from '../../types/types';
 import { queryKeys } from '../../reactQuery/queryKeys';
-import { useUser } from '../auth/useUser';
 import { useNavigate } from 'react-router-dom';
 
 export function useAddAccount() {
-  const { user } = useUser();
   const navigate = useNavigate();
   const { addAccount } = useAccountRequests();
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    (formData: AddAccountState) =>
-      addAccount(user?.accessToken || '', formData),
+    (formData: AddAccountState) => addAccount(formData),
     {
       onSuccess: async (data) => {
         queryClient.setQueryData(
@@ -29,7 +26,14 @@ export function useAddAccount() {
           }
         );
 
-        await queryClient.resetQueries([queryKeys.accounts]);
+        const { account } = data;
+        queryClient.setQueryData<Account[]>(
+          [queryKeys.accounts],
+          (oldAccounts: Account[] | undefined) => {
+            if (!oldAccounts) return oldAccounts;
+            return [...oldAccounts, account];
+          }
+        );
 
         navigate('/accounts');
       },

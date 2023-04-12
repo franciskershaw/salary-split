@@ -16,10 +16,7 @@ export function useEditAccount(accountId: string) {
         queryClient.setQueryData<Account[]>(
           [queryKeys.accounts],
           (oldAccounts: Account[] | undefined) => {
-            if (!oldAccounts) {
-              return oldAccounts;
-            }
-
+            if (!oldAccounts) return oldAccounts;
             return oldAccounts.map((account: Account) =>
               account._id === accountId ? updatedAccount : account
             );

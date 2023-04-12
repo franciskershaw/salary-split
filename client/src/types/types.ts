@@ -20,7 +20,6 @@ export interface AddAccountState {
   amount: number;
   defaultAccount: boolean;
   acceptsFunds: boolean;
-  excludeFromTotal: boolean;
 }
 
 export interface EditAccountState {

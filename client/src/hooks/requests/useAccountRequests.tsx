@@ -8,6 +8,7 @@ interface AccountRequests {
   addAccount: (formData: AddAccountState) => Promise<any>;
   getAccounts: () => Promise<any>;
   editAccount: (accountId: string, formData: EditAccountState) => Promise<any>;
+  deleteAccount: (accountId: string) => Promise<any>;
 }
 
 export const useAccountRequests = (): AccountRequests => {
@@ -30,5 +31,11 @@ export const useAccountRequests = (): AccountRequests => {
     return response.data;
   };
 
-  return { addAccount, getAccounts, editAccount };
+  const deleteAccount = async (accountId: string): Promise<AxiosResponse> => {
+    const response = await api.delete(`/api/accounts/${accountId}`, config)
+    console.log(response)
+    return response.data
+  }
+
+  return { addAccount, getAccounts, editAccount, deleteAccount };
 };

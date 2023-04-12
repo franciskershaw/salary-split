@@ -163,7 +163,7 @@ const deleteAccount = async (req, res, next) => {
       },
       { new: true }
     );
-    res.status(200).json({ msg: 'Account deleted' });
+    res.status(200).json({ deleted: accountId });
   } catch (err) {
     next(err);
   }
