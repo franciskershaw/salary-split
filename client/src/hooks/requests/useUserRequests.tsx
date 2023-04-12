@@ -3,19 +3,19 @@ import { createConfig } from '../../utils/utils';
 import { User } from '../../types/types';
 
 interface UserRequests {
-  getUser: (user: User | null) => Promise<User | null>;
+  getUser: (user: User | null | undefined) => Promise<User | null>;
 }
 
 export const useUserRequests = (): UserRequests => {
   const api = useAxios();
 
-  const getUser = async (user: User | null): Promise<User | null> => {
+  const getUser = async (user: User | null | undefined) => {
     if (!user) {
       try {
-        const response = await api.get<{ _id: string; token: string }>('/api/users/refreshToken');
+        const response = await api.get(`/api/users/refreshToken`);
         if (response.status === 200) {
-          const config = createConfig(response.data.token);
-          const user = await api.get<User>(`/api/users/${response.data._id}`, config);
+          const config = createConfig(response.data.accessToken);
+          const user = await api.get(`/api/users/${response.data._id}`, config);
           return user.data;
         }
       } catch (error) {
@@ -23,10 +23,9 @@ export const useUserRequests = (): UserRequests => {
       }
     } else {
       const config = createConfig(user.accessToken);
-      const response = await api.get<User>(`/api/users/${user.userInfo._id}`, config);
+      const response = await api.get(`/api/users/${user.userInfo._id}`, config);
       return response.data;
     }
-    return null;
   };
 
   return {

@@ -18,7 +18,7 @@ export function useUser(): UseUserResponse {
 
   const { data: user, isFetching: fetchingUser } = useQuery<User | null>(
     [queryKeys.user],
-    () => getUser(null)
+    () => getUser(user)
   );
 
   function updateUser(newUser: User) {

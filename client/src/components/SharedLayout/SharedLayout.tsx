@@ -5,8 +5,10 @@ import AccountForm from '../../pages/AccountsPage/AccountForm/AccountForm';
 import { useUser } from '../../hooks/auth/useUser';
 
 const SharedLayout = (): ReactElement => {
-  const { user } = useUser();
-  return (
+  const { user, fetchingUser } = useUser();
+  return fetchingUser ? (
+    <div>Loading...</div>
+  ) : (
     <>
       {user?.userInfo.accounts.length && <Navbar />}
       <main>

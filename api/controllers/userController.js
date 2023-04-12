@@ -110,7 +110,7 @@ const checkRefreshToken = (req, res) => {
     res.json({ accessToken: accessToken, _id });
   } catch (error) {
     res.clearCookie('refreshToken');
-    throw new UnauthorizedError('Issues validating the token');
+    throw new UnauthorizedError('Issues validating the token', 'INVALID_TOKEN');
   }
 };
 
