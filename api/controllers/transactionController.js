@@ -1,5 +1,6 @@
 const Transaction = require('../models/Transaction');
 const User = require('../models/User');
+const Account = require('../models/Account');
 const {
   addTransactionSchema,
   updateTransactionSchema,
@@ -26,6 +27,11 @@ const addTransaction = async (req, res, next) => {
     });
     if (nameInUse) {
       throw new ConflictError("You've used that name already");
+    }
+
+    const account = await Account.findById(sendToAccount);
+    if (!account.acceptsFunds) {
+      throw new BadRequestError('This account does not accept funds directly');
     }
 
     const transaction = new Transaction({
@@ -60,6 +66,15 @@ const editTransaction = async (req, res, next) => {
       throw new BadRequestError(error.details[0].message);
     }
 
+    if (req.body.sendToAccount) {
+      const account = await Account.findById(req.body.sendToAccount);
+      if (!account.acceptsFunds) {
+        throw new BadRequestError(
+          'This account does not accept funds directly'
+        );
+      }
+    }
+
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       req.params.transactionId,
       value,
@@ -87,7 +102,7 @@ const deleteTransaction = async (req, res, next) => {
       },
       { new: true }
     );
-    res.status(200).json({ msg: 'Transaction deleted' });
+    res.status(200).json({ deleted: transactionId });
   } catch (err) {
     next(err);
   }
