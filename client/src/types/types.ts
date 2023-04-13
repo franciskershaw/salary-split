@@ -30,6 +30,13 @@ export interface EditAccountState {
   excludeFromTotal?: boolean;
 }
 
+export interface AddTransactionState {
+  name: string;
+  amount: number;
+  sendToAccount: string;
+  type: 'bill' | 'savings';
+}
+
 export interface User {
   userInfo: {
     _id: string;
@@ -54,4 +61,3 @@ export interface Account {
 }
 
 export type Accounts = Account[];
-
