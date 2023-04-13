@@ -5,7 +5,8 @@ import { AddTransactionState } from '../../types/types';
 import { useUser } from '../auth/useUser';
 
 interface TransactionRequests {
-	addTransaction: (formData: AddTransactionState) => Promise<any>
+	addTransaction: (formData: AddTransactionState) => Promise<any>;
+	getTransactions: () => Promise<any>;
 }
 
 export const useTransactionRequests = (): TransactionRequests => {
@@ -18,5 +19,10 @@ export const useTransactionRequests = (): TransactionRequests => {
     return response.data;
   };
 
-	return { addTransaction }
+	const getTransactions = async (): Promise<AxiosResponse> => {
+		const response = await api.get('/api/transactions', config)
+		return response.data
+	}
+
+	return { addTransaction, getTransactions }
 };
