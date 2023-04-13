@@ -19,9 +19,8 @@ export function useAddAccount() {
             if (!oldUserData) {
               return undefined;
             }
-
             const newUserData = { ...oldUserData };
-            newUserData.userInfo.accounts.push(data._id);
+            newUserData.userInfo.accounts.push(data.transaction._id);
             return newUserData;
           }
         );
