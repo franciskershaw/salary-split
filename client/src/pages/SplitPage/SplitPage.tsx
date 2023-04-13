@@ -14,7 +14,7 @@ const SplitPage = (): JSX.Element => {
     useState<boolean>(false);
 
   const { prefetchAccounts } = useAccounts();
-  const { transactions, totalBills, totalSavings } = useTransactions();
+  const { transactions, totalBills, totalSavings, balance } = useTransactions();
 
   useEffect(() => {
     prefetchAccounts();
@@ -45,7 +45,7 @@ const SplitPage = (): JSX.Element => {
             <h3>Total: {totalBills}</h3>
           </div>
         </section>
-        <section className="flex flex-col">
+        <section className="flex flex-col mb-4">
           <div className="flex gap-2 mb-2">
             <h2 className="text-xl font-bold">Savings</h2>
             <button onClick={() => setAddSavingsModalOpen(true)}>
@@ -66,6 +66,16 @@ const SplitPage = (): JSX.Element => {
           <div className='text-end font-bold'>
             <h3>Total: {totalSavings}</h3>
           </div>
+        </section>
+        <section className='flex justify-between items-end'>
+            <h2 className='font-bold'>Balance</h2>
+            <h3>£{balance}</h3>
+            <div className='flex flex-col'>
+              <label className='text-xs' htmlFor="">Send to (default account)</label>
+              <select className='border'>
+                <option value="">Add later</option>
+              </select>
+            </div>
         </section>
       </div>
       <Modal setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
