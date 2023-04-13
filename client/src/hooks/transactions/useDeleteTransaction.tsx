@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTransactionRequests } from '../requests/useTransactionRequests';
 import { queryKeys } from '../../reactQuery/queryKeys';
-import { Transaction } from '../../types/types';
+import { Transaction, User } from '../../types/types';
 
 export function useDeleteTransaction(transactionId: string) {
   const { deleteTransaction } = useTransactionRequests();
@@ -10,6 +10,20 @@ export function useDeleteTransaction(transactionId: string) {
   const { mutate } = useMutation(() => deleteTransaction(transactionId), {
     onSuccess: (data) => {
       const { deleted } = data;
+
+      queryClient.setQueryData(
+        [queryKeys.user],
+        (oldUserData: User | undefined) => {
+          if (!oldUserData) return oldUserData;
+          const newUserData = { ...oldUserData };
+          newUserData.userInfo.transactions =
+            newUserData.userInfo.transactions.filter(
+              (transactionId) => transactionId !== deleted
+            );
+          return newUserData;
+        }
+      );
+
       queryClient.setQueryData<Transaction[]>(
         [queryKeys.transactions],
         (oldTransactions) => {

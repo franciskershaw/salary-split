@@ -10,16 +10,16 @@ export function useAddTransaction() {
   const { mutate } = useMutation(
     (formData: AddTransactionState) => addTransaction(formData),
     {
-      onSuccess: async (data) => {
+      onSuccess: (data) => {
+        console.log(data);
         queryClient.setQueryData(
           [queryKeys.user],
           (oldUserData: User | undefined) => {
             if (!oldUserData) {
               return undefined;
             }
-
             const newUserData = { ...oldUserData };
-            newUserData.userInfo.transactions.push(data._id);
+            newUserData.userInfo.transactions.push(data.transaction._id);
             return newUserData;
           }
         );
