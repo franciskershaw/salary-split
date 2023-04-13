@@ -37,6 +37,13 @@ export interface AddTransactionState {
   type: 'bill' | 'savings';
 }
 
+export interface EditTransactionState {
+  name?: string;
+  amount?: number;
+  sendToAccount?: string;
+  type?: 'bill' | 'savings';
+}
+
 export interface User {
   userInfo: {
     _id: string;

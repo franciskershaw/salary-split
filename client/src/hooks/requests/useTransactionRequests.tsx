@@ -1,12 +1,13 @@
 import useAxios from '../axios/useAxios';
 import { AxiosResponse } from 'axios';
 import { createConfig } from '../../utils/utils';
-import { AddTransactionState } from '../../types/types';
+import { AddTransactionState, EditTransactionState } from '../../types/types';
 import { useUser } from '../auth/useUser';
 
 interface TransactionRequests {
 	addTransaction: (formData: AddTransactionState) => Promise<any>;
 	getTransactions: () => Promise<any>;
+	editTransaction: (transactionId: string, formData: EditTransactionState) => Promise<any>;
 }
 
 export const useTransactionRequests = (): TransactionRequests => {
@@ -24,5 +25,10 @@ export const useTransactionRequests = (): TransactionRequests => {
 		return response.data
 	}
 
-	return { addTransaction, getTransactions }
+	const editTransaction = async (transactionId: string, formData: EditTransactionState): Promise<AxiosResponse> => {
+		const response = await api.put(`/api/transactions/${transactionId}`, formData, config)
+		return response.data
+	}
+
+	return { addTransaction, getTransactions, editTransaction }
 };
