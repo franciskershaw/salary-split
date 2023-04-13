@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../components/Modal/Modal';
 import BillForm from './TransactionForm/TransactionForm';
+import TransactionRow from './TransactionRow/TransactionRow';
 import { Transaction } from '../../types/types';
 
 const SplitPage = (): JSX.Element => {
@@ -29,13 +30,17 @@ const SplitPage = (): JSX.Element => {
               <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
             </button>
           </div>
-          <div>
+          <ul>
             {transactions.map((transaction: Transaction, i: number) => {
               if (transaction.type === 'bill') {
-                return <p key={`bill_${i}`}>{transaction.name}</p>;
+                return (
+                  <li className="mb-2" key={`bill_${i}`}>
+                    <TransactionRow transaction={transaction} />
+                  </li>
+                );
               }
             })}
-          </div>
+          </ul>
         </section>
         <section className="flex flex-col">
           <div className="flex gap-2 mb-2">
@@ -44,13 +49,17 @@ const SplitPage = (): JSX.Element => {
               <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
             </button>
           </div>
-          <div>
+          <ul>
             {transactions.map((transaction: Transaction, i: number) => {
               if (transaction.type === 'savings') {
-                return <p key={`savings_${i}`}>{transaction.name}</p>;
+                return (
+                  <li className="mb-2" key={`savings_${i}`}>
+                    <TransactionRow transaction={transaction} />
+                  </li>
+                );
               }
             })}
-          </div>
+          </ul>
         </section>
       </div>
       <Modal setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
