@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, useState } from 'react';
 import { FormType, AddAccountState } from '../../../types/types';
 import { useAddAccount } from '../../../hooks/accounts/useAddAccount';
 
@@ -7,10 +7,7 @@ interface AccountFormProps {
   type: FormType;
 }
 
-const AccountForm: FC<AccountFormProps> = ({
-  setModalOpen,
-  type,
-}): ReactElement => {
+const AccountForm: FC<AccountFormProps> = ({ setModalOpen, type }): JSX.Element => {
   const [formData, setFormData] = useState<AddAccountState>({
     name: '',
     amount: 0,

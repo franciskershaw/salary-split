@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 
-const SummaryPage: FC = (): ReactElement => {
+const SummaryPage = (): JSX.Element => {
   return <p>I am the summary page</p>;
 };
 

@@ -1,10 +1,10 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { RegisterFormState, PageType } from '../../../types/types';
 import { useAuth } from '../../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import './_authForm.scss';
 
-const AuthForm = ({ page }: { page: PageType }): ReactElement => {
+const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
   const [formData, setFormData] = useState<RegisterFormState>({
     username: '',
     name: '',
@@ -26,11 +26,11 @@ const AuthForm = ({ page }: { page: PageType }): ReactElement => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const loginData = { username, password };
-    const registerData = { 
-      username, 
-      name, 
-      monthlySalary, 
-      password 
+    const registerData = {
+      username,
+      name,
+      monthlySalary,
+      password,
     };
     if (page === 'register') {
       if (password !== confirmPassword) {

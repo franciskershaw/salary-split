@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, useState } from 'react';
 import { Account } from '../../../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,7 @@ interface Props {
   account: Account;
 }
 
-const AccountRow: FC<Props> = ({ account }): ReactElement => {
+const AccountRow: FC<Props> = ({ account }): JSX.Element => {
   const [amount, setAmount] = useState<number>(account.amount);
   const [defaultAccount, setDefaultAccount] = useState<boolean>(
     account.defaultAccount
@@ -48,7 +48,7 @@ const AccountRow: FC<Props> = ({ account }): ReactElement => {
   };
 
   const onClickDeleteButton = () => {
-    deleteAccount()
+    deleteAccount();
     setDeleteRowModalOpen(false);
   };
 

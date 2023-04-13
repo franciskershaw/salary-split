@@ -1,11 +1,11 @@
-import { FC, ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { useUser } from '../../hooks/auth/useUser';
 import { useAuth } from '../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
-const Navbar: FC = (): ReactElement => {
+const Navbar = (): JSX.Element => {
   const { user } = useUser();
   const auth = useAuth();
   const [salary, setSalary] = useState(user?.userInfo.monthlySalary);

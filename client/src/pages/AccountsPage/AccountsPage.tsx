@@ -1,5 +1,5 @@
 // In AccountsPage.tsx
-import { FC, ReactElement, useState, useEffect } from 'react';
+import { useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AccountForm from './AccountForm/AccountForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +8,7 @@ import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { Account } from '../../types/types';
 import AccountRow from './AccountRow/AccountRow';
 
-const AccountsPage: FC = (): ReactElement => {
+const AccountsPage = (): JSX.Element => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 
@@ -25,27 +25,27 @@ const AccountsPage: FC = (): ReactElement => {
           </button>
         </section>
         {/* Accounts list */}
-        <section className='mb-4'>
-          <div className='flex'>
-            <div className='w-1/3'></div>
-            <div className='w-1/2 flex items-end justify-between text-xs gap-2'>
-              <label className=''>Default Account</label>
-              <label className='text-center'>Accepts Funds</label>
-              <label className='text-end'>Exclude - total</label>
+        <section className="mb-4">
+          <div className="flex">
+            <div className="w-1/3"></div>
+            <div className="w-1/2 flex items-end justify-between text-xs gap-2">
+              <label className="">Default Account</label>
+              <label className="text-center">Accepts Funds</label>
+              <label className="text-end">Exclude - total</label>
             </div>
-            <div className='w-1/4'></div>
+            <div className="w-1/4"></div>
           </div>
           <ul>
             {accounts.map((account: Account) => (
               <li className="mb-2" key={`account_${account._id}`}>
-                <AccountRow account={account}/>
+                <AccountRow account={account} />
               </li>
             ))}
           </ul>
         </section>
         {/* Totals */}
-        <section className='text-center training-wheels'>
-          <h3 className='text-2xl'>Total: £{total}</h3>
+        <section className="text-center training-wheels">
+          <h3 className="text-2xl">Total: £{total}</h3>
         </section>
       </div>
       <Modal setIsOpen={setAddAccountModalOpen} isOpen={addAccountModalOpen}>

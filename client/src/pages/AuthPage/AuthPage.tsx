@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useUser } from '../../hooks/auth/useUser';
-import { ReactElement } from 'react';
 import AuthForm from './AuthForm/AuthForm';
 import { PageType } from '../../types/types';
 
-const AuthPage = ({ page }: { page: PageType }): ReactElement => {
+const AuthPage = ({ page }: { page: PageType }): JSX.Element => {
   document.title = `Salary Split | ${
     page === 'register' ? 'Create Account' : 'Login'
   }`;
