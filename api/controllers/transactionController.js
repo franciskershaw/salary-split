@@ -11,6 +11,18 @@ const {
   NotFoundError,
 } = require('../errors/errors');
 
+const getTransactions = async (req, res, next) => {
+  try {
+    const { transactions: transactionIds } = await User.findById(req.user._id);
+    const transactions = await Transaction.find({
+      _id: { $in: transactionIds },
+    });
+    res.status(200).json(transactions);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const addTransaction = async (req, res, next) => {
   try {
     const { error, value } = addTransactionSchema.validate(req.body);
@@ -108,4 +120,9 @@ const deleteTransaction = async (req, res, next) => {
   }
 };
 
-module.exports = { addTransaction, editTransaction, deleteTransaction };
+module.exports = {
+  getTransactions,
+  addTransaction,
+  editTransaction,
+  deleteTransaction,
+};
