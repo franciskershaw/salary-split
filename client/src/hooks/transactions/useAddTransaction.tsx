@@ -11,7 +11,6 @@ export function useAddTransaction() {
     (formData: AddTransactionState) => addTransaction(formData),
     {
       onSuccess: (data) => {
-        console.log(data);
         queryClient.setQueryData(
           [queryKeys.user],
           (oldUserData: User | undefined) => {

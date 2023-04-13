@@ -22,10 +22,6 @@ const TransactionForm: FC<TransactionFormProps> = ({
     type: type,
   });
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
