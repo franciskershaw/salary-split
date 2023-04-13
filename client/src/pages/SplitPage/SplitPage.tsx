@@ -41,6 +41,9 @@ const SplitPage = (): JSX.Element => {
               }
             })}
           </ul>
+          <div className='text-end font-bold'>
+            <h3>Total: {totalBills}</h3>
+          </div>
         </section>
         <section className="flex flex-col">
           <div className="flex gap-2 mb-2">
@@ -60,6 +63,9 @@ const SplitPage = (): JSX.Element => {
               }
             })}
           </ul>
+          <div className='text-end font-bold'>
+            <h3>Total: {totalSavings}</h3>
+          </div>
         </section>
       </div>
       <Modal setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
