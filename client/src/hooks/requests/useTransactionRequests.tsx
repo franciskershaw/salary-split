@@ -8,6 +8,7 @@ interface TransactionRequests {
 	addTransaction: (formData: AddTransactionState) => Promise<any>;
 	getTransactions: () => Promise<any>;
 	editTransaction: (transactionId: string, formData: EditTransactionState) => Promise<any>;
+	deleteTransaction: (transactionId: string) => Promise<any>;
 }
 
 export const useTransactionRequests = (): TransactionRequests => {
@@ -30,5 +31,10 @@ export const useTransactionRequests = (): TransactionRequests => {
 		return response.data
 	}
 
-	return { addTransaction, getTransactions, editTransaction }
+	const deleteTransaction = async (transactionId: string): Promise<AxiosResponse> => {
+		const response = await api.delete(`/api/transactions/${transactionId}`, config)
+		return response.data
+	}
+
+	return { addTransaction, getTransactions, editTransaction, deleteTransaction }
 };

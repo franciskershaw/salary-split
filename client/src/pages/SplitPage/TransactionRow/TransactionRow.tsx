@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useAccounts } from '../../../hooks/accounts/useAccounts';
 import { useEditTransaction } from '../../../hooks/transactions/useEditTransaction';
-// import { useDeleteAccount } from '../../../hooks/accounts/useDeleteAccount';
+import { useDeleteTransaction } from '../../../hooks/transactions/useDeleteTransaction';
 import Modal from '../../../components/Modal/Modal';
 
 interface Props {
@@ -19,9 +19,8 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
   const [deleteRowModalOpen, setDeleteRowModalOpen] = useState<boolean>(false);
 
   const { accounts } = useAccounts();
-	const editTransaction = useEditTransaction(transaction._id)
-
-  // const deleteTransaction = useDeleteTransaction(transaction._id);
+  const editTransaction = useEditTransaction(transaction._id);
+  const deleteTransaction = useDeleteTransaction(transaction._id);
 
   const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
@@ -29,13 +28,13 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
     editTransaction({ amount: newAmount });
   };
 
-	const onChangeAccount = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSendToAccount(e.target.value)
-		editTransaction({ sendToAccount: e.target.value })
-	}
+  const onChangeAccount = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSendToAccount(e.target.value);
+    editTransaction({ sendToAccount: e.target.value });
+  };
 
   const onClickDeleteButton = () => {
-    // deleteTransaction();
+    deleteTransaction();
     setDeleteRowModalOpen(false);
   };
 
@@ -49,7 +48,12 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
           <label className="text-xs" htmlFor="">
             Amount
           </label>
-          <input onChange={onChangeAmount} value={amount} className="w-28" type="number" />
+          <input
+            onChange={onChangeAmount}
+            value={amount}
+            className="w-28"
+            type="number"
+          />
         </div>
 
         {/* Send to */}
