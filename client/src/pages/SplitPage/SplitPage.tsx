@@ -3,7 +3,7 @@ import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../components/Modal/Modal';
-import BillForm from './BillForm/BillForm';
+import BillForm from './TransactionForm/TransactionForm';
 
 const SplitPage = (): JSX.Element => {
   const [addBillModalOpen, setAddBillModalOpen] = useState<boolean>(false);

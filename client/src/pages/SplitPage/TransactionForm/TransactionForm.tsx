@@ -1,6 +1,7 @@
-import { FC, useState } from 'react';
-import { AddTransactionState } from '../../../types/types';
-// import { useAddAccount } from '../../../hooks/accounts/useAddAccount';
+import { FC, useState, useEffect } from 'react';
+import { Account, AddTransactionState } from '../../../types/types';
+import { useAddTransaction } from '../../../hooks/transactions/useAddTransaction';
+import { useAccounts } from '../../../hooks/accounts/useAccounts';
 
 interface TransactionFormProps {
   setModalOpen?: (isOpen: boolean) => void;
@@ -11,26 +12,33 @@ const TransactionForm: FC<TransactionFormProps> = ({
   setModalOpen,
   type,
 }): JSX.Element => {
+  const { accounts, defaultAccountId } = useAccounts();
+  const addTransaction = useAddTransaction();
+
   const [formData, setFormData] = useState<AddTransactionState>({
     name: '',
     amount: 0,
-    sendToAccount: '',
+    sendToAccount: defaultAccountId,
     type: type,
   });
 
-  // const addAccount = useAddAccount();
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const { name, value, type, checked } = e.target;
-    // setFormData((prevState: AddAccountState) => ({
-    //   ...prevState,
-    //   [name]: type === 'checkbox' ? checked : value,
-    // }));
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevState: AddTransactionState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // addAccount(formData);
+    addTransaction(formData);
     if (setModalOpen) {
       setModalOpen(false);
     }
@@ -64,8 +72,21 @@ const TransactionForm: FC<TransactionFormProps> = ({
 
       <div className="flex flex-col mb-6">
         <label>Account to send funds to</label>
-        <select name="" id="">
-          <option value="hi">Hi</option>
+        <select
+          onChange={onChange}
+          className="border"
+          name="sendToAccount"
+          value={formData.sendToAccount}
+          id="">
+          {accounts.map((account: Account, i: number) => {
+            if (account.acceptsFunds) {
+              return (
+                <option value={account._id} key={`account_${i}`}>
+                  {account.name}
+                </option>
+              );
+            }
+          })}
         </select>
       </div>
       <div className="flex items-center justify-center">

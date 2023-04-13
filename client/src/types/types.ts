@@ -60,4 +60,13 @@ export interface Account {
   __v: number;
 }
 
+export interface Transaction {
+  _id: string;
+  amount: number;
+  name: string;
+  sendToAccount: string;
+  type: 'bill' | 'savings';
+  __v: number;
+}
+
 export type Accounts = Account[];
