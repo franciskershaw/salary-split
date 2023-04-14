@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, useEffect } from 'react';
+import { createContext, ReactNode, useState } from 'react';
 
 interface Context {
   salary: number | string;
