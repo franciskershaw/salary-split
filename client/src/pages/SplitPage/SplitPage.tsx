@@ -82,7 +82,7 @@ const SplitPage = (): JSX.Element => {
         <BillForm type="bill" setModalOpen={setAddBillModalOpen} />
       </Modal>
       <Modal setIsOpen={setAddSavingsModalOpen} isOpen={addSavingsModalOpen}>
-        <BillForm type="savings" setModalOpen={setAddBillModalOpen} />
+        <BillForm type="savings" setModalOpen={setAddSavingsModalOpen} />
       </Modal>
     </>
   );

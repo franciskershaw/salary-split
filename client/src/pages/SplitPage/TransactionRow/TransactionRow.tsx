@@ -86,7 +86,7 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
       </div>
       <Modal isOpen={deleteRowModalOpen} setIsOpen={setDeleteRowModalOpen}>
         <div className="text-center mb-3">
-          <h2 className="mb-3 text-white">
+          <h2 className="mb-3">
             Are you sure you'd like to delete this transaction?
           </h2>
           <button
