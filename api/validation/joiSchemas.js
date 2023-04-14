@@ -19,24 +19,17 @@ const editSalarySchema = Joi.object({
 const addAccountSchema = Joi.object({
   name: Joi.string().required(),
   amount: Joi.number().required(),
-  defaultAccount: Joi.boolean().required(),
   acceptsFunds: Joi.boolean().required(),
 });
 
 const updateAccountSchema = Joi.object({
   name: Joi.string().optional(),
   amount: Joi.number().optional(),
-  defaultAccount: Joi.boolean().optional(),
-  acceptsFunds: Joi.boolean()
-    .optional()
-    .when('defaultAccount', {
-      is: true,
-      then: Joi.boolean().valid(true),
-    }),
+  acceptsFunds: Joi.boolean().optional(),
   excludeFromTotal: Joi.boolean().optional(),
 })
   .min(1)
-  .or('name', 'amount', 'defaultAccount', 'acceptsFunds', 'excludeFromTotal');
+  .or('name', 'amount', 'acceptsFunds', 'excludeFromTotal');
 
 const addTransactionSchema = Joi.object({
   name: Joi.string().required(),

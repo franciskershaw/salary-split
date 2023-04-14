@@ -28,44 +28,34 @@ const addAccount = async (req, res, next) => {
       throw new BadRequestError(error.details[0].message);
     }
 
-    const userId = req.user._id;
+    const { name, amount, acceptsFunds, excludeFromTotal } = value;
+
     const nameInUse = await Account.findOne({
-      user: userId,
-      name: value.name,
+      user: req.user._id,
+      name,
     });
     if (nameInUse) {
       throw new ConflictError("You've used that name already");
     }
 
-    const { name, amount, defaultAccount, acceptsFunds, excludeFromTotal } =
-      value;
-
-    // Ensure there is only one defaultAccount
-    if (defaultAccount) {
-      const previousDefaults = await Account.find({
-        user: userId,
-        defaultAccount: true,
-      });
-      if (previousDefaults.length) {
-        for (let account of previousDefaults) {
-          account.defaultAccount = false;
-          await account.save();
-        }
-      }
+    const user = await User.findById(req.user._id);
+    if (user.accounts < 1 && acceptsFunds === false) {
+      throw new BadRequestError('Your default account must accept funds');
     }
 
     const account = new Account({
       name,
-      user: userId,
+      user: req.user._id,
       amount,
-      defaultAccount,
       acceptsFunds,
       excludeFromTotal,
     });
 
     await account.save();
 
-    const user = await User.findById(userId);
+    if (user.accounts < 1) {
+      user.defaultAccount = account._id;
+    }
     user.accounts.push(account._id);
     await user.save();
 
@@ -78,14 +68,13 @@ const addAccount = async (req, res, next) => {
 const editAccount = async (req, res, next) => {
   try {
     const account = await Account.findById(req.params.accountId);
-
+  
     if (!account) {
       throw new NotFoundError('Account not found');
     }
 
-    // Merge existing account data with the request body
+    // Next few lines are to ensure validation works
     const mergedData = { ...account.toObject(), ...req.body };
-
     // Remove unwanted properties from mergedData
     delete mergedData._id;
     delete mergedData.user;
@@ -102,20 +91,16 @@ const editAccount = async (req, res, next) => {
       updatedFields[key] = value[key];
     }
 
-    // Ensure there is only one defaultAccount
-    if (value.defaultAccount) {
-      const previousDefaults = await Account.find({
-        user: req.user._id,
-        defaultAccount: true,
-      });
-      if (previousDefaults.length) {
-        for (let account of previousDefaults) {
-          account.defaultAccount = false;
-          await account.save();
-        }
-      }
+    const user = await User.findById(req.user._id);
+    // Halt update if attempting to change 'acceptsFunds' to false on default acount
+    if (
+      user.defaultAccount.equals(req.params.accountId) &&
+      value.acceptsFunds === false
+    ) {
+      throw new BadRequestError('Default account must accept funds');
     }
 
+    // Finally, update the account
     const updatedAccount = await Account.findByIdAndUpdate(
       req.params.accountId,
       updatedFields,

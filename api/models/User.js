@@ -17,7 +17,7 @@ const UserSchema = mongoose.Schema({
   monthlySalary: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   transactions: [
     {
@@ -31,6 +31,10 @@ const UserSchema = mongoose.Schema({
       ref: 'Account',
     },
   ],
+  defaultAccount: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
+  },
 });
 
 module.exports = mongoose.model('User', UserSchema);
