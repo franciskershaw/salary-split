@@ -56,6 +56,7 @@ export interface User {
     monthlySalary: number;
     transactions: string[];
     accounts: string[];
+    defaultAccount: string;
   };
   accessToken: string;
 }

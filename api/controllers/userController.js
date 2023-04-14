@@ -136,6 +136,7 @@ const getUserInfo = async (req, res, next) => {
         monthlySalary: user.monthlySalary,
         transactions: user.transactions,
         accounts: user.accounts,
+        defaultAccount: user.defaultAccount,
       },
       accessToken: generateAccessToken(user._id),
     });
