@@ -20,7 +20,7 @@ export function useAddAccount() {
               return undefined;
             }
             const newUserData = { ...oldUserData };
-            newUserData.userInfo.accounts.push(data.transaction._id);
+            newUserData.userInfo.accounts.push(data.account._id);
             return newUserData;
           }
         );
