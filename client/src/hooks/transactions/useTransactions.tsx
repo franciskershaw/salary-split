@@ -2,13 +2,16 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTransactionRequests } from '../requests/useTransactionRequests';
 import { queryKeys } from '../../reactQuery/queryKeys';
 import { Transaction } from '../../types/types';
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
+import Context from '../../context/Context';
 import { useUser } from '../auth/useUser';
 
 export function useTransactions() {
   const queryClient = useQueryClient();
   const { getTransactions } = useTransactionRequests();
   const { user } = useUser();
+  const { salary } = useContext(Context);
+
   const { data: transactions = [] } = useQuery(
     [queryKeys.transactions],
     getTransactions
@@ -23,8 +26,8 @@ export function useTransactions() {
   }, [transactions]);
 
   const balance = useMemo(() => {
-    return (user?.userInfo.monthlySalary || 0) - (totalBills + totalSavings)
-  }, [transactions, user]);
+    return Number(salary) - (totalBills + totalSavings);
+  }, [transactions, salary]);
 
   function calculateTotal(transactionType: 'bill' | 'savings') {
     return transactions.reduce(
@@ -45,5 +48,11 @@ export function useTransactions() {
     });
   };
 
-  return { transactions, totalBills, totalSavings, balance, prefetchTransactions };
+  return {
+    transactions,
+    totalBills,
+    totalSavings,
+    balance,
+    prefetchTransactions,
+  };
 }

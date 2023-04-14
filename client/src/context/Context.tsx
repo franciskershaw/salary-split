@@ -9,7 +9,7 @@ interface ContextProps {
   children: ReactNode;
 }
 
-export const MyContext = createContext<Context>({
+const Context = createContext<Context>({
   salary: '',
   setSalary: () => {},
 });
@@ -17,10 +17,10 @@ export const MyContext = createContext<Context>({
 export function ContextProvider({ children }: ContextProps) {
   const [salary, setSalary] = useState<number | string>(0);
   return (
-    <MyContext.Provider value={{ salary, setSalary }}>
+    <Context.Provider value={{ salary, setSalary }}>
       {children}
-    </MyContext.Provider>
+    </Context.Provider>
   );
 }
 
-export default MyContext;
+export default Context;
