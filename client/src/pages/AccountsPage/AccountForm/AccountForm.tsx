@@ -14,23 +14,20 @@ const AccountForm: FC<AccountFormProps> = ({
   const [formData, setFormData] = useState<AddAccountState>({
     name: '',
     amount: 0,
-    // defaultAccount: type === 'first' ? true : false,
     acceptsFunds: true,
   });
-  // const { name, amount, defaultAccount } = formData;
   const { name, amount } = formData;
 
   const addAccount = useAddAccount();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
     setFormData((prevState: AddAccountState) => ({
       ...prevState,
-      [name]: type === 'checkbox' ? checked : value,
+      [e.target.name]: e.target.value,
     }));
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addAccount(formData);
     if (setModalOpen) {
@@ -55,19 +52,6 @@ const AccountForm: FC<AccountFormProps> = ({
           onChange={onChange}
         />
       </div>
-      {type !== 'first' && (
-        <div className="flex gap-4 mb-6">
-          <label>Make default account?</label>
-          <input
-            className="py-2 px-3 border-2 rounded-sm text-sm bg-transparent"
-            type="checkbox"
-            // checked={defaultAccount}
-            name="defaultAccount"
-            onChange={onChange}
-          />
-        </div>
-      )}
-
       <div className="flex flex-col mb-6">
         <label>Amount in account</label>
         <input

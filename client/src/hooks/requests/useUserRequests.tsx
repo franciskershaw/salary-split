@@ -1,12 +1,12 @@
 import useAxios from '../axios/useAxios';
 import { createConfig } from '../../utils/utils';
-import { User, EditSalaryState } from '../../types/types';
+import { User, EditUserState } from '../../types/types';
 
 interface UserRequests {
   getUser: (user: User | null | undefined) => Promise<User | null>;
-  editUserSalary: (
+  editUser: (
     user: User | null | undefined,
-    formData: EditSalaryState
+    formData: EditUserState
   ) => Promise<User | null>;
 }
 
@@ -32,14 +32,14 @@ export const useUserRequests = (): UserRequests => {
     }
   };
 
-  const editUserSalary = async (
+  const editUser = async (
     user: User | null | undefined,
-    formData: EditSalaryState
+    formData: EditUserState
   ) => {
     const config = createConfig(user?.accessToken || '');
     const response = await api.put('/api/users/', formData, config);
     return response.data;
   };
 
-  return { getUser, editUserSalary };
+  return { getUser, editUser };
 };

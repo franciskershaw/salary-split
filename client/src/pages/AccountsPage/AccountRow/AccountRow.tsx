@@ -4,6 +4,7 @@ import { Account } from '../../../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useEditAccount } from '../../../hooks/accounts/useEditAccount';
+import { useEditUser } from '../../../hooks/user/useEditUser';
 import { useDeleteAccount } from '../../../hooks/accounts/useDeleteAccount';
 import Modal from '../../../components/Modal/Modal';
 
@@ -24,6 +25,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
   const editAccount = useEditAccount(account._id);
   const deleteAccount = useDeleteAccount(account._id);
+  const editUser = useEditUser()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
@@ -31,12 +33,12 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
     editAccount({ amount: newAmount });
   };
 
-  // const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.checked) {
-  //     setDefaultId(account._id);
-  //   }
-  //   editAccount({ defaultAccount: e.target.checked });
-  // };
+  const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setDefaultId(account._id);
+    }
+    editUser({ defaultAccount: account._id });
+  };
 
   const onChangeAcceptsFunds = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAcceptsFunds(e.target.checked);
@@ -71,7 +73,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
         <div className="flex items-end justify-between gap-4 w-1/2 mx-2">
           <input
-            // onChange={onChangeDefault}
+            onChange={onChangeDefault}
             defaultChecked={account._id === defaultId}
             name="defaultAccount"
             className="w-6 h-6"

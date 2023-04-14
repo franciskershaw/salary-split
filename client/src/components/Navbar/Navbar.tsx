@@ -5,11 +5,11 @@ import { useAuth } from '../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { useEditUserSalary } from '../../hooks/user/useEditUserSalary';
+import { useEditUser } from '../../hooks/user/useEditUser';
 
 const Navbar = (): JSX.Element => {
   const { user } = useUser();
-  const editSalary = useEditUserSalary();
+  const editUser = useEditUser();
   const auth = useAuth();
   const { salary, setSalary } = useContext(Context);
 
@@ -21,7 +21,7 @@ const Navbar = (): JSX.Element => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSalary(e.target.value);
-    editSalary({
+    editUser({
       monthlySalary: parseFloat(e.target.value),
     });
   };

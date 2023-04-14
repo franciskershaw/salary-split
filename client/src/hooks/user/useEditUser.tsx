@@ -1,24 +1,28 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserRequests } from '../requests/useUserRequests';
 import { useUser } from '../auth/useUser';
-import { EditSalaryState, User } from '../../types/types';
+import { EditUserState, User } from '../../types/types';
 import { queryKeys } from '../../reactQuery/queryKeys';
 
-export function useEditUserSalary() {
+export function useEditUser() {
   const { user } = useUser();
-  const { editUserSalary } = useUserRequests();
+  const { editUser } = useUserRequests();
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    (formData: EditSalaryState) => editUserSalary(user, formData),
+    (formData: EditUserState) => editUser(user, formData),
     {
       onSuccess: (data, variables) => {
         queryClient.setQueryData<User>(
           [queryKeys.user],
           (prevUser: User | undefined) => {
             if (!prevUser) return prevUser;
-            const updatedUser = prevUser;
-            updatedUser.userInfo.monthlySalary = variables.monthlySalary;
+
+            const updatedUser = {
+              ...prevUser,
+              userInfo: { ...prevUser.userInfo, ...variables },
+            };
+
             return updatedUser;
           }
         );
