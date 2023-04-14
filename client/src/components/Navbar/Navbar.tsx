@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser } from '../../hooks/auth/useUser';
 import { useAuth } from '../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,16 @@ import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 const Navbar = (): JSX.Element => {
   const { user } = useUser();
   const auth = useAuth();
-  const [salary, setSalary] = useState(user?.userInfo.monthlySalary);
+  const [salary, setSalary] = useState<number | string>(user?.userInfo.monthlySalary || "");
+
+  useEffect(() => {
+    console.log(salary)
+  }, [salary])
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSalary(e.target.value)
+    // editUser(parseInt(e.target.value))
+  }
   return (
     <header className="px-3 py-4 training-wheels">
       <div className="flex justify-between mb-2">
@@ -20,7 +29,7 @@ const Navbar = (): JSX.Element => {
       <div className="border-t-2 border-b-2 py-3 mx-2">
         <div className="flex flex-col items-center justify-center gap-2 mb-3">
           <label>This month's take-home salary</label>
-          <input type="number" name="" id="" value={salary} />
+          <input onChange={onChange} type="number" name="" id="" value={salary} />
         </div>
         <nav className="flex items-center justify-center gap-4">
           <Link to={'/split'}>Split</Link>

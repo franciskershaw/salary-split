@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 import { Account, AddTransactionState } from '../../../types/types';
 import { useAddTransaction } from '../../../hooks/transactions/useAddTransaction';
 import { useAccounts } from '../../../hooks/accounts/useAccounts';

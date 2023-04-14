@@ -73,7 +73,7 @@ const SplitPage = (): JSX.Element => {
             <div className='flex flex-col'>
               <label className='text-xs' htmlFor="">Send to (default account)</label>
               <select className='border'>
-                <option value="">Add later</option>
+                <option value="">Monzo (Personal)</option>
               </select>
             </div>
         </section>
