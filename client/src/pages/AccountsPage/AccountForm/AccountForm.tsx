@@ -7,14 +7,18 @@ interface AccountFormProps {
   type: FormType;
 }
 
-const AccountForm: FC<AccountFormProps> = ({ setModalOpen, type }): JSX.Element => {
+const AccountForm: FC<AccountFormProps> = ({
+  setModalOpen,
+  type,
+}): JSX.Element => {
   const [formData, setFormData] = useState<AddAccountState>({
     name: '',
     amount: 0,
-    defaultAccount: type === 'first' ? true : false,
+    // defaultAccount: type === 'first' ? true : false,
     acceptsFunds: true,
   });
-  const { name, amount, defaultAccount } = formData;
+  // const { name, amount, defaultAccount } = formData;
+  const { name, amount } = formData;
 
   const addAccount = useAddAccount();
 
@@ -57,7 +61,7 @@ const AccountForm: FC<AccountFormProps> = ({ setModalOpen, type }): JSX.Element 
           <input
             className="py-2 px-3 border-2 rounded-sm text-sm bg-transparent"
             type="checkbox"
-            checked={defaultAccount}
+            // checked={defaultAccount}
             name="defaultAccount"
             onChange={onChange}
           />

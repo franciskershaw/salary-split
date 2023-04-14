@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
+import Context from '../../../context/Context';
 import { Account } from '../../../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -12,9 +13,7 @@ interface Props {
 
 const AccountRow: FC<Props> = ({ account }): JSX.Element => {
   const [amount, setAmount] = useState<number>(account.amount);
-  const [defaultAccount, setDefaultAccount] = useState<boolean>(
-    account.defaultAccount
-  );
+  const { defaultId, setDefaultId } = useContext(Context);
   const [acceptsFunds, setAcceptsFunds] = useState<boolean>(
     account.acceptsFunds
   );
@@ -32,10 +31,12 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
     editAccount({ amount: newAmount });
   };
 
-  const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDefaultAccount(e.target.checked);
-    editAccount({ defaultAccount: e.target.checked });
-  };
+  // const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.checked) {
+  //     setDefaultId(account._id);
+  //   }
+  //   editAccount({ defaultAccount: e.target.checked });
+  // };
 
   const onChangeAcceptsFunds = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAcceptsFunds(e.target.checked);
@@ -70,8 +71,8 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
         <div className="flex items-end justify-between gap-4 w-1/2 mx-2">
           <input
-            onChange={onChangeDefault}
-            checked={defaultAccount}
+            // onChange={onChangeDefault}
+            defaultChecked={account._id === defaultId}
             name="defaultAccount"
             className="w-6 h-6"
             type="radio"
@@ -84,7 +85,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
             checked={acceptsFunds}
             className="w-6 h-6"
             type="checkbox"
-            disabled={account.defaultAccount}
+            disabled={account._id === defaultId}
           />
           <input
             onChange={onChangeExcludeFromTotal}

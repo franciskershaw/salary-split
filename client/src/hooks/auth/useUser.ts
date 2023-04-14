@@ -3,6 +3,8 @@ import useAxios from '../axios/useAxios';
 import { queryKeys } from '../../reactQuery/queryKeys';
 import { useUserRequests } from '../requests/useUserRequests';
 import { User } from '../../types/types';
+import { useEffect, useContext } from 'react';
+import Context from '../../context/Context';
 
 interface UseUserResponse {
   user: User | null;
@@ -12,6 +14,7 @@ interface UseUserResponse {
 }
 
 export function useUser(): UseUserResponse {
+  const { setDefaultId } = useContext(Context);
   const api = useAxios();
   const queryClient = useQueryClient();
   const { getUser } = useUserRequests();
@@ -20,6 +23,12 @@ export function useUser(): UseUserResponse {
     [queryKeys.user],
     () => getUser(user)
   );
+
+  useEffect(() => {
+    if (user) {
+      setDefaultId(user.userInfo.defaultAccount);
+    }
+  }, [user]);
 
   function updateUser(newUser: User) {
     queryClient.setQueryData<User | null>([queryKeys.user], newUser);

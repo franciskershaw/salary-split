@@ -18,14 +18,12 @@ export interface RegisterFormState extends RegisterFormData {
 export interface AddAccountState {
   name: string;
   amount: number;
-  defaultAccount: boolean;
   acceptsFunds: boolean;
 }
 
 export interface EditAccountState {
   name?: string;
   amount?: number;
-  defaultAccount?: boolean;
   acceptsFunds?: boolean;
   excludeFromTotal?: boolean;
 }
