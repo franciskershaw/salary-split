@@ -6,14 +6,14 @@ import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../components/Modal/Modal';
 import BillForm from './TransactionForm/TransactionForm';
 import TransactionRow from './TransactionRow/TransactionRow';
-import { Transaction } from '../../types/types';
+import { Transaction, Account } from '../../types/types';
 
 const SplitPage = (): JSX.Element => {
   const [addBillModalOpen, setAddBillModalOpen] = useState<boolean>(false);
   const [addSavingsModalOpen, setAddSavingsModalOpen] =
     useState<boolean>(false);
 
-  const { prefetchAccounts } = useAccounts();
+  const { prefetchAccounts, accounts } = useAccounts();
   const { transactions, totalBills, totalSavings, balance } = useTransactions();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const SplitPage = (): JSX.Element => {
               }
             })}
           </ul>
-          <div className='text-end font-bold'>
+          <div className="text-end font-bold">
             <h3>Total: {totalBills}</h3>
           </div>
         </section>
@@ -63,19 +63,29 @@ const SplitPage = (): JSX.Element => {
               }
             })}
           </ul>
-          <div className='text-end font-bold'>
+          <div className="text-end font-bold">
             <h3>Total: {totalSavings}</h3>
           </div>
         </section>
-        <section className='flex justify-between items-end'>
-            <h2 className='font-bold'>Balance</h2>
-            <h3>£{balance}</h3>
-            <div className='flex flex-col'>
-              <label className='text-xs' htmlFor="">Send to (default account)</label>
-              <select className='border'>
-                <option value="">Monzo (Personal)</option>
-              </select>
-            </div>
+        <section className="flex justify-between items-end">
+          <h2 className="font-bold">Balance</h2>
+          <h3>£{balance}</h3>
+          <div className="flex flex-col">
+            <label className="text-xs" htmlFor="">
+              Send to (default account)
+            </label>
+            <select className="border">
+              {accounts.map((account: Account, i: number) => {
+                if (account.acceptsFunds) {
+                  return (
+                    <option value={account._id} key={`balance_accounts_${i}`}>
+                      {account.name}
+                    </option>
+                  );
+                }
+              })}
+            </select>
+          </div>
         </section>
       </div>
       <Modal setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
