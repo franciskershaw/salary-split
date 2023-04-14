@@ -13,9 +13,10 @@ const {
 const {
   createUserSchema,
   loginUserSchema,
-  editSalarySchema,
+  editUserSchema,
 } = require('../validation/joiSchemas');
 const User = require('../models/User');
+const Account = require('../models/Account');
 
 const createUser = async (req, res, next) => {
   try {
@@ -145,11 +146,18 @@ const getUserInfo = async (req, res, next) => {
   }
 };
 
-const editUserSalary = async (req, res, next) => {
+const editUser = async (req, res, next) => {
   try {
-    const { error, value } = editSalarySchema.validate(req.body);
+    const { error, value } = editUserSchema.validate(req.body);
     if (error) {
       throw new BadRequestError(error.details[0].message);
+    }
+
+    if (value.defaultAccount) {
+      const account = await Account.findById(value.defaultAccount);
+      if (account.acceptsFunds === false) {
+        throw new BadRequestError('A default account must accept funds')
+      }
     }
 
     const user = await User.findByIdAndUpdate(req.user._id, value, {
@@ -167,5 +175,5 @@ module.exports = {
   checkRefreshToken,
   logoutUser,
   getUserInfo,
-  editUserSalary,
+  editUser,
 };
