@@ -12,6 +12,10 @@ const loginUserSchema = Joi.object({
   password: Joi.string().max(20).required().min(6),
 });
 
+const editSalarySchema = Joi.object({
+  monthlySalary: Joi.number().positive().required(),
+});
+
 const addAccountSchema = Joi.object({
   name: Joi.string().required(),
   amount: Joi.number().required(),
@@ -57,6 +61,7 @@ const updateTransactionSchema = Joi.object({
 module.exports = {
   createUserSchema,
   loginUserSchema,
+  editSalarySchema,
   addAccountSchema,
   updateAccountSchema,
   addTransactionSchema,

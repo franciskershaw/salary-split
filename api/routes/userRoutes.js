@@ -8,11 +8,13 @@ const {
   checkRefreshToken,
   logoutUser,
   getUserInfo,
+  editUserSalary,
 } = require('../controllers/userController');
 
 const { isLoggedIn, isAuthorised } = require('../middleware/authMiddleware');
 
 router.post('/', asyncHandler(createUser));
+router.put('/', isLoggedIn, asyncHandler(editUserSalary));
 router.post('/login', asyncHandler(loginUser));
 router.get('/refreshToken', checkRefreshToken);
 router.post('/logout', logoutUser);

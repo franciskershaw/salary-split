@@ -13,6 +13,7 @@ const {
 const {
   createUserSchema,
   loginUserSchema,
+  editSalarySchema,
 } = require('../validation/joiSchemas');
 const User = require('../models/User');
 
@@ -141,10 +142,27 @@ const getUserInfo = async (req, res, next) => {
   }
 };
 
+const editUserSalary = async (req, res, next) => {
+  try {
+    const { error, value } = editSalarySchema.validate(req.body);
+    if (error) {
+      throw new BadRequestError(error.details[0].message);
+    }
+
+    const user = await User.findByIdAndUpdate(req.user._id, value, {
+      new: true,
+    });
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
   checkRefreshToken,
   logoutUser,
   getUserInfo,
+  editUserSalary,
 };
