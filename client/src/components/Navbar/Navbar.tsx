@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useEffect } from 'react';
+import Context from '../../context/Context';
 import { useUser } from '../../hooks/auth/useUser';
 import { useAuth } from '../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
@@ -10,9 +11,13 @@ const Navbar = (): JSX.Element => {
   const { user } = useUser();
   const editSalary = useEditUserSalary();
   const auth = useAuth();
-  const [salary, setSalary] = useState<number | string>(
-    user?.userInfo.monthlySalary || ''
-  );
+  const { salary, setSalary } = useContext(Context);
+
+  useEffect(() => {
+    if (user) {
+      setSalary(user.userInfo.monthlySalary);
+    }
+  }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSalary(e.target.value);
