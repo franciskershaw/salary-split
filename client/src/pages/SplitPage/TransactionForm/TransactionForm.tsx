@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
+import Context from '../../../context/Context';
 import { Account, AddTransactionState } from '../../../types/types';
 import { useAddTransaction } from '../../../hooks/transactions/useAddTransaction';
 import { useAccounts } from '../../../hooks/accounts/useAccounts';
@@ -12,13 +13,14 @@ const TransactionForm: FC<TransactionFormProps> = ({
   setModalOpen,
   type,
 }): JSX.Element => {
-  const { accounts, defaultAccountId } = useAccounts();
+  const { accounts } = useAccounts();
   const addTransaction = useAddTransaction();
 
+  const { defaultId } = useContext(Context);
   const [formData, setFormData] = useState<AddTransactionState>({
     name: '',
     amount: 0,
-    sendToAccount: defaultAccountId,
+    sendToAccount: defaultId,
     type: type,
   });
 
