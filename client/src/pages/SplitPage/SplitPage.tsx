@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import Context from '../../context/Context';
 import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { useTransactions } from '../../hooks/transactions/useTransactions';
+import { useEditUser } from '../../hooks/user/useEditUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../components/Modal/Modal';
@@ -12,13 +14,20 @@ const SplitPage = (): JSX.Element => {
   const [addBillModalOpen, setAddBillModalOpen] = useState<boolean>(false);
   const [addSavingsModalOpen, setAddSavingsModalOpen] =
     useState<boolean>(false);
+  const { defaultId, setDefaultId } = useContext(Context);
 
   const { prefetchAccounts, accounts } = useAccounts();
   const { transactions, totalBills, totalSavings, balance } = useTransactions();
+  const editUser = useEditUser();
 
   useEffect(() => {
     prefetchAccounts();
   }, []);
+
+  const onChangeDefault = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDefaultId(e.target.value);
+    editUser({ defaultAccount: e.target.value });
+  };
 
   return (
     <>
@@ -74,7 +83,10 @@ const SplitPage = (): JSX.Element => {
             <label className="text-xs" htmlFor="">
               Send to (default account)
             </label>
-            <select className="border">
+            <select
+              onChange={onChangeDefault}
+              value={defaultId}
+              className="border">
               {accounts.map((account: Account, i: number) => {
                 if (account.acceptsFunds) {
                   return (
