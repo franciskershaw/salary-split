@@ -1,9 +1,13 @@
 import useAxios from '../axios/useAxios';
 import { createConfig } from '../../utils/utils';
-import { User } from '../../types/types';
+import { User, EditSalaryState } from '../../types/types';
 
 interface UserRequests {
   getUser: (user: User | null | undefined) => Promise<User | null>;
+  editUserSalary: (
+    user: User | null | undefined,
+    formData: EditSalaryState
+  ) => Promise<User | null>;
 }
 
 export const useUserRequests = (): UserRequests => {
@@ -28,7 +32,14 @@ export const useUserRequests = (): UserRequests => {
     }
   };
 
-  return {
-    getUser,
+  const editUserSalary = async (
+    user: User | null | undefined,
+    formData: EditSalaryState
+  ) => {
+    const config = createConfig(user?.accessToken || '');
+    const response = await api.put('/api/users/', formData, config);
+    return response.data;
   };
+
+  return { getUser, editUserSalary };
 };

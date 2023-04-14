@@ -44,6 +44,10 @@ export interface EditTransactionState {
   type?: 'bill' | 'savings';
 }
 
+export interface EditSalaryState {
+  monthlySalary: number;
+}
+
 export interface User {
   userInfo: {
     _id: string;
