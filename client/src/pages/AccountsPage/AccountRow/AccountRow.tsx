@@ -25,12 +25,13 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
   const editAccount = useEditAccount(account._id);
   const deleteAccount = useDeleteAccount(account._id);
-  const editUser = useEditUser()
+  const editUser = useEditUser();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
-    setAmount(newAmount);
-    editAccount({ amount: newAmount });
+    newAmount
+      ? (setAmount(newAmount), editAccount({ amount: newAmount }))
+      : (setAmount(0), editAccount({ amount: 0 }));
   };
 
   const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {

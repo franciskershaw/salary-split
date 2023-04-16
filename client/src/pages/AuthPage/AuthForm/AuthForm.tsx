@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RegisterFormState, PageType } from '../../../types/types';
 import { useAuth } from '../../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
@@ -17,9 +17,15 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
   const auth = useAuth();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prevState: RegisterFormState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]:
+        name === 'monthlySalary'
+          ? value && parseFloat(value) >= 0
+            ? parseFloat(value)
+            : 0
+          : value,
     }));
   };
 

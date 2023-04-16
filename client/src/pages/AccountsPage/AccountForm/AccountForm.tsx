@@ -21,9 +21,15 @@ const AccountForm: FC<AccountFormProps> = ({
   const addAccount = useAddAccount();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prevState: AddAccountState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]:
+        name === 'amount'
+          ? value && parseFloat(value) >= 0
+            ? parseFloat(value)
+            : 0
+          : value,
     }));
   };
 

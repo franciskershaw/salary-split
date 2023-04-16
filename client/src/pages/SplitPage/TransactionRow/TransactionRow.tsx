@@ -24,8 +24,9 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
 
   const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
-    setAmount(newAmount);
-    editTransaction({ amount: newAmount });
+    newAmount !== null && newAmount >= 0
+      ? (setAmount(newAmount), editTransaction({ amount: newAmount }))
+      : (setAmount(0), editTransaction({ amount: 0 }));
   };
 
   const onChangeAccount = (e: React.ChangeEvent<HTMLSelectElement>) => {

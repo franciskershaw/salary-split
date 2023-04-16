@@ -30,7 +30,12 @@ const TransactionForm: FC<TransactionFormProps> = ({
     const { name, value } = e.target;
     setFormData((prevState: AddTransactionState) => ({
       ...prevState,
-      [name]: value,
+      [name]:
+        name === 'amount'
+          ? value && parseFloat(value) >= 0
+            ? parseFloat(value)
+            : 0
+          : value,
     }));
   };
 

@@ -3,7 +3,7 @@ const Joi = require('joi');
 const createUserSchema = Joi.object({
   username: Joi.string().max(30).required().regex(/^\S+$/),
   name: Joi.string().max(30).required(),
-  monthlySalary: Joi.number().positive().required(),
+  monthlySalary: Joi.number().min(0).required(),
   password: Joi.string().max(20).required().min(6),
 });
 
@@ -13,8 +13,10 @@ const loginUserSchema = Joi.object({
 });
 
 const editUserSchema = Joi.object({
-  monthlySalary: Joi.number().positive().optional(),
-  defaultAccount:  Joi.string().regex(/^[0-9a-fA-F]{24}$/).optional()
+  monthlySalary: Joi.number().min(0).optional(),
+  defaultAccount: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .optional(),
 }).min(1);
 
 const addAccountSchema = Joi.object({
