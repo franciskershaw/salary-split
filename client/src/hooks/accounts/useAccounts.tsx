@@ -19,12 +19,17 @@ export function useAccounts() {
   )?._id;
 
   const total = useMemo(() => {
-    return accounts.reduce((accumulator: number, account: Account) => {
-      if (!account.excludeFromTotal) {
-        accumulator += account.amount;
-      }
-      return accumulator;
-    }, 0);
+    const subtotal = accounts.reduce(
+      (accumulator: number, account: Account) => {
+        if (!account.excludeFromTotal) {
+          accumulator += account.amount;
+        }
+        return accumulator;
+      },
+      0
+    );
+
+    return Number(subtotal.toFixed(2));
   }, [accounts]);
 
   useEffect(() => {

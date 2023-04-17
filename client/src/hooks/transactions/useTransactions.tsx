@@ -40,7 +40,7 @@ export function useTransactions() {
   }, [transactions, salary, accounts, defaultId]);
 
   function calculateTotal(transactionType: 'bill' | 'savings') {
-    return transactions.reduce(
+    const subtotal = transactions.reduce(
       (accumulator: number, transaction: Transaction) => {
         if (transaction.type === transactionType) {
           accumulator += transaction.amount;
@@ -49,6 +49,8 @@ export function useTransactions() {
       },
       0
     );
+
+    return Number(subtotal.toFixed(2));
   }
 
   function getAccountNameById(id: string): string {
@@ -80,7 +82,7 @@ export function useTransactions() {
 
     for (const [account, amount] of summaryMap) {
       const accountName = getAccountNameById(account);
-      summary.push({ account: accountName, amount });
+      summary.push({ account: accountName, amount: Number(amount.toFixed(2)) });
     }
 
     return summary;
