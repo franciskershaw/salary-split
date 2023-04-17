@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, useEffect } from 'react';
+import { createContext, ReactNode, useState } from 'react';
 
 interface Context {
   salary: number | string;
@@ -26,10 +26,6 @@ export function ContextProvider({ children }: ContextProps) {
   const [salary, setSalary] = useState<number | string>(0);
   const [defaultId, setDefaultId] = useState<string>('');
   const [noAccounts, setNoAccounts] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log(noAccounts)
-  }, [noAccounts])
 
   return (
     <Context.Provider
