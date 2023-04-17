@@ -9,6 +9,7 @@ import Modal from '../../components/Modal/Modal';
 import BillForm from './TransactionForm/TransactionForm';
 import TransactionRow from './TransactionRow/TransactionRow';
 import { Transaction, Account } from '../../types/types';
+import SelectInput from '../../components/SelectInput/SelectInput';
 
 const SplitPage = (): JSX.Element => {
   const [addBillModalOpen, setAddBillModalOpen] = useState<boolean>(false);
@@ -94,10 +95,11 @@ const SplitPage = (): JSX.Element => {
             <label className="text-xs" htmlFor="">
               Send to (default account)
             </label>
-            <select
+            <SelectInput
               onChange={onChangeDefault}
+              name="sendToAccount"
               value={defaultId}
-              className="border">
+              id={`splitPage-defaultId`}>
               {accounts.map((account: Account, i: number) => {
                 if (account.acceptsFunds) {
                   return (
@@ -107,7 +109,7 @@ const SplitPage = (): JSX.Element => {
                   );
                 }
               })}
-            </select>
+            </SelectInput>
           </div>
         </section>
       </div>

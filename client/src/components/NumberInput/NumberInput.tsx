@@ -4,7 +4,7 @@ interface NumberInputProps {
   name: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
-  size?: 'w-28' | 'w-32' | 'w-full';
+  size?: 'w-28';
   value: number;
 }
 

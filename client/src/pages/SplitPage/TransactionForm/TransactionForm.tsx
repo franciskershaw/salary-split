@@ -4,6 +4,7 @@ import { Account, AddTransactionState } from '../../../types/types';
 import { useAddTransaction } from '../../../hooks/transactions/useAddTransaction';
 import { useAccounts } from '../../../hooks/accounts/useAccounts';
 import NumberInput from '../../../components/NumberInput/NumberInput';
+import SelectInput from '../../../components/SelectInput/SelectInput';
 
 interface TransactionFormProps {
   setModalOpen?: (isOpen: boolean) => void;
@@ -75,12 +76,11 @@ const TransactionForm: FC<TransactionFormProps> = ({
 
       <div className="flex flex-col mb-6">
         <label>Account to send funds to</label>
-        <select
+        <SelectInput
           onChange={onChange}
-          className="border"
           name="sendToAccount"
           value={formData.sendToAccount}
-          id="">
+          id={`transactionForm-sendTo`}>
           {accounts.map((account: Account, i: number) => {
             if (account.acceptsFunds) {
               return (
@@ -90,7 +90,7 @@ const TransactionForm: FC<TransactionFormProps> = ({
               );
             }
           })}
-        </select>
+        </SelectInput>
       </div>
       <div className="flex items-center justify-center">
         <button className="px-6 py-2 border">

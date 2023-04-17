@@ -7,6 +7,7 @@ import { useEditTransaction } from '../../../hooks/transactions/useEditTransacti
 import { useDeleteTransaction } from '../../../hooks/transactions/useDeleteTransaction';
 import Modal from '../../../components/Modal/Modal';
 import NumberInput from '../../../components/NumberInput/NumberInput';
+import SelectInput from '../../../components/SelectInput/SelectInput';
 
 interface Props {
   transaction: Transaction;
@@ -64,12 +65,11 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
           <label className="text-xs" htmlFor="">
             Send to
           </label>
-          <select
+          <SelectInput
             onChange={onChangeAccount}
-            className="border"
             name="sendToAccount"
             value={sendToAccount}
-            id="">
+            id={`transactionRow-${sendToAccount}`}>
             {accounts.map((account: Account, i: number) => {
               if (account.acceptsFunds) {
                 return (
@@ -78,8 +78,9 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
                   </option>
                 );
               }
+              return null;
             })}
-          </select>
+          </SelectInput>
         </div>
 
         {/* Delete button */}
