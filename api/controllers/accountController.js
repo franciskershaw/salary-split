@@ -68,7 +68,7 @@ const addAccount = async (req, res, next) => {
 const editAccount = async (req, res, next) => {
   try {
     const account = await Account.findById(req.params.accountId);
-  
+
     if (!account) {
       throw new NotFoundError('Account not found');
     }
@@ -120,8 +120,10 @@ const deleteAccount = async (req, res, next) => {
     if (!account) {
       throw NotFoundError('Account not found');
     }
-    if (account.defaultAccount) {
-      throw new BadRequestError('You cannot delete the default account');
+
+    const user = await User.findById(req.user._id);
+    if (user.defaultAccount.equals(accountId)) {
+      throw new BadRequestError('Cannot delete default account');
     }
 
     // find transactions that have the account as 'sendToAccount'
