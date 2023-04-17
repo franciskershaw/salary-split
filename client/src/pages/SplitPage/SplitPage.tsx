@@ -39,7 +39,7 @@ const SplitPage = (): JSX.Element => {
 
   return (
     <>
-      <div className="px-8">
+      <div className="px-8 mb-8">
         <section className="flex flex-col">
           <div className="flex gap-2 mb-2">
             <h2 className="text-xl font-bold">Bills</h2>
