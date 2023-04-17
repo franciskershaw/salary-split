@@ -59,7 +59,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
   return (
     <>
-      <div className="flex training-wheels">
+      <div className="flex items-end mb-8">
         <div className="flex flex-col w-1/3">
           <label className="text-xs w-26" htmlFor={`accounts-${account.name}`}>
             {account.name}

@@ -43,7 +43,7 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
 
   return (
     <>
-      <div className="flex training-wheels justify-between items-center">
+      <div className="flex justify-between items-end">
         <h3 className="text-xs w-20 font-bold">{transaction.name}</h3>
 
         {/* Amount */}

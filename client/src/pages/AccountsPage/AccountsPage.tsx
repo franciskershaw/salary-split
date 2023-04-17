@@ -1,5 +1,5 @@
 // In AccountsPage.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AccountForm from './AccountForm/AccountForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,12 +7,18 @@ import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { Account } from '../../types/types';
 import AccountRow from './AccountRow/AccountRow';
+import { useTransactions } from '../../hooks/transactions/useTransactions';
 
 const AccountsPage = (): JSX.Element => {
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 
   const { accounts, total } = useAccounts();
+  const { prefetchTransactions } = useTransactions();
+
+  useEffect(() => {
+    prefetchTransactions();
+  }, []);
 
   return (
     <>
@@ -48,7 +54,10 @@ const AccountsPage = (): JSX.Element => {
           <h3 className="text-2xl">Total: £{total}</h3>
         </section>
       </div>
-      <Modal canClose setIsOpen={setAddAccountModalOpen} isOpen={addAccountModalOpen}>
+      <Modal
+        canClose
+        setIsOpen={setAddAccountModalOpen}
+        isOpen={addAccountModalOpen}>
         <AccountForm setModalOpen={setAddAccountModalOpen} type="add" />
       </Modal>
     </>
