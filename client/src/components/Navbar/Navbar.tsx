@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useEditUser } from '../../hooks/user/useEditUser';
+import NumberInput from '../NumberInput/NumberInput';
 
 const Navbar = (): JSX.Element => {
   const { user } = useUser();
@@ -37,11 +38,10 @@ const Navbar = (): JSX.Element => {
       <div className="border-t-2 border-b-2 py-3 mx-2">
         <div className="flex flex-col items-center justify-center gap-2 mb-3">
           <label>This month's take-home salary</label>
-          <input
+          <NumberInput
+            id="navbar-salary"
+            name="navbar-salary"
             onChange={onChange}
-            type="number"
-            name=""
-            id=""
             value={salary}
           />
         </div>

@@ -7,6 +7,7 @@ import { useEditAccount } from '../../../hooks/accounts/useEditAccount';
 import { useEditUser } from '../../../hooks/user/useEditUser';
 import { useDeleteAccount } from '../../../hooks/accounts/useDeleteAccount';
 import Modal from '../../../components/Modal/Modal';
+import NumberInput from '../../../components/NumberInput/NumberInput';
 
 interface Props {
   account: Account;
@@ -60,15 +61,15 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
     <>
       <div className="flex">
         <div className="flex flex-col w-1/3">
-          <label className="text-xs w-26" htmlFor="">
+          <label className="text-xs w-26" htmlFor={`accounts-${account.name}`}>
             {account.name}
           </label>
-          <input
-            className="h-8 w-24 border border-black"
-            type="number"
-            value={amount}
-            min={0}
+          <NumberInput
+            id={`accounts-${account.name}`}
+            name={account.name}
             onChange={onChange}
+            size="w-28"
+            value={amount}
           />
         </div>
 
@@ -106,7 +107,10 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           </button>
         </div>
       </div>
-      <Modal canClose isOpen={deleteRowModalOpen} setIsOpen={setDeleteRowModalOpen}>
+      <Modal
+        canClose
+        isOpen={deleteRowModalOpen}
+        setIsOpen={setDeleteRowModalOpen}>
         <div className="text-center mb-3">
           <h2 className="mb-3 text-white">
             Are you sure you'd like to delete this account?

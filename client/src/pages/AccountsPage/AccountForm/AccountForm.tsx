@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { FormType, AddAccountState } from '../../../types/types';
 import { useAddAccount } from '../../../hooks/accounts/useAddAccount';
+import NumberInput from '../../../components/NumberInput/NumberInput';
 
 interface AccountFormProps {
   setModalOpen?: (isOpen: boolean) => void;
@@ -60,12 +61,11 @@ const AccountForm: FC<AccountFormProps> = ({
       </div>
       <div className="flex flex-col mb-6">
         <label>Amount in account</label>
-        <input
-          className="py-2 px-3 border-2 rounded-sm text-sm bg-transparent"
-          type="number"
-          value={amount}
+        <NumberInput
+          id="account-amount"
           name="amount"
           onChange={onChange}
+          value={amount}
         />
       </div>
       <div className="flex items-center justify-center">

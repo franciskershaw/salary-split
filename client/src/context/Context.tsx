@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useState } from 'react';
 
 interface Context {
-  salary: number | string;
-  setSalary: (value: number | string) => void;
+  salary: number; // Changed to number only
+  setSalary: (value: number) => void;
   defaultId: string;
   setDefaultId: (value: string) => void;
   noAccounts: boolean;
@@ -14,7 +14,7 @@ interface ContextProps {
 }
 
 const Context = createContext<Context>({
-  salary: '',
+  salary: 0,
   setSalary: () => {},
   defaultId: '',
   setDefaultId: () => {},
@@ -23,7 +23,7 @@ const Context = createContext<Context>({
 });
 
 export function ContextProvider({ children }: ContextProps) {
-  const [salary, setSalary] = useState<number | string>(0);
+  const [salary, setSalary] = useState<number>(0);
   const [defaultId, setDefaultId] = useState<string>('');
   const [noAccounts, setNoAccounts] = useState<boolean>(false);
 

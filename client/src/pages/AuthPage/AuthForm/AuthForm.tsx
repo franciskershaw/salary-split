@@ -3,6 +3,7 @@ import { RegisterFormState, PageType } from '../../../types/types';
 import { useAuth } from '../../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import './_authForm.scss';
+import NumberInput from '../../../components/NumberInput/NumberInput';
 
 const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
   const [formData, setFormData] = useState<RegisterFormState>({
@@ -101,16 +102,14 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
               />
             </div>
             <div className="form__group">
-              <label htmlFor="username">
+              <label htmlFor="monthlySalary">
                 What is your montly salary (after deductions)
               </label>
-              <input
-                name="monthlySalary"
-                value={monthlySalary}
-                onChange={onChange}
-                className="border"
-                type="number"
+              <NumberInput
                 id="monthlySalary"
+                name="monthlySalary"
+                onChange={onChange}
+                value={monthlySalary}
                 autoComplete="off"
                 required
               />

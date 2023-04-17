@@ -3,6 +3,7 @@ import Context from '../../../context/Context';
 import { Account, AddTransactionState } from '../../../types/types';
 import { useAddTransaction } from '../../../hooks/transactions/useAddTransaction';
 import { useAccounts } from '../../../hooks/accounts/useAccounts';
+import NumberInput from '../../../components/NumberInput/NumberInput';
 
 interface TransactionFormProps {
   setModalOpen?: (isOpen: boolean) => void;
@@ -64,12 +65,11 @@ const TransactionForm: FC<TransactionFormProps> = ({
       </div>
       <div className="flex flex-col mb-6">
         <label>Amount</label>
-        <input
-          className="py-2 px-3 border-2 rounded-sm text-sm bg-transparent"
-          type="number"
-          value={formData.amount}
+        <NumberInput
+          id="transaction-amount"
           name="amount"
           onChange={onChange}
+          value={formData.amount}
         />
       </div>
 
