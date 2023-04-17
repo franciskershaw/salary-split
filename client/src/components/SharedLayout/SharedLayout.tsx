@@ -8,7 +8,7 @@ const SharedLayout = (): JSX.Element => {
     <div>Loading...</div>
   ) : (
     <>
-      {user?.userInfo.accounts.length && <Navbar />}
+      {user ? <Navbar /> : null}
       <main>
         <Outlet />
       </main>

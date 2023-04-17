@@ -100,10 +100,10 @@ const SplitPage = (): JSX.Element => {
           </div>
         </section>
       </div>
-      <Modal setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
+      <Modal canClose setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
         <BillForm type="bill" setModalOpen={setAddBillModalOpen} />
       </Modal>
-      <Modal setIsOpen={setAddSavingsModalOpen} isOpen={addSavingsModalOpen}>
+      <Modal canClose setIsOpen={setAddSavingsModalOpen} isOpen={addSavingsModalOpen}>
         <BillForm type="savings" setModalOpen={setAddSavingsModalOpen} />
       </Modal>
     </>

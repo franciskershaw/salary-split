@@ -2,9 +2,13 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAccountRequests } from '../requests/useAccountRequests';
 import { queryKeys } from '../../reactQuery/queryKeys';
 import { Account } from '../../types/types';
-import { useMemo } from 'react';
+import { useMemo, useEffect, useContext } from 'react';
+import Context from '../../context/Context';
+import { useNavigate } from 'react-router-dom';
 
 export function useAccounts() {
+  const { setNoAccounts } = useContext(Context);
+
   const queryClient = useQueryClient();
   const { getAccounts } = useAccountRequests();
 
@@ -21,6 +25,14 @@ export function useAccounts() {
       }
       return accumulator;
     }, 0);
+  }, [accounts]);
+
+  useEffect(() => {
+    if (!accounts.length) {
+      setNoAccounts(true);
+    } else {
+      setNoAccounts(false);
+    }
   }, [accounts]);
 
   const prefetchAccounts = async () => {

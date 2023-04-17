@@ -106,7 +106,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           </button>
         </div>
       </div>
-      <Modal isOpen={deleteRowModalOpen} setIsOpen={setDeleteRowModalOpen}>
+      <Modal canClose isOpen={deleteRowModalOpen} setIsOpen={setDeleteRowModalOpen}>
         <div className="text-center mb-3">
           <h2 className="mb-3 text-white">
             Are you sure you'd like to delete this account?

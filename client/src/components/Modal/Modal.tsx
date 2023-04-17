@@ -8,11 +8,18 @@ interface ModalProps {
   setIsOpen: (isOpen: boolean) => void;
   title?: string;
   children?: ReactNode;
+  canClose: boolean;
 }
 
-const Modal: FC<ModalProps> = ({ isOpen, setIsOpen, children, title }) => {
+const Modal: FC<ModalProps> = ({
+  isOpen,
+  setIsOpen,
+  children,
+  title,
+  canClose,
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  
+
   const handleClickOutside = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       setIsOpen(false);
@@ -20,13 +27,13 @@ const Modal: FC<ModalProps> = ({ isOpen, setIsOpen, children, title }) => {
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && canClose) {
       window.addEventListener('mousedown', handleClickOutside);
       return () => {
         window.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, canClose]);
 
   if (!isOpen) {
     return null;
@@ -41,9 +48,11 @@ const Modal: FC<ModalProps> = ({ isOpen, setIsOpen, children, title }) => {
               title ? 'title-included' : 'justify-end'
             }`}>
             {title && <h1>{title}</h1>}
-            <button onClick={() => setIsOpen(false)}>
-              <FontAwesomeIcon icon={faCircleXmark} />
-            </button>
+            {canClose && (
+              <button onClick={() => setIsOpen(false)}>
+                <FontAwesomeIcon icon={faCircleXmark} />
+              </button>
+            )}
           </div>
           <div className="modal__content--body">{children}</div>
         </div>
