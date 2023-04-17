@@ -16,6 +16,20 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
 
   const auth = useAuth();
 
+  useEffect(() => {
+    resetFormData();
+  }, [page]);
+
+  function resetFormData() {
+    setFormData({
+      username: '',
+      name: '',
+      monthlySalary: 0,
+      password: '',
+      confirmPassword: '',
+    });
+  }
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState: RegisterFormState) => ({
