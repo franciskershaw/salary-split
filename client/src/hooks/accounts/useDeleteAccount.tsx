@@ -22,14 +22,16 @@ export function useDeleteAccount(accountId: string) {
           return newUserData;
         }
       );
+      queryClient.invalidateQueries([queryKeys.accounts])
+      queryClient.invalidateQueries([queryKeys.transactions])
 
-      queryClient.setQueryData<Account[]>(
-        [queryKeys.accounts],
-        (oldAccounts) => {
-          if (!oldAccounts) return oldAccounts;
-          return oldAccounts.filter((account) => account._id !== deleted);
-        }
-      );
+      // queryClient.setQueryData<Account[]>(
+      //   [queryKeys.accounts],
+      //   (oldAccounts) => {
+      //     if (!oldAccounts) return oldAccounts;
+      //     return oldAccounts.filter((account) => account._id !== deleted);
+      //   }
+      // );
     },
     onError: (error) => {
       console.log(error);

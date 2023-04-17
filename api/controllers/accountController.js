@@ -130,14 +130,10 @@ const deleteAccount = async (req, res, next) => {
     const affectedTransactions = await Transaction.find({
       sendToAccount: account._id,
     });
-    const defaultAccount = await Account.findOne({
-      user: req.user._id,
-      defaultAccount: true,
-    });
 
     if (affectedTransactions.length) {
       for (let transaction of affectedTransactions) {
-        transaction.sendToAccount = defaultAccount._id;
+        transaction.sendToAccount = user.defaultAccount;
         await transaction.save();
       }
     }
