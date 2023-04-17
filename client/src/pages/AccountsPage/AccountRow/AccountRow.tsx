@@ -100,7 +100,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
         <div className="flex items-end justify-end gap-4 w-1/4">
           <button
-            disabled={account.defaultAccount}
+            disabled={account._id === defaultId}
             onClick={() => setDeleteRowModalOpen(true)}>
             <FontAwesomeIcon className="text-2xl" icon={faTrash} />
           </button>

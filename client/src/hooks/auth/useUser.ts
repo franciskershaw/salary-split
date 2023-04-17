@@ -25,7 +25,7 @@ export function useUser(): UseUserResponse {
   );
 
   useEffect(() => {
-    if (user) {
+    if (user && user.userInfo.defaultAccount) {
       setDefaultId(user.userInfo.defaultAccount);
     }
   }, [user]);

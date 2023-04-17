@@ -3,9 +3,12 @@ import { useAccountRequests } from '../requests/useAccountRequests';
 import { AddAccountState, User, Account } from '../../types/types';
 import { queryKeys } from '../../reactQuery/queryKeys';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import Context from '../../context/Context';
 
 export function useAddAccount() {
   const navigate = useNavigate();
+  const { setDefaultId } = useContext(Context);
   const { addAccount } = useAccountRequests();
   const queryClient = useQueryClient();
 
@@ -30,6 +33,9 @@ export function useAddAccount() {
           [queryKeys.accounts],
           (oldAccounts: Account[] | undefined) => {
             if (!oldAccounts) return oldAccounts;
+            if (oldAccounts.length < 1 && account) {
+              setDefaultId(account._id)
+            }
             return [...oldAccounts, account];
           }
         );
