@@ -9,9 +9,12 @@ import SummaryPage from './pages/SummaryPage/SummaryPage';
 import AccountsPage from './pages/AccountsPage/AccountsPage';
 import Modal from './components/Modal/Modal';
 import AccountForm from './pages/AccountsPage/AccountForm/AccountForm';
+import { useIsFetching } from '@tanstack/react-query';
 
 function App(): ReactElement {
   const { noAccounts, setNoAccounts } = useContext(Context);
+  const isFetching = useIsFetching();
+
   return (
     <>
       <BrowserRouter>
@@ -30,7 +33,10 @@ function App(): ReactElement {
             </Route>
           </Route>
         </Routes>
-        <Modal isOpen={noAccounts} setIsOpen={setNoAccounts} canClose={false}>
+        <Modal
+          isOpen={noAccounts && !isFetching}
+          setIsOpen={setNoAccounts}
+          canClose={false}>
           <AccountForm type="first" />
         </Modal>
       </BrowserRouter>
