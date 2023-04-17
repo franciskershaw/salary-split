@@ -25,14 +25,15 @@ export function useTransactions() {
 
   const totalBills = useMemo(() => {
     return calculateTotal('bill');
-  }, [transactions]);
+  }, [transactions, salary]);
 
   const totalSavings = useMemo(() => {
     return calculateTotal('savings');
-  }, [transactions]);
+  }, [transactions, salary]);
 
   const balance = useMemo(() => {
-    return Number(salary) - (totalBills + totalSavings);
+    const balanceAmount = Number(salary) - (totalBills + totalSavings);
+    return Number(balanceAmount.toFixed(2));
   }, [transactions, salary]);
 
   const summary = useMemo(() => {
