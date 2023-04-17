@@ -29,6 +29,13 @@ const SplitPage = (): JSX.Element => {
     editUser({ defaultAccount: e.target.value });
   };
 
+  const hasBillTransactions = transactions.some(
+    (transaction: Transaction) => transaction.type === 'bill'
+  );
+  const hasSavingsTransactions = transactions.some(
+    (transaction: Transaction) => transaction.type === 'savings'
+  );
+
   return (
     <>
       <div className="px-8">
@@ -50,9 +57,11 @@ const SplitPage = (): JSX.Element => {
               }
             })}
           </ul>
-          <div className="text-end font-bold">
-            <h3>Total: {totalBills}</h3>
-          </div>
+          {hasBillTransactions && (
+            <div className="text-end font-bold">
+              <h3>Total: {totalBills}</h3>
+            </div>
+          )}
         </section>
         <section className="flex flex-col mb-4">
           <div className="flex gap-2 mb-2">
@@ -72,9 +81,11 @@ const SplitPage = (): JSX.Element => {
               }
             })}
           </ul>
-          <div className="text-end font-bold">
-            <h3>Total: {totalSavings}</h3>
-          </div>
+          {hasSavingsTransactions && (
+            <div className="text-end font-bold">
+              <h3>Total: {totalSavings}</h3>
+            </div>
+          )}
         </section>
         <section className="flex justify-between items-end">
           <h2 className="font-bold">Balance</h2>
@@ -103,7 +114,10 @@ const SplitPage = (): JSX.Element => {
       <Modal canClose setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
         <BillForm type="bill" setModalOpen={setAddBillModalOpen} />
       </Modal>
-      <Modal canClose setIsOpen={setAddSavingsModalOpen} isOpen={addSavingsModalOpen}>
+      <Modal
+        canClose
+        setIsOpen={setAddSavingsModalOpen}
+        isOpen={addSavingsModalOpen}>
         <BillForm type="savings" setModalOpen={setAddSavingsModalOpen} />
       </Modal>
     </>
