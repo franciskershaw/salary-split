@@ -19,30 +19,20 @@ const TransactionForm: FC<TransactionFormProps> = ({
   const addTransaction = useAddTransaction();
 
   const { defaultId } = useContext(Context);
-  const [formData, setFormData] = useState<AddTransactionState>({
-    name: '',
-    amount: 0,
-    sendToAccount: defaultId,
-    type: type,
-  });
 
-  const onChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevState: AddTransactionState) => ({
-      ...prevState,
-      [name]:
-        name === 'amount'
-          ? value && parseFloat(value) >= 0
-            ? parseFloat(value)
-            : 0
-          : value,
-    }));
-  };
+  // Form data
+  const [name, setName] = useState<string>('');
+  const [amount, setAmount] = useState<number>(0);
+  const [sendToAccount, setSendToAccount] = useState<string>(defaultId);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = {
+      name,
+      amount,
+      sendToAccount,
+      type,
+    };
     addTransaction(formData);
     if (setModalOpen) {
       setModalOpen(false);
@@ -59,9 +49,9 @@ const TransactionForm: FC<TransactionFormProps> = ({
         <input
           className="py-2 px-3 border-2 rounded-sm text-sm bg-transparent"
           type="text"
-          value={formData.name}
+          value={name}
           name="name"
-          onChange={onChange}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div className="flex flex-col mb-6">
@@ -69,17 +59,17 @@ const TransactionForm: FC<TransactionFormProps> = ({
         <NumberInput
           id="transaction-amount"
           name="amount"
-          onChange={onChange}
-          value={formData.amount}
+          setState={setAmount}
+          value={amount}
         />
       </div>
 
       <div className="flex flex-col mb-6">
         <label>Account to send funds to</label>
         <SelectInput
-          onChange={onChange}
+          onChange={(e) => setSendToAccount(e.target.value)}
           name="sendToAccount"
-          value={formData.sendToAccount}
+          value={sendToAccount}
           id={`transactionForm-sendTo`}>
           {accounts.map((account: Account, i: number) => {
             if (account.acceptsFunds) {

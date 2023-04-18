@@ -67,7 +67,9 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           <NumberInput
             id={`accounts-${account.name}`}
             name={account.name}
-            onChange={onChange}
+            setState={setAmount}
+            updateServer={editAccount}
+            serverFieldToUpdate="amount"
             size="w-28"
             value={amount}
           />

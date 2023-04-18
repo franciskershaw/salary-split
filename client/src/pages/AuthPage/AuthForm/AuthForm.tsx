@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react';
-import { RegisterFormState, PageType } from '../../../types/types';
+import { PageType } from '../../../types/types';
 import { useAuth } from '../../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import './_authForm.scss';
 import NumberInput from '../../../components/NumberInput/NumberInput';
 
 const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
-  const [formData, setFormData] = useState<RegisterFormState>({
-    username: '',
-    name: '',
-    monthlySalary: 0,
-    password: '',
-    confirmPassword: '',
-  });
-  const { username, name, monthlySalary, password, confirmPassword } = formData;
+  // Form data
+  const [username, setUsername] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [monthlySalary, setMonthlySalary] = useState<number>(0);
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const auth = useAuth();
 
@@ -22,27 +20,12 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
   }, [page]);
 
   function resetFormData() {
-    setFormData({
-      username: '',
-      name: '',
-      monthlySalary: 0,
-      password: '',
-      confirmPassword: '',
-    });
+    setUsername('');
+    setName('');
+    setMonthlySalary(0);
+    setPassword('');
+    setConfirmPassword('');
   }
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState: RegisterFormState) => ({
-      ...prevState,
-      [name]:
-        name === 'monthlySalary'
-          ? value && parseFloat(value) >= 0
-            ? parseFloat(value)
-            : 0
-          : value,
-    }));
-  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,7 +61,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
           <input
             name="username"
             value={username}
-            onChange={onChange}
+            onChange={(e) => setUsername(e.target.value)}
             className="border"
             type="text"
             id="username"
@@ -93,7 +76,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
               <input
                 name="name"
                 value={name}
-                onChange={onChange}
+                onChange={(e) => setName(e.target.value)}
                 className="border"
                 type="text"
                 id="name"
@@ -108,7 +91,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
               <NumberInput
                 id="monthlySalary"
                 name="monthlySalary"
-                onChange={onChange}
+                setState={setMonthlySalary}
                 value={monthlySalary}
                 autoComplete="off"
                 required
@@ -121,7 +104,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
           <input
             name="password"
             value={password}
-            onChange={onChange}
+            onChange={(e) => setPassword(e.target.value)}
             className="border"
             type="password"
             id="password"
@@ -135,7 +118,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
             <input
               name="confirmPassword"
               value={confirmPassword}
-              onChange={onChange}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="border"
               type="password"
               id="confirmPassword"

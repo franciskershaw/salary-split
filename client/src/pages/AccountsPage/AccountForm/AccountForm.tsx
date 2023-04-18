@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { FormType, AddAccountState } from '../../../types/types';
+import { FormType } from '../../../types/types';
 import { useAddAccount } from '../../../hooks/accounts/useAddAccount';
 import NumberInput from '../../../components/NumberInput/NumberInput';
 
@@ -8,34 +8,15 @@ interface AccountFormProps {
   type: FormType;
 }
 
-const AccountForm: FC<AccountFormProps> = ({
-  setModalOpen,
-  type,
-}): JSX.Element => {
-  const [formData, setFormData] = useState<AddAccountState>({
-    name: '',
-    amount: 0,
-    acceptsFunds: true,
-  });
-  const { name, amount } = formData;
+const AccountForm: FC<AccountFormProps> = ({ setModalOpen, type }): JSX.Element => {
+  const [name, setName] = useState<string>('');
+  const [amount, setAmount] = useState<number>(0);
 
   const addAccount = useAddAccount();
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState: AddAccountState) => ({
-      ...prevState,
-      [name]:
-        name === 'amount'
-          ? value && parseFloat(value) >= 0
-            ? parseFloat(value)
-            : 0
-          : value,
-    }));
-  };
-
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = { name, amount, acceptsFunds: true };
     addAccount(formData);
     if (setModalOpen) {
       setModalOpen(false);
@@ -56,7 +37,7 @@ const AccountForm: FC<AccountFormProps> = ({
           type="text"
           value={name}
           name="name"
-          onChange={onChange}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div className="flex flex-col mb-6">
@@ -64,7 +45,7 @@ const AccountForm: FC<AccountFormProps> = ({
         <NumberInput
           id="account-amount"
           name="amount"
-          onChange={onChange}
+          setState={setAmount}
           value={amount}
         />
       </div>

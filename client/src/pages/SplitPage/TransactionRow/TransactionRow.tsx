@@ -24,13 +24,6 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
   const editTransaction = useEditTransaction(transaction._id);
   const deleteTransaction = useDeleteTransaction(transaction._id);
 
-  const onChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newAmount = parseFloat(e.target.value);
-    newAmount !== null && newAmount >= 0
-      ? (setAmount(newAmount), editTransaction({ amount: newAmount }))
-      : (setAmount(0), editTransaction({ amount: 0 }));
-  };
-
   const onChangeAccount = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSendToAccount(e.target.value);
     editTransaction({ sendToAccount: e.target.value });
@@ -54,7 +47,9 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
           <NumberInput
             id={`transactions-${transaction.name}`}
             name={transaction.name}
-            onChange={onChangeAmount}
+            setState={setAmount}
+            updateServer={editTransaction}
+            serverFieldToUpdate="amount"
             size="w-28"
             value={amount}
           />

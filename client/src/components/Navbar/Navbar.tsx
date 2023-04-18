@@ -20,13 +20,6 @@ const Navbar = (): JSX.Element => {
     }
   }, []);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newAmount = parseFloat(e.target.value);
-    newAmount && newAmount >= 0
-      ? (setSalary(newAmount), editUser({ monthlySalary: newAmount }))
-      : (setSalary(0), editUser({ monthlySalary: 0 }));
-  };
-
   return (
     <header className="px-3 py-4 training-wheels">
       <div className="flex justify-between mb-2">
@@ -41,8 +34,10 @@ const Navbar = (): JSX.Element => {
           <NumberInput
             id="navbar-salary"
             name="navbar-salary"
-            onChange={onChange}
             value={salary}
+            setState={setSalary}
+            updateServer={editUser}
+            serverFieldToUpdate="monthlySalary"
           />
         </div>
         <nav className="flex items-center justify-center gap-4">
