@@ -12,7 +12,13 @@ interface NumberInputProps {
 
 const NumberInput = (props: NumberInputProps): JSX.Element => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newAmount = parseFloat(e.target.value);
+    let newAmount = parseFloat(e.target.value);
+
+    // Remove leading zeros and update the input value
+    if (!isNaN(newAmount) && newAmount.toString() !== e.target.value) {
+      e.target.value = newAmount.toString();
+    }
+
     const validAmount = newAmount !== null && newAmount >= 0;
 
     if (validAmount) {
