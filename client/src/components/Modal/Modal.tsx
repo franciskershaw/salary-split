@@ -27,13 +27,23 @@ const Modal: FC<ModalProps> = ({
   };
 
   useEffect(() => {
-    if (isOpen && canClose) {
-      window.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        window.removeEventListener('mousedown', handleClickOutside);
-      };
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+      if (canClose) {
+        window.addEventListener('mousedown', handleClickOutside);
+      }
+    } else {
+      document.body.classList.remove('modal-open');
     }
+  
+    return () => {
+      document.body.classList.remove('modal-open');
+      if (canClose) {
+        window.removeEventListener('mousedown', handleClickOutside);
+      }
+    };
   }, [isOpen, canClose]);
+  
 
   if (!isOpen) {
     return null;
