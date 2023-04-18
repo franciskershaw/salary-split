@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 interface NumberInputProps {
   autoComplete?: 'off';
   id: string;
@@ -11,11 +13,17 @@ interface NumberInputProps {
 }
 
 const NumberInput = (props: NumberInputProps): JSX.Element => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newAmount = parseFloat(e.target.value);
+  const [editing, setEditing] = useState<boolean>(false);
 
-    // Remove leading zeros and update the input value
-    if (!isNaN(newAmount) && newAmount.toString() !== e.target.value) {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    let newAmount = parseFloat(inputValue);
+    // Check if the input value is a valid number and has leading zeros
+    if (
+      !isNaN(newAmount) &&
+      newAmount.toString() !== inputValue &&
+      !inputValue.includes('.')
+    ) {
       e.target.value = newAmount.toString();
     }
 
@@ -34,6 +42,18 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
     }
   };
 
+  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setEditing(true);
+  };
+
+  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const newAmount = parseFloat(e.target.value);
+    const fixedAmount = parseFloat(newAmount.toFixed(2));
+    e.target.value = fixedAmount.toFixed(2); // Update the input value to display 2 decimal places
+    props.setState(fixedAmount);
+    setEditing(false);
+  };
+
   return (
     <input
       autoComplete={props.autoComplete}
@@ -41,8 +61,10 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
       id={props.id}
       name={props.name}
       onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
       required={props.required}
-      value={props.value}
+      value={editing ? props.value : props.value.toFixed(2)}
       type="number"
     />
   );
