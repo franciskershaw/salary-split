@@ -52,7 +52,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
     <form onSubmit={onSubmit} className="form">
       <div className="h-28 flex items-end justify-center w-full ">
         <h1 className="text-center text-2xl">
-          {page === 'login' ? 'Log in' : 'Create your Account'}
+          {page === 'login' ? 'Log in to Salary Splitter' : 'Create your Account'}
         </h1>
       </div>
 
@@ -130,7 +130,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
         )}
       </div>
 
-      <div className="text-center w-full h-1/3 flex flex-col justify-around items-center">
+      <div className="text-center w-full md:w-1/3 h-1/3 flex flex-col justify-around items-center">
         <button className="px-8 py-2 border text-2xl w-4/5">
           {page === 'login' ? 'Login' : 'Sign Up'}
         </button>

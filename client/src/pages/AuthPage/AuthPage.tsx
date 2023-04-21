@@ -19,7 +19,7 @@ const AuthPage = ({ page }: { page: PageType }): JSX.Element => {
   }, [user]);
 
   return (
-    <div className="h-screen flex justify-center items-center training-wheels">
+    <div className="h-screen flex justify-center items-center">
       <AuthForm page={page} />
     </div>
   );
