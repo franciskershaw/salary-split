@@ -5,6 +5,7 @@ import { useUserRequests } from '../requests/useUserRequests';
 import { User } from '../../types/types';
 import { useEffect, useContext } from 'react';
 import Context from '../../context/Context';
+import { toast } from 'react-toastify';
 
 interface UseUserResponse {
   user: User | null;
@@ -40,8 +41,9 @@ export function useUser(): UseUserResponse {
       queryClient.setQueryData<User | null>([queryKeys.user], null);
       queryClient.removeQueries([queryKeys.transactions]);
       queryClient.removeQueries([queryKeys.accounts]);
+      toast.success('Successfully logged out');
     } catch (error) {
-      console.error('Error clearing refreshToken cookie:', error);
+      toast.error('Error clearing refreshToken cookie:');
     }
   }
 

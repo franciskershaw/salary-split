@@ -1,6 +1,8 @@
 import { useUser } from './useUser';
 import useAxios from '../axios/useAxios';
 import { User } from '../../types/types';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 interface UseAuthResponse {
   signin: (userData: {
@@ -16,6 +18,10 @@ interface UseAuthResponse {
   signout: () => void;
 }
 
+interface ErrorResponse {
+  message: string;
+}
+
 export function useAuth(): UseAuthResponse {
   const { clearUser, updateUser } = useUser();
   const api = useAxios();
@@ -27,10 +33,12 @@ export function useAuth(): UseAuthResponse {
     try {
       const response = await api.post<User>('/api/users/login', userData);
       updateUser(response.data);
+      toast.success(`Logged in as ${response.data.userInfo.name}`);
       return response.data;
-    } catch (error) {
-      if (error) {
-        console.log(error);
+    } catch (error: any) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      if (axiosError && axiosError.response) {
+        toast.error(axiosError.response.data.message);
       }
       return null;
     }
@@ -45,10 +53,12 @@ export function useAuth(): UseAuthResponse {
     try {
       const response = await api.post<User>('/api/users/', userData);
       updateUser(response.data);
+      toast.success(`Logged in as ${response.data.userInfo.name}`);
       return response.data;
-    } catch (error) {
-      if (error) {
-        console.log(error);
+    } catch (error: any) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      if (axiosError && axiosError.response) {
+        toast.error(axiosError.response.data.message);
       }
       return null;
     }

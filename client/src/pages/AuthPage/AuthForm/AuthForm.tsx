@@ -4,6 +4,7 @@ import { useAuth } from '../../../hooks/auth/useAuth';
 import { Link } from 'react-router-dom';
 import './_authForm.scss';
 import NumberInput from '../../../components/NumberInput/NumberInput';
+import { toast } from 'react-toastify';
 
 const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
   // Form data
@@ -38,7 +39,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
     };
     if (page === 'register') {
       if (password !== confirmPassword) {
-        console.log('Passwords do not match');
+        toast.error('Passwords do not match');
       } else {
         auth.signup(registerData);
       }
