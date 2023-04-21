@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import Context from '../../context/Context';
 import { useUser } from '../../hooks/auth/useUser';
 import { useAuth } from '../../hooks/auth/useAuth';
@@ -13,12 +13,6 @@ const Navbar = (): JSX.Element => {
   const editUser = useEditUser();
   const auth = useAuth();
   const { salary, setSalary } = useContext(Context);
-
-  useEffect(() => {
-    if (user) {
-      setSalary(user.userInfo.monthlySalary);
-    }
-  }, []);
 
   return (
     <header className="px-3 py-4 training-wheels">

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react';
 
 interface Context {
-  salary: number; // Changed to number only
+  salary: number;
   setSalary: (value: number) => void;
   defaultId: string;
   setDefaultId: (value: string) => void;

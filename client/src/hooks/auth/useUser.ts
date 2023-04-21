@@ -15,7 +15,7 @@ interface UseUserResponse {
 }
 
 export function useUser(): UseUserResponse {
-  const { setDefaultId } = useContext(Context);
+  const { setDefaultId, setSalary } = useContext(Context);
   const api = useAxios();
   const queryClient = useQueryClient();
   const { getUser } = useUserRequests();
@@ -28,6 +28,10 @@ export function useUser(): UseUserResponse {
   useEffect(() => {
     if (user && user.userInfo.defaultAccount) {
       setDefaultId(user.userInfo.defaultAccount);
+    }
+
+    if (user) {
+      setSalary(user.userInfo.monthlySalary);
     }
   }, [user]);
 
