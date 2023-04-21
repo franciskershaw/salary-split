@@ -8,9 +8,9 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const SharedLayout = (): JSX.Element => {
   const { user, fetchingUser } = useUser();
-  const isFetching = useIsFetching();
+  // const isFetching = useIsFetching()
 
-  return fetchingUser || isFetching ? (
+  return fetchingUser ? (
     <LoadingSpinner />
   ) : (
     <>

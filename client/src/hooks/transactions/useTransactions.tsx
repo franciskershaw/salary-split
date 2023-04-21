@@ -5,7 +5,6 @@ import { Transaction } from '../../types/types';
 import { useMemo, useContext, useEffect } from 'react';
 import Context from '../../context/Context';
 import { useAccounts } from '../accounts/useAccounts';
-import { useUser } from '../auth/useUser';
 import { Account } from '../../types/types';
 
 interface Summary {
@@ -18,12 +17,10 @@ export function useTransactions() {
   const { getTransactions } = useTransactionRequests();
   const { salary, defaultId } = useContext(Context);
   const { accounts } = useAccounts();
-  const { user } = useUser();
 
-  const { data: transactions = [], isFetching: loadingTransactions } = useQuery(
+  const { data: transactions = [] } = useQuery(
     [queryKeys.transactions],
-    getTransactions,
-    { enabled: !!user }
+    getTransactions
   );
 
   const totalBills = useMemo(() => {
@@ -106,6 +103,5 @@ export function useTransactions() {
     balance,
     summary,
     prefetchTransactions,
-    loadingTransactions,
   };
 }
