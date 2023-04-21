@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       colors: {
         overlay: 'rgba(0, 0, 0, 0.5)',
+        bg: '#1A4861',
+        text: '#0D2430',
       },
       fontFamily: {
         body: ['Nunito', 'sans-serif'],

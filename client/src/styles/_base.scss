@@ -7,9 +7,13 @@
 body {
   width: 100vw;
   min-height: 100vh;
-  @apply font-body;
+  @apply font-body bg-bg text-white;
 }
 
 body.modal-open {
   @apply overflow-hidden;
+}
+
+input, select {
+  @apply text-text;
 }
