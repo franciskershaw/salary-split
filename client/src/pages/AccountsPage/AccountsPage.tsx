@@ -1,4 +1,3 @@
-// In AccountsPage.tsx
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal/Modal';
 import AccountForm from './AccountForm/AccountForm';
@@ -33,7 +32,7 @@ const AccountsPage = (): JSX.Element => {
       <section className="mb-4">
         <div className="flex">
           <div className="w-1/3"></div>
-          <div className="w-1/2 flex items-end justify-between text-xs gap-2">
+          <div className="w-1/2 flex items-end justify-between text-xs gap-2 ml-3">
             <label className="">Default Account</label>
             <label className="text-center">Accepts Funds</label>
             <label className="text-end">Exclude - total</label>
@@ -49,8 +48,18 @@ const AccountsPage = (): JSX.Element => {
         </ul>
       </section>
       {/* Totals */}
-      <section className="text-center training-wheels">
-        <h3 className="text-2xl">Total: £{total}</h3>
+      <section className="text-center">
+        <h3 className="text-2xl">
+          Total:{' '}
+          <span className="font-bold">
+            £
+            {new Intl.NumberFormat('en-GB', {
+              style: 'decimal',
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(total)}
+          </span>
+        </h3>
       </section>
 
       <Modal

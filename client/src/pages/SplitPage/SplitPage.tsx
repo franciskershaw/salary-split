@@ -59,7 +59,11 @@ const SplitPage = (): JSX.Element => {
         </ul>
         {hasBillTransactions && (
           <div className="text-end font-bold">
-            <h3>Total: £{totalBills.toLocaleString()}</h3>
+            <h3>Total: £{new Intl.NumberFormat('en-GB', {
+              style: 'decimal',
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(totalBills)}</h3>
           </div>
         )}
       </section>
@@ -83,7 +87,12 @@ const SplitPage = (): JSX.Element => {
         </ul>
         {hasSavingsTransactions && (
           <div className="text-end font-bold">
-            <h3>Total: £{totalSavings.toLocaleString()}</h3>
+            <h3>Total: £{new Intl.NumberFormat('en-GB', {
+              style: 'decimal',
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(totalSavings)}</h3>
+            
           </div>
         )}
       </section>

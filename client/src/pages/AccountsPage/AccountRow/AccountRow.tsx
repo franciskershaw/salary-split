@@ -59,7 +59,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
   return (
     <>
-      <div className="flex items-end mb-4">
+      <div className="flex items-end mb-4 border-b pb-2">
         <div className="flex flex-col w-1/3">
           <label className="text-xs w-26" htmlFor={`accounts-${account.name}`}>
             {account.name}
@@ -75,12 +75,12 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           />
         </div>
 
-        <div className="flex items-end justify-between gap-4 w-1/2 mx-2">
+        <div className="h-full flex items-center justify-between gap-4 w-1/2 my-2 ml-4">
           <input
             onChange={onChangeDefault}
             defaultChecked={account._id === defaultId}
             name="defaultAccount"
-            className="w-6 h-6"
+            className="w-4 h-4"
             type="radio"
             id={`defaultAccount_${account._id}`}
             disabled={!acceptsFunds}
@@ -89,14 +89,14 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           <input
             onChange={onChangeAcceptsFunds}
             checked={acceptsFunds}
-            className="w-6 h-6"
+            className="w-4 h-4"
             type="checkbox"
             disabled={account._id === defaultId}
           />
           <input
             onChange={onChangeExcludeFromTotal}
             checked={excludeFromTotal}
-            className="w-6 h-6"
+            className="w-4 h-4"
             type="checkbox"
           />
         </div>
