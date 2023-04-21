@@ -72,7 +72,7 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
         {page === 'register' && (
           <>
             <div className="form__group">
-              <label htmlFor="username">Your name</label>
+              <label htmlFor="name">Your name</label>
               <input
                 name="name"
                 value={name}
