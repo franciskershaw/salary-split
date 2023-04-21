@@ -4,7 +4,6 @@ import { queryKeys } from '../../reactQuery/queryKeys';
 import { Account } from '../../types/types';
 import { useMemo, useEffect, useContext } from 'react';
 import Context from '../../context/Context';
-import { useNavigate } from 'react-router-dom';
 
 export function useAccounts() {
   const { setNoAccounts } = useContext(Context);

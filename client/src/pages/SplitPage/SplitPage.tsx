@@ -120,7 +120,8 @@ const SplitPage = (): JSX.Element => {
             onChange={onChangeDefault}
             name="sendToAccount"
             value={defaultId}
-            id={`splitPage-defaultId`}>
+            id={`splitPage-defaultId`}
+            size='medium'>
             {accounts.map((account: Account, i: number) => {
               if (account.acceptsFunds) {
                 return (

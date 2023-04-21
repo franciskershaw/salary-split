@@ -34,7 +34,7 @@ function App(): ReactElement {
           </Route>
         </Routes>
         <Modal
-          isOpen={noAccounts && !isFetching}
+          isOpen={!isFetching && noAccounts}
           setIsOpen={setNoAccounts}
           canClose={false}>
           <AccountForm type="first" />
