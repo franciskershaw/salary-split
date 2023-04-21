@@ -1,11 +1,11 @@
 .form {
-  @apply h-full w-full flex flex-col items-center justify-between md:w-2/3;
+  @apply h-full w-full flex flex-col items-center justify-around md:w-2/3;
 
 	&__inputs {
 		@apply w-full flex flex-col items-center;
 	}
   &__group {
-    @apply flex flex-col w-3/5 mb-3 mt-3;
+    @apply flex flex-col w-3/5 mb-2 mt-3;
 
     label {
       @apply font-bold text-sm mb-1;

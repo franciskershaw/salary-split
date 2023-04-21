@@ -50,10 +50,13 @@ const AuthForm = ({ page }: { page: PageType }): JSX.Element => {
 
   return (
     <form onSubmit={onSubmit} className="form">
-      <div className="h-28 flex items-end justify-center w-full ">
+      <div className="text-center flex flex-col gap-4 justify-end w-full py-6">
         <h1 className="text-center text-2xl">
           {page === 'login' ? 'Log in to Salary Splitter' : 'Create your Account'}
         </h1>
+        {page === 'login' && (
+          <h2>The handy way to calculate where your monthly budget should be going</h2>
+        )}
       </div>
 
       <div className="form__inputs">
