@@ -1,11 +1,11 @@
 .modal {
-  @apply w-full h-full fixed top-0 left-0 bg-overlay flex items-center justify-center;
+  @apply w-full h-full fixed top-0 left-0 bg-overlay flex items-center justify-center text-text;
 
   &__content {
-    @apply max-h-full w-4/5 md:w-1/2 lg:w-1/3 border-2 rounded-sm overflow-auto flex flex-col bg-white;
+    @apply max-h-full w-4/5 md:w-1/2 lg:w-1/3 rounded-sm overflow-auto flex flex-col bg-white;
 
     .title-included {
-      @apply justify-between border-b-2;
+      @apply justify-between text-text;
     }
 
     &--header {

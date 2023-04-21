@@ -40,7 +40,7 @@ const TransactionForm: FC<TransactionFormProps> = ({
   };
 
   return (
-    <form onSubmit={onSubmit} className="h-full py-8 px-8 border-2">
+    <form onSubmit={onSubmit} className="h-full py-8 px-8">
       <h2 className="text-center text-xl mb-3">
         Add new {type === 'bill' ? 'bill' : 'savings'} transaction
       </h2>
@@ -70,7 +70,8 @@ const TransactionForm: FC<TransactionFormProps> = ({
           onChange={(e) => setSendToAccount(e.target.value)}
           name="sendToAccount"
           value={sendToAccount}
-          id={`transactionForm-sendTo`}>
+          id={`transactionForm-sendTo`}
+          size='medium'>
           {accounts.map((account: Account, i: number) => {
             if (account.acceptsFunds) {
               return (

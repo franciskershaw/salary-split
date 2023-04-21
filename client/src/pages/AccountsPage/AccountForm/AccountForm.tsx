@@ -24,7 +24,7 @@ const AccountForm: FC<AccountFormProps> = ({ setModalOpen, type }): JSX.Element 
   };
 
   return (
-    <form onSubmit={onSubmit} className="h-full py-8 px-8 border-2">
+    <form onSubmit={onSubmit} className="h-full py-8 px-8">
       <h2 className="text-center text-xl mb-3">
         {type === 'add' || 'first' ? 'Add' : 'Edit'}{' '}
         {type === 'first' ? 'your first' : type === 'add' ? 'new' : null}{' '}

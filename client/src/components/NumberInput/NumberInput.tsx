@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import britishPound from './britishPound.svg';
+import './_NumberInput.scss';
 
 interface NumberInputProps {
   autoComplete?: 'off';
@@ -8,13 +10,19 @@ interface NumberInputProps {
   updateServer?: (newData: {}) => void;
   serverFieldToUpdate?: string;
   required?: boolean;
-  size?: 'small' | 'medium';
+  size?: 'small' | 'medium' | 'large';
   value: number;
 }
 
 const NumberInput = (props: NumberInputProps): JSX.Element => {
   const size =
-    props.size === 'small' ? 'w-24 md:w-28' : props.size === 'medium' ? 'w-28 md:w-full' : '';
+    props.size === 'small'
+      ? 'w-24 md:w-28'
+      : props.size === 'medium'
+      ? 'w-28 md:w-full'
+      : props.size === 'large'
+      ? 'w-full'
+      : '';
   const [editing, setEditing] = useState<boolean>(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +52,7 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
     }
   };
 
-  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const onFocus = () => {
     setEditing(true);
   };
 
@@ -57,18 +65,25 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
   };
 
   return (
-    <input
-      autoComplete={props.autoComplete}
-      className={`${size} py-2 px-3 border-2 rounded-sm text-xs sm:text-sm md:text-base h-9 sm:h-10`}
-      id={props.id}
-      name={props.name}
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      required={props.required}
-      value={editing ? props.value : props.value.toFixed(2)}
-      type="number"
-    />
+    <div className="relative">
+      <img
+        src={britishPound}
+        alt="British Pound Symbol"
+        className="absolute top-1/2 left-2 transform -translate-y-1/2 w-3 h-3 text-gray-400 opacity-30"
+      />
+      <input
+        autoComplete={props.autoComplete}
+        className={`${size} py-2 border-2 text-center rounded-sm text-xs sm:text-sm md:text-base h-9 sm:h-10`}
+        id={props.id}
+        name={props.name}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        required={props.required}
+        value={editing ? props.value : props.value.toFixed(2)}
+        type="number"
+      />
+    </div>
   );
 };
 
