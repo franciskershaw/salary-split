@@ -59,7 +59,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
 
   return (
     <>
-      <div className="flex items-end mb-4">
+      <div className="flex items-end mb-4 lg:justify-center">
         <div className="flex flex-col w-1/3">
           <label className="text-xs w-26" htmlFor={`accounts-${account.name}`}>
             {account.name}
@@ -80,7 +80,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
             onChange={onChangeDefault}
             defaultChecked={account._id === defaultId}
             name="defaultAccount"
-            className="w-4 h-4"
+            className="w-4 h-4 md:w-6 md:h-6"
             type="radio"
             id={`defaultAccount_${account._id}`}
             disabled={!acceptsFunds}
@@ -89,14 +89,14 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           <input
             onChange={onChangeAcceptsFunds}
             checked={acceptsFunds}
-            className="w-4 h-4"
+            className="w-4 h-4 md:w-6 md:h-6"
             type="checkbox"
             disabled={account._id === defaultId}
           />
           <input
             onChange={onChangeExcludeFromTotal}
             checked={excludeFromTotal}
-            className="w-4 h-4"
+            className="w-4 h-4 md:w-6 md:h-6"
             type="checkbox"
           />
         </div>

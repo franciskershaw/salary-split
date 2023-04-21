@@ -39,75 +39,75 @@ const SplitPage = (): JSX.Element => {
 
   return (
     <>
-    <div className='flex flex-col lg:flex-row lg:justify-between'>
-      <section className="flex flex-col">
-        <div className="flex gap-2 mb-2">
-          <h2 className="text-xl font-bold">Bills</h2>
-          <button onClick={() => setAddBillModalOpen(true)}>
-            <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
-          </button>
-        </div>
-        <ul>
-          {transactions.map((transaction: Transaction, i: number) => {
-            if (transaction.type === 'bill') {
-              return (
-                <li className="mb-2" key={`bill_${i}`}>
-                  <TransactionRow transaction={transaction} />
-                </li>
-              );
-            }
-          })}
-        </ul>
-        {hasBillTransactions && (
-          <div className="text-end md:text-center py-2">
-            <h3>
-              Total:{' '}
-              <span className="font-bold">
-                £
-                {new Intl.NumberFormat('en-GB', {
-                  style: 'decimal',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(totalBills)}
-              </span>
-            </h3>
+      <div className="flex flex-col lg:flex-row lg:justify-between mb-4 lg:border-b">
+        <section className="flex flex-col">
+          <div className="flex gap-2 mb-2">
+            <h2 className="text-xl font-bold">Bills</h2>
+            <button onClick={() => setAddBillModalOpen(true)}>
+              <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
+            </button>
           </div>
-        )}
-      </section>
-      <section className="flex flex-col mb-4">
-        <div className="flex gap-2 mb-2">
-          <h2 className="text-xl font-bold">Savings</h2>
-          <button onClick={() => setAddSavingsModalOpen(true)}>
-            <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
-          </button>
-        </div>
-        <ul>
-          {transactions.map((transaction: Transaction, i: number) => {
-            if (transaction.type === 'savings') {
-              return (
-                <li className="mb-2" key={`savings_${i}`}>
-                  <TransactionRow transaction={transaction} />
-                </li>
-              );
-            }
-          })}
-        </ul>
-        {hasSavingsTransactions && (
-          <div className="text-end md:text-center py-2">
-            <h3>
-              Total:{' '}
-              <span className="font-bold">
-                £
-                {new Intl.NumberFormat('en-GB', {
-                  style: 'decimal',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(totalSavings)}
-              </span>
-            </h3>
+          <ul>
+            {transactions.map((transaction: Transaction, i: number) => {
+              if (transaction.type === 'bill') {
+                return (
+                  <li className="mb-2" key={`bill_${i}`}>
+                    <TransactionRow transaction={transaction} />
+                  </li>
+                );
+              }
+            })}
+          </ul>
+          {hasBillTransactions && (
+            <div className="text-end md:text-center py-2">
+              <h3>
+                Total:{' '}
+                <span className="font-bold">
+                  £
+                  {new Intl.NumberFormat('en-GB', {
+                    style: 'decimal',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(totalBills)}
+                </span>
+              </h3>
+            </div>
+          )}
+        </section>
+        <section className="flex flex-col">
+          <div className="flex gap-2 mb-2">
+            <h2 className="text-xl font-bold">Savings</h2>
+            <button onClick={() => setAddSavingsModalOpen(true)}>
+              <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
+            </button>
           </div>
-        )}
-      </section>
+          <ul>
+            {transactions.map((transaction: Transaction, i: number) => {
+              if (transaction.type === 'savings') {
+                return (
+                  <li className="mb-2" key={`savings_${i}`}>
+                    <TransactionRow transaction={transaction} />
+                  </li>
+                );
+              }
+            })}
+          </ul>
+          {hasSavingsTransactions && (
+            <div className="text-end md:text-center mb-2">
+              <h3>
+                Total:{' '}
+                <span className="font-bold">
+                  £
+                  {new Intl.NumberFormat('en-GB', {
+                    style: 'decimal',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(totalSavings)}
+                </span>
+              </h3>
+            </div>
+          )}
+        </section>
       </div>
       <section className="flex justify-between md:justify-center md:gap-8 items-end">
         <h2 className="sm:text-lg">Balance:</h2>

@@ -22,7 +22,7 @@ const AccountsPage = (): JSX.Element => {
   return (
     <>
       {/* Header and add button */}
-      <section className="flex gap-2 mb-2">
+      <section className="flex gap-2 mb-2 lg:px-12">
         <h2 className="text-xl font-bold">Accounts</h2>
         <button onClick={() => setAddAccountModalOpen(true)}>
           <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
@@ -32,14 +32,14 @@ const AccountsPage = (): JSX.Element => {
       <section className="mb-4">
         <div className="flex">
           <div className="w-1/3"></div>
-          <div className="w-1/2 flex items-end justify-between text-xs gap-2 ml-3">
+          <div className="w-1/2 flex items-end justify-between text-xs gap-2 ml-3 lg:justify-center lg:gap-10">
             <label className="">Default Account</label>
             <label className="text-center">Accepts Funds</label>
             <label className="text-end">Exclude - total</label>
           </div>
           <div className="w-1/4"></div>
         </div>
-        <ul>
+        <ul className='lg:px-40'>
           {accounts.map((account: Account) => (
             <li className="mb-2" key={`account_${account._id}`}>
               <AccountRow account={account} />
