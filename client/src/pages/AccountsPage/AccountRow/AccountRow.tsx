@@ -28,13 +28,6 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
   const deleteAccount = useDeleteAccount(account._id);
   const editUser = useEditUser();
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newAmount = parseFloat(e.target.value);
-    newAmount
-      ? (setAmount(newAmount), editAccount({ amount: newAmount }))
-      : (setAmount(0), editAccount({ amount: 0 }));
-  };
-
   const onChangeDefault = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       setDefaultId(account._id);
@@ -70,7 +63,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
             setState={setAmount}
             updateServer={editAccount}
             serverFieldToUpdate="amount"
-            size="w-28"
+            size="medium"
             value={amount}
           />
         </div>

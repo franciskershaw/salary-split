@@ -8,11 +8,13 @@ interface NumberInputProps {
   updateServer?: (newData: {}) => void;
   serverFieldToUpdate?: string;
   required?: boolean;
-  size?: 'w-24' | 'w-28';
+  size?: 'small' | 'medium';
   value: number;
 }
 
 const NumberInput = (props: NumberInputProps): JSX.Element => {
+  const size =
+    props.size === 'small' ? 'w-24 md:w-28' : props.size === 'medium' ? 'w-28 md:w-full' : '';
   const [editing, setEditing] = useState<boolean>(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +59,7 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
   return (
     <input
       autoComplete={props.autoComplete}
-      className={`${props.size} py-2 px-3 border-2 rounded-sm text-xs sm:text-sm h-9 sm:h-10`}
+      className={`${size} py-2 px-3 border-2 rounded-sm text-xs sm:text-sm md:text-base h-9 sm:h-10`}
       id={props.id}
       name={props.name}
       onChange={onChange}

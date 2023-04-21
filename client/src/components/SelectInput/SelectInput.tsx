@@ -15,7 +15,7 @@ const SelectInput = (props: SelectInputProps): JSX.Element => {
   return (
     <select
       onChange={props.onChange}
-      className={`py-2 px-3 border-2 rounded-sm text-xs sm:text-sm h-9 sm:h-10 ${width}`}
+      className={`py-2 px-3 border-2 rounded-sm text-xs sm:text-sm md:text-xs h-9 sm:h-10 ${width}`}
       name={props.name}
       value={props.value}
       id={props.value}>

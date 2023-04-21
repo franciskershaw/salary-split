@@ -30,7 +30,7 @@ const Navbar = (): JSX.Element => {
       </div>
       <div className="border-t-2 border-b-2 py-3 mx-2">
         <div className="flex flex-col items-center justify-center gap-2 mb-3">
-          <label>This month's take-home salary</label>
+          <label className='md:text-lg'>This month's take-home salary</label>
           <NumberInput
             id="navbar-salary"
             name="navbar-salary"

@@ -52,7 +52,7 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
             setState={setAmount}
             updateServer={editTransaction}
             serverFieldToUpdate="amount"
-            size="w-24"
+            size="small"
             value={amount}
           />
         </div>
