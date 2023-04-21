@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         overlay: 'rgba(0, 0, 0, 0.5)',
       },
+      fontFamily: {
+        body: ['Nunito', 'sans-serif'],
+      },
     },
   },
   plugins: [],
