@@ -8,7 +8,7 @@ interface NumberInputProps {
   updateServer?: (newData: {}) => void;
   serverFieldToUpdate?: string;
   required?: boolean;
-  size?: 'w-28';
+  size?: 'w-24' | 'w-28';
   value: number;
 }
 
@@ -57,7 +57,7 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
   return (
     <input
       autoComplete={props.autoComplete}
-      className={`${props.size} py-2 px-3 border-2 rounded-sm text-sm`}
+      className={`${props.size} py-2 px-3 border-2 rounded-sm text-xs h-9`}
       id={props.id}
       name={props.name}
       onChange={onChange}

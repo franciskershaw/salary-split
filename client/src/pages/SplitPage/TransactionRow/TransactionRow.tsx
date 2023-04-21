@@ -36,12 +36,14 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
 
   return (
     <>
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end border-b pb-2">
         <h3 className="text-xs w-20 font-bold">{transaction.name}</h3>
 
         {/* Amount */}
         <div className="flex flex-col">
-          <label className="text-xs" htmlFor="">
+          <label
+            className="text-xs"
+            htmlFor={`transactions-${transaction.name}`}>
             Amount
           </label>
           <NumberInput
@@ -50,21 +52,24 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
             setState={setAmount}
             updateServer={editTransaction}
             serverFieldToUpdate="amount"
-            size="w-28"
+            size="w-24"
             value={amount}
           />
         </div>
 
         {/* Send to */}
         <div className="flex flex-col">
-          <label className="text-xs" htmlFor="">
+          <label
+            className="text-xs"
+            htmlFor={`transactionRow-${sendToAccount}`}>
             Send to
           </label>
           <SelectInput
             onChange={onChangeAccount}
             name="sendToAccount"
             value={sendToAccount}
-            id={`transactionRow-${sendToAccount}`}>
+            id={`transactionRow-${sendToAccount}`}
+            size='w-28'>
             {accounts.map((account: Account, i: number) => {
               if (account.acceptsFunds) {
                 return (

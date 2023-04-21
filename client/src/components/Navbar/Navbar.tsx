@@ -21,9 +21,9 @@ const Navbar = (): JSX.Element => {
   }, []);
 
   return (
-    <header className="px-3 py-4 training-wheels">
+    <header className="px-3 py-4">
       <div className="flex justify-between mb-2">
-        <h1>Salary Split - {user?.userInfo.name}</h1>
+        <h1 className="font-bold">Salary Split - {user?.userInfo.name}</h1>
         <button onClick={() => auth.signout()}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
         </button>

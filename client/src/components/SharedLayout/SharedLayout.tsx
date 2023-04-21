@@ -11,7 +11,7 @@ const SharedLayout = (): JSX.Element => {
   ) : (
     <>
       {user ? <Navbar /> : null}
-      <main>
+      <main className="px-4 mb-8">
         <Outlet />
       </main>
       <ToastContainer closeButton={false} autoClose={1500} />

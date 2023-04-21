@@ -39,80 +39,78 @@ const SplitPage = (): JSX.Element => {
 
   return (
     <>
-      <div className="px-8 mb-8">
-        <section className="flex flex-col">
-          <div className="flex gap-2 mb-2">
-            <h2 className="text-xl font-bold">Bills</h2>
-            <button onClick={() => setAddBillModalOpen(true)}>
-              <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
-            </button>
+      <section className="flex flex-col">
+        <div className="flex gap-2 mb-2">
+          <h2 className="text-xl font-bold">Bills</h2>
+          <button onClick={() => setAddBillModalOpen(true)}>
+            <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
+          </button>
+        </div>
+        <ul>
+          {transactions.map((transaction: Transaction, i: number) => {
+            if (transaction.type === 'bill') {
+              return (
+                <li className="mb-2" key={`bill_${i}`}>
+                  <TransactionRow transaction={transaction} />
+                </li>
+              );
+            }
+          })}
+        </ul>
+        {hasBillTransactions && (
+          <div className="text-end font-bold">
+            <h3>Total: £{totalBills.toLocaleString()}</h3>
           </div>
-          <ul>
-            {transactions.map((transaction: Transaction, i: number) => {
-              if (transaction.type === 'bill') {
+        )}
+      </section>
+      <section className="flex flex-col mb-4">
+        <div className="flex gap-2 mb-2">
+          <h2 className="text-xl font-bold">Savings</h2>
+          <button onClick={() => setAddSavingsModalOpen(true)}>
+            <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
+          </button>
+        </div>
+        <ul>
+          {transactions.map((transaction: Transaction, i: number) => {
+            if (transaction.type === 'savings') {
+              return (
+                <li className="mb-2" key={`savings_${i}`}>
+                  <TransactionRow transaction={transaction} />
+                </li>
+              );
+            }
+          })}
+        </ul>
+        {hasSavingsTransactions && (
+          <div className="text-end font-bold">
+            <h3>Total: £{totalSavings.toLocaleString()}</h3>
+          </div>
+        )}
+      </section>
+      <section className="flex justify-between items-end">
+        <h2>Balance:</h2>
+        <h3 className='font-bold'>£{balance.toLocaleString()}</h3>
+        <div className="flex flex-col">
+          <label className="text-xs" htmlFor="">
+            Send to (default account)
+          </label>
+          <SelectInput
+            onChange={onChangeDefault}
+            name="sendToAccount"
+            value={defaultId}
+            id={`splitPage-defaultId`}>
+            {accounts.map((account: Account, i: number) => {
+              if (account.acceptsFunds) {
                 return (
-                  <li className="mb-2" key={`bill_${i}`}>
-                    <TransactionRow transaction={transaction} />
-                  </li>
+                  <option value={account._id} key={`balance_accounts_${i}`}>
+                    {account.name}
+                  </option>
                 );
               }
             })}
-          </ul>
-          {hasBillTransactions && (
-            <div className="text-end font-bold">
-              <h3>Total: {totalBills}</h3>
-            </div>
-          )}
-        </section>
-        <section className="flex flex-col mb-4">
-          <div className="flex gap-2 mb-2">
-            <h2 className="text-xl font-bold">Savings</h2>
-            <button onClick={() => setAddSavingsModalOpen(true)}>
-              <FontAwesomeIcon className="text-2xl" icon={faCirclePlus} />
-            </button>
-          </div>
-          <ul>
-            {transactions.map((transaction: Transaction, i: number) => {
-              if (transaction.type === 'savings') {
-                return (
-                  <li className="mb-2" key={`savings_${i}`}>
-                    <TransactionRow transaction={transaction} />
-                  </li>
-                );
-              }
-            })}
-          </ul>
-          {hasSavingsTransactions && (
-            <div className="text-end font-bold">
-              <h3>Total: {totalSavings}</h3>
-            </div>
-          )}
-        </section>
-        <section className="flex justify-between items-end">
-          <h2 className="font-bold">Balance</h2>
-          <h3>£{balance}</h3>
-          <div className="flex flex-col">
-            <label className="text-xs" htmlFor="">
-              Send to (default account)
-            </label>
-            <SelectInput
-              onChange={onChangeDefault}
-              name="sendToAccount"
-              value={defaultId}
-              id={`splitPage-defaultId`}>
-              {accounts.map((account: Account, i: number) => {
-                if (account.acceptsFunds) {
-                  return (
-                    <option value={account._id} key={`balance_accounts_${i}`}>
-                      {account.name}
-                    </option>
-                  );
-                }
-              })}
-            </SelectInput>
-          </div>
-        </section>
-      </div>
+          </SelectInput>
+        </div>
+      </section>
       <Modal canClose setIsOpen={setAddBillModalOpen} isOpen={addBillModalOpen}>
         <BillForm type="bill" setModalOpen={setAddBillModalOpen} />
       </Modal>
