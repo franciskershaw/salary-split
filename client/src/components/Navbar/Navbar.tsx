@@ -23,7 +23,7 @@ const Navbar = (): JSX.Element => {
   return (
     <header className="px-3 py-4">
       <div className="flex justify-between mb-2">
-        <h1 className="font-bold">Salary Split - {user?.userInfo.name}</h1>
+        <h1 className="font-bold sm:text-lg">Salary Split - {user?.userInfo.name}</h1>
         <button onClick={() => auth.signout()}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
         </button>

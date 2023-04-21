@@ -36,7 +36,7 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
 
   return (
     <>
-      <div className="flex justify-between items-end border-b pb-2">
+      <div className="flex justify-between md:justify-center md:gap-8 items-end border-b pb-2">
         <h3 className="text-xs w-20 font-bold">{transaction.name}</h3>
 
         {/* Amount */}
@@ -69,7 +69,7 @@ const TransactionRow: FC<Props> = ({ transaction }): JSX.Element => {
             name="sendToAccount"
             value={sendToAccount}
             id={`transactionRow-${sendToAccount}`}
-            size='w-28'>
+            size="small">
             {accounts.map((account: Account, i: number) => {
               if (account.acceptsFunds) {
                 return (

@@ -57,7 +57,7 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
   return (
     <input
       autoComplete={props.autoComplete}
-      className={`${props.size} py-2 px-3 border-2 rounded-sm text-xs h-9`}
+      className={`${props.size} py-2 px-3 border-2 rounded-sm text-xs sm:text-sm h-9 sm:h-10`}
       id={props.id}
       name={props.name}
       onChange={onChange}

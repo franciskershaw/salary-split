@@ -39,6 +39,7 @@ const SplitPage = (): JSX.Element => {
 
   return (
     <>
+    <div className='flex flex-col lg:flex-row lg:justify-between'>
       <section className="flex flex-col">
         <div className="flex gap-2 mb-2">
           <h2 className="text-xl font-bold">Bills</h2>
@@ -58,12 +59,18 @@ const SplitPage = (): JSX.Element => {
           })}
         </ul>
         {hasBillTransactions && (
-          <div className="text-end font-bold">
-            <h3>Total: £{new Intl.NumberFormat('en-GB', {
-              style: 'decimal',
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }).format(totalBills)}</h3>
+          <div className="text-end md:text-center py-2">
+            <h3>
+              Total:{' '}
+              <span className="font-bold">
+                £
+                {new Intl.NumberFormat('en-GB', {
+                  style: 'decimal',
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(totalBills)}
+              </span>
+            </h3>
           </div>
         )}
       </section>
@@ -86,19 +93,25 @@ const SplitPage = (): JSX.Element => {
           })}
         </ul>
         {hasSavingsTransactions && (
-          <div className="text-end font-bold">
-            <h3>Total: £{new Intl.NumberFormat('en-GB', {
-              style: 'decimal',
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }).format(totalSavings)}</h3>
-            
+          <div className="text-end md:text-center py-2">
+            <h3>
+              Total:{' '}
+              <span className="font-bold">
+                £
+                {new Intl.NumberFormat('en-GB', {
+                  style: 'decimal',
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(totalSavings)}
+              </span>
+            </h3>
           </div>
         )}
       </section>
-      <section className="flex justify-between items-end">
-        <h2>Balance:</h2>
-        <h3 className='font-bold'>£{balance.toLocaleString()}</h3>
+      </div>
+      <section className="flex justify-between md:justify-center md:gap-8 items-end">
+        <h2 className="sm:text-lg">Balance:</h2>
+        <h3 className="font-bold sm:text-lg">£{balance.toLocaleString()}</h3>
         <div className="flex flex-col">
           <label className="text-xs" htmlFor="">
             Send to (default account)
