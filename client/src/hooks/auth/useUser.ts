@@ -29,10 +29,6 @@ export function useUser(): UseUserResponse {
     if (user && user.userInfo.defaultAccount) {
       setDefaultId(user.userInfo.defaultAccount);
     }
-
-    if (user) {
-      setSalary(user.userInfo.monthlySalary);
-    }
   }, [user]);
 
   function updateUser(newUser: User) {
