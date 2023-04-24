@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useUser } from '../../hooks/auth/useUser';
+import { useUser } from '../../hooks/user/useUser';
 import AuthForm from './AuthForm/AuthForm';
 import { PageType } from '../../types/types';
 

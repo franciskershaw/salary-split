@@ -2,7 +2,7 @@ import useAxios from '../axios/useAxios';
 import { AxiosResponse } from 'axios';
 import { createConfig } from '../../utils/utils';
 import { AddTransactionState, EditTransactionState } from '../../types/types';
-import { useUser } from '../auth/useUser';
+import { useUser } from '../user/useUser';
 
 interface TransactionRequests {
 	addTransaction: (formData: AddTransactionState) => Promise<any>;

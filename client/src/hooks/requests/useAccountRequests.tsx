@@ -2,7 +2,7 @@ import useAxios from '../axios/useAxios';
 import { AxiosResponse } from 'axios';
 import { createConfig } from '../../utils/utils';
 import { AddAccountState, EditAccountState } from '../../types/types';
-import { useUser } from '../auth/useUser';
+import { useUser } from '../user/useUser';
 
 interface AccountRequests {
   addAccount: (formData: AddAccountState) => Promise<any>;

@@ -1,4 +1,4 @@
-import { useUser } from './useUser';
+import { useUser } from '../user/useUser';
 import useAxios from '../axios/useAxios';
 import { User } from '../../types/types';
 import { toast } from 'react-toastify';

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import Context from '../../context/Context';
-import { useUser } from '../../hooks/auth/useUser';
+import { useUser } from '../../hooks/user/useUser';
 import { useAuth } from '../../hooks/auth/useAuth';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

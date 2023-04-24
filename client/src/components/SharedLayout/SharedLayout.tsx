@@ -2,7 +2,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useUser } from '../../hooks/auth/useUser';
+import { useUser } from '../../hooks/user/useUser';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
