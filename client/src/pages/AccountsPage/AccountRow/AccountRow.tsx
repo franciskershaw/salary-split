@@ -94,7 +94,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
           />
         </div>
 
-        <div className="flex items-end justify-end gap-4 w-1/4">
+        <div className="flex items-end justify-end gap-4 w-1/4 mb-2">
           <button
             disabled={account._id === defaultId}
             onClick={() => setDeleteRowModalOpen(true)}>
@@ -107,7 +107,7 @@ const AccountRow: FC<Props> = ({ account }): JSX.Element => {
         isOpen={deleteRowModalOpen}
         setIsOpen={setDeleteRowModalOpen}>
         <div className="text-center mb-3">
-          <h2 className="mb-3 text-white">
+          <h2 className="mb-3 text-text">
             Are you sure you'd like to delete this account?
           </h2>
           <button
