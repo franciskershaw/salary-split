@@ -8,8 +8,6 @@ const cookieParser = require('cookie-parser');
 // Grab port info from config
 const PORT = process.env.PORT || 5300;
 
-// Connect to Mongo database
-
 // Initialize app
 const app = express();
 
@@ -32,6 +30,7 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Salary Split API' });
 });
 
+// Connect to DB, then if successful listen for app
 connectDB()
   .then(() => {
     app.listen(
@@ -49,4 +48,3 @@ connectDB()
     );
     process.exit(1);
   });
-// Listen for app

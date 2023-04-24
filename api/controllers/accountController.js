@@ -38,6 +38,10 @@ const addAccount = async (req, res, next) => {
       throw new ConflictError("You've used that name already");
     }
 
+    /* 
+      Make sure first account added is the 'default' account
+      and therefore accepts funds
+    */
     const user = await User.findById(req.user._id);
     if (user.accounts < 1 && acceptsFunds === false) {
       throw new BadRequestError('Your default account must accept funds');
@@ -53,9 +57,11 @@ const addAccount = async (req, res, next) => {
 
     await account.save();
 
+    // Sets the default account if this is the first account added
     if (user.accounts < 1) {
       user.defaultAccount = account._id;
     }
+    // Adds account _id to accounts array in user object
     user.accounts.push(account._id);
     await user.save();
 
@@ -73,13 +79,18 @@ const editAccount = async (req, res, next) => {
       throw new NotFoundError('Account not found');
     }
 
-    // Next few lines are to ensure validation works
+    /* 
+      mergedData to ensure validation works as
+      there are extra fields that are not in the JOI schema but
+      are automatically stored in MongoDB
+    */
     const mergedData = { ...account.toObject(), ...req.body };
     // Remove unwanted properties from mergedData
     delete mergedData._id;
     delete mergedData.user;
     delete mergedData.__v;
 
+    // use mergedData for the validation instead of req.body
     const { error, value } = updateAccountSchema.validate(mergedData);
     if (error) {
       throw new BadRequestError(error.details[0].message);
@@ -92,7 +103,10 @@ const editAccount = async (req, res, next) => {
     }
 
     const user = await User.findById(req.user._id);
-    // Halt update if attempting to change 'acceptsFunds' to false on default acount
+    /*
+      Halt update if attempting to change 'acceptsFunds' to false on 
+      default acount as this is not allowed
+    */
     if (
       user.defaultAccount.equals(req.params.accountId) &&
       value.acceptsFunds === false
@@ -100,7 +114,7 @@ const editAccount = async (req, res, next) => {
       throw new BadRequestError('Default account must accept funds');
     }
 
-    // Finally, update the account
+    // Finally, if everything else has passed, update the account
     const updatedAccount = await Account.findByIdAndUpdate(
       req.params.accountId,
       updatedFields,
@@ -121,12 +135,17 @@ const deleteAccount = async (req, res, next) => {
       throw NotFoundError('Account not found');
     }
 
+    // Do not allow default accounts to be deleted
     const user = await User.findById(req.user._id);
     if (user.defaultAccount.equals(accountId)) {
       throw new BadRequestError('Cannot delete default account');
     }
 
-    // find transactions that have the account as 'sendToAccount'
+    /*
+      Find transactions that have the deleted account as 
+      'sendToAccount' as they will need to have the default
+      account set as their new 'sendToAccount'
+    */
     const affectedTransactions = await Transaction.find({
       sendToAccount: account._id,
     });
@@ -138,7 +157,10 @@ const deleteAccount = async (req, res, next) => {
       }
     }
 
+    // Delete account
     await Account.findByIdAndDelete(accountId);
+
+    // Update user 'accounts' array to remove deleted _id
     await User.findByIdAndUpdate(
       req.user._id,
       {
@@ -146,6 +168,7 @@ const deleteAccount = async (req, res, next) => {
       },
       { new: true }
     );
+
     res.status(200).json({ deleted: accountId });
   } catch (err) {
     next(err);

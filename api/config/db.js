@@ -1,3 +1,5 @@
+// Connection function to MongoDb, called on server.js
+
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 
