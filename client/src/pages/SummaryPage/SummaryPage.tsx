@@ -1,6 +1,8 @@
 import { useTransactions } from '../../hooks/transactions/useTransactions';
+import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
 const SummaryPage = (): JSX.Element => {
+  useDocumentTitle()
   const { summary } = useTransactions();
   return (
     <ul className="text-center mx-auto md:text-xl py-2">

@@ -3,11 +3,10 @@ import { useEffect } from 'react';
 import { useUser } from '../../hooks/auth/useUser';
 import AuthForm from './AuthForm/AuthForm';
 import { PageType } from '../../types/types';
+import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
 const AuthPage = ({ page }: { page: PageType }): JSX.Element => {
-  document.title = `Salary Split | ${
-    page === 'register' ? 'Create Account' : 'Login'
-  }`;
+  useDocumentTitle();
 
   const navigate = useNavigate();
   const { user } = useUser();

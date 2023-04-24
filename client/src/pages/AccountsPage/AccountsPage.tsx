@@ -7,8 +7,11 @@ import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { Account } from '../../types/types';
 import AccountRow from './AccountRow/AccountRow';
 import { useTransactions } from '../../hooks/transactions/useTransactions';
+import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
 const AccountsPage = (): JSX.Element => {
+  useDocumentTitle();
+
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 
@@ -39,7 +42,7 @@ const AccountsPage = (): JSX.Element => {
           </div>
           <div className="w-1/4"></div>
         </div>
-        <ul className='lg:px-40'>
+        <ul className="lg:px-40">
           {accounts.map((account: Account) => (
             <li className="mb-2" key={`account_${account._id}`}>
               <AccountRow account={account} />

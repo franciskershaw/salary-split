@@ -10,8 +10,10 @@ import BillForm from './TransactionForm/TransactionForm';
 import TransactionRow from './TransactionRow/TransactionRow';
 import { Transaction, Account } from '../../types/types';
 import SelectInput from '../../components/SelectInput/SelectInput';
+import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
 const SplitPage = (): JSX.Element => {
+  useDocumentTitle()
   const [addBillModalOpen, setAddBillModalOpen] = useState<boolean>(false);
   const [addSavingsModalOpen, setAddSavingsModalOpen] =
     useState<boolean>(false);
