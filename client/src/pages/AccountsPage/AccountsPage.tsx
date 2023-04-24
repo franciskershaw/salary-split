@@ -7,11 +7,8 @@ import { useAccounts } from '../../hooks/accounts/useAccounts';
 import { Account } from '../../types/types';
 import AccountRow from './AccountRow/AccountRow';
 import { useTransactions } from '../../hooks/transactions/useTransactions';
-import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
 const AccountsPage = (): JSX.Element => {
-  useDocumentTitle();
-
   const [addAccountModalOpen, setAddAccountModalOpen] =
     useState<boolean>(false);
 

@@ -1,14 +1,10 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
-export const useDocumentTitle = () => {
-  const location = useLocation();
-
+export const useDocumentTitle = (currentPath: string) => {
   useEffect(() => {
-    const path = location.pathname;
     let title = 'Salary Split';
 
-    switch (path) {
+    switch (currentPath) {
       case '/split':
         title += ' | Split';
         break;
@@ -29,5 +25,5 @@ export const useDocumentTitle = () => {
     }
 
     document.title = title;
-  }, [location]);
+  }, [currentPath]);
 };

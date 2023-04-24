@@ -1,14 +1,16 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '../../hooks/auth/useUser';
-import { useIsFetching } from '@tanstack/react-query';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { useDocumentTitle } from '../../hooks/helper/useDocumentTitle';
 
 const SharedLayout = (): JSX.Element => {
   const { user, fetchingUser } = useUser();
-  // const isFetching = useIsFetching()
+  const location = useLocation();
+
+  useDocumentTitle(location.pathname);
 
   return fetchingUser ? (
     <LoadingSpinner />
