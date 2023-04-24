@@ -19,7 +19,7 @@ export const useUserRequests = (): UserRequests => {
         const response = await api.get(`/api/users/refreshToken`);
         if (response.status === 200) {
           const config = createConfig(response.data.accessToken);
-          const user = await api.get(`/api/users/${response.data._id}`, config);
+          const user = await api.get(`/api/users/`, config);
           return user.data;
         }
       } catch (error) {
@@ -27,7 +27,7 @@ export const useUserRequests = (): UserRequests => {
       }
     } else {
       const config = createConfig(user.accessToken);
-      const response = await api.get(`/api/users/${user.userInfo._id}`, config);
+      const response = await api.get(`/api/users/`, config);
       return response.data;
     }
   };

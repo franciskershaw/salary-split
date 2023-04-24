@@ -125,10 +125,7 @@ const logoutUser = (req, res) => {
 
 const getUserInfo = async (req, res, next) => {
   try {
-    if (!req.params.userId) {
-      throw new NotFoundError('User not found');
-    }
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.user._id);
     res.status(200).json({
       userInfo: {
         _id: user._id,
@@ -156,7 +153,7 @@ const editUser = async (req, res, next) => {
     if (value.defaultAccount) {
       const account = await Account.findById(value.defaultAccount);
       if (account.acceptsFunds === false) {
-        throw new BadRequestError('A default account must accept funds')
+        throw new BadRequestError('A default account must accept funds');
       }
     }
 
