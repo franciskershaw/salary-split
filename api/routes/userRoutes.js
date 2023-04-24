@@ -13,11 +13,16 @@ const {
 
 const { isLoggedIn } = require('../middleware/authMiddleware');
 
-router.post('/', asyncHandler(createUser));
-router.put('/', isLoggedIn, asyncHandler(editUser));
-router.post('/login', asyncHandler(loginUser));
-router.get('/refreshToken', checkRefreshToken);
-router.post('/logout', logoutUser);
-router.get('/', isLoggedIn, asyncHandler(getUserInfo));
+router
+  .route('/')
+  .post(asyncHandler(createUser))
+  .put(isLoggedIn, asyncHandler(editUser))
+  .get(isLoggedIn, asyncHandler(getUserInfo));
+
+router.route('/login').post(asyncHandler(loginUser));
+
+router.route('/refreshToken').get(checkRefreshToken);
+
+router.route('/logout').post(logoutUser);
 
 module.exports = router;

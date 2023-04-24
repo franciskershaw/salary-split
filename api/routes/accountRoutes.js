@@ -11,14 +11,14 @@ const {
 
 const { isLoggedIn, isAuthorised } = require('../middleware/authMiddleware');
 
-router.get('/', isLoggedIn, asyncHandler(getAccounts));
-router.post('/', isLoggedIn, asyncHandler(addAccount));
-router.put('/:accountId', isLoggedIn, isAuthorised, asyncHandler(editAccount));
-router.delete(
-  '/:accountId',
-  isLoggedIn,
-  isAuthorised,
-  asyncHandler(deleteAccount)
-);
+router
+  .route('/')
+  .get(isLoggedIn, asyncHandler(getAccounts))
+  .post(isLoggedIn, asyncHandler(addAccount));
+
+router
+  .route('/:accountId')
+  .put(isLoggedIn, isAuthorised, asyncHandler(editAccount))
+  .delete(isLoggedIn, isAuthorised, asyncHandler(deleteAccount));
 
 module.exports = router;
