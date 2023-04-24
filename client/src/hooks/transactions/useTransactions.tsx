@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTransactionRequests } from '../requests/useTransactionRequests';
 import { queryKeys } from '../../reactQuery/queryKeys';
 import { Transaction } from '../../types/types';
-import { useMemo, useContext, useEffect } from 'react';
+import { useMemo, useContext } from 'react';
 import Context from '../../context/Context';
 import { useAccounts } from '../accounts/useAccounts';
 import { Account } from '../../types/types';

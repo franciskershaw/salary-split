@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccountRequests } from '../requests/useAccountRequests';
 import { queryKeys } from '../../reactQuery/queryKeys';
-import { Account, User } from '../../types/types';
+import { User } from '../../types/types';
 
 export function useDeleteAccount(accountId: string) {
   const { deleteAccount } = useAccountRequests();
@@ -22,16 +22,8 @@ export function useDeleteAccount(accountId: string) {
           return newUserData;
         }
       );
-      queryClient.invalidateQueries([queryKeys.accounts])
-      queryClient.invalidateQueries([queryKeys.transactions])
-
-      // queryClient.setQueryData<Account[]>(
-      //   [queryKeys.accounts],
-      //   (oldAccounts) => {
-      //     if (!oldAccounts) return oldAccounts;
-      //     return oldAccounts.filter((account) => account._id !== deleted);
-      //   }
-      // );
+      queryClient.invalidateQueries([queryKeys.accounts]);
+      queryClient.invalidateQueries([queryKeys.transactions]);
     },
     onError: (error) => {
       console.log(error);

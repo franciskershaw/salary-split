@@ -59,7 +59,7 @@ const NumberInput = (props: NumberInputProps): JSX.Element => {
   const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const newAmount = parseFloat(e.target.value);
     const fixedAmount = parseFloat(newAmount.toFixed(2));
-    e.target.value = fixedAmount.toFixed(2); // Update the input value to display 2 decimal places
+    e.target.value = fixedAmount.toFixed(2);
     props.setState(fixedAmount);
     setEditing(false);
   };

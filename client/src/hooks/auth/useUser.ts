@@ -15,7 +15,7 @@ interface UseUserResponse {
 }
 
 export function useUser(): UseUserResponse {
-  const { setDefaultId, setSalary } = useContext(Context);
+  const { setDefaultId } = useContext(Context);
   const api = useAxios();
   const queryClient = useQueryClient();
   const { getUser } = useUserRequests();

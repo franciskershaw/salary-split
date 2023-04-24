@@ -1,6 +1,6 @@
 import { FC, useState, useContext } from 'react';
 import Context from '../../../context/Context';
-import { Account, AddTransactionState } from '../../../types/types';
+import { Account } from '../../../types/types';
 import { useAddTransaction } from '../../../hooks/transactions/useAddTransaction';
 import { useAccounts } from '../../../hooks/accounts/useAccounts';
 import NumberInput from '../../../components/NumberInput/NumberInput';
@@ -71,7 +71,7 @@ const TransactionForm: FC<TransactionFormProps> = ({
           name="sendToAccount"
           value={sendToAccount}
           id={`transactionForm-sendTo`}
-          size='medium'>
+          size="medium">
           {accounts.map((account: Account, i: number) => {
             if (account.acceptsFunds) {
               return (
