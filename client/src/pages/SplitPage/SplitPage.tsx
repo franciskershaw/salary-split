@@ -48,10 +48,10 @@ const SplitPage = (): JSX.Element => {
             </button>
           </div>
           <ul>
-            {transactions.map((transaction: Transaction, i: number) => {
+            {transactions.map((transaction: Transaction) => {
               if (transaction.type === 'bill') {
                 return (
-                  <li className="mb-2" key={`bill_${i}`}>
+                  <li className="mb-2" key={transaction._id}>
                     <TransactionRow transaction={transaction} />
                   </li>
                 );
@@ -85,7 +85,7 @@ const SplitPage = (): JSX.Element => {
             {transactions.map((transaction: Transaction, i: number) => {
               if (transaction.type === 'savings') {
                 return (
-                  <li className="mb-2" key={`savings_${i}`}>
+                  <li className="mb-2" key={transaction._id}>
                     <TransactionRow transaction={transaction} />
                   </li>
                 );
