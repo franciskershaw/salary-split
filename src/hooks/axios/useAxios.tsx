@@ -18,7 +18,10 @@ type UseAxios = AxiosInstance & {
 };
 
 const useAxios = (): UseAxios => {
-  const api = axios.create();
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true,
+  });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -32,7 +35,9 @@ const useAxios = (): UseAxios => {
       ) {
         try {
           const originalRequest = error.config;
-          const response = await api.get('/api/users/refreshToken');
+          const response = await api.get(
+            `${import.meta.env.VITE_API_URL}/users/refreshToken`
+          );
           originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
           queryClient.setQueryData<User>([queryKeys.user], (oldData) => {
             if (!oldData) {
