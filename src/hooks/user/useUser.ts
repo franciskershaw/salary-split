@@ -1,11 +1,11 @@
-import { useQueryClient, useQuery } from '@tanstack/react-query';
-import useAxios from '../axios/useAxios';
-import { queryKeys } from '../../reactQuery/queryKeys';
-import { useUserRequests } from '../requests/useUserRequests';
-import { User } from '../../types/types';
-import { useEffect, useContext } from 'react';
-import Context from '../../context/Context';
-import { toast } from 'react-toastify';
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import useAxios from "../axios/useAxios";
+import { queryKeys } from "../../reactQuery/queryKeys";
+import { useUserRequests } from "../requests/useUserRequests";
+import { User } from "../../types/types";
+import { useEffect, useContext } from "react";
+import Context from "../../context/Context";
+import { toast } from "react-toastify";
 
 interface UseUserResponse {
   user: User | null;
@@ -18,11 +18,27 @@ export function useUser(): UseUserResponse {
   const { setDefaultId } = useContext(Context);
   const api = useAxios();
   const queryClient = useQueryClient();
-  const { getUser } = useUserRequests();
+
+  const getUser = async (): Promise<User | null> => {
+    try {
+      const response = await api.get("/api/users/refreshToken");
+      if (response?.status === 200) {
+        const userResponse = await api.get("/api/users/", {
+          headers: {
+            Authorization: `Bearer ${response.data.accessToken}`,
+          },
+        });
+        return userResponse.data;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
 
   const { data: user, isFetching: fetchingUser } = useQuery<User | null>(
     [queryKeys.user],
-    () => getUser(user)
+    getUser
   );
 
   useEffect(() => {
@@ -37,13 +53,13 @@ export function useUser(): UseUserResponse {
 
   async function clearUser() {
     try {
-      await api.post('/api/users/logout');
+      await api.post("/api/users/logout");
       queryClient.setQueryData<User | null>([queryKeys.user], null);
       queryClient.removeQueries([queryKeys.transactions]);
       queryClient.removeQueries([queryKeys.accounts]);
-      toast.success('Successfully logged out');
+      toast.success("Successfully logged out");
     } catch (error) {
-      toast.error('Error clearing refreshToken cookie:');
+      toast.error("Error clearing refreshToken cookie:");
     }
   }
 
