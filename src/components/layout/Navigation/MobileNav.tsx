@@ -16,12 +16,12 @@ export default function MobileNav() {
     <nav className="fixed bottom-0 left-0 right-0 bg-surface border-t border-surface-border">
       <div className="flex justify-around items-center h-16">
         <Link
-          to="/"
+          to="/dashboard"
           className={cn(
-            "flex flex-col items-center justify-center flex-1 h-full",
-            location.pathname === "/"
-              ? "text-primary"
-              : "text-surface-foreground"
+            "flex flex-col items-center justify-center flex-1 h-full transition-colors",
+            location.pathname === "/dashboard"
+              ? "text-primary bg-surface-hover"
+              : "text-surface-foreground hover:bg-surface-hover/50"
           )}
         >
           <HomeIcon className="h-6 w-6" />
@@ -30,10 +30,10 @@ export default function MobileNav() {
         <Link
           to="/accounts"
           className={cn(
-            "flex flex-col items-center justify-center flex-1 h-full",
+            "flex flex-col items-center justify-center flex-1 h-full transition-colors",
             location.pathname === "/accounts"
-              ? "text-primary"
-              : "text-surface-foreground"
+              ? "text-primary bg-surface-hover"
+              : "text-surface-foreground hover:bg-surface-hover/50"
           )}
         >
           <WalletCards className="h-6 w-6" />
@@ -42,10 +42,10 @@ export default function MobileNav() {
         <Link
           to="/bills"
           className={cn(
-            "flex flex-col items-center justify-center flex-1 h-full",
+            "flex flex-col items-center justify-center flex-1 h-full transition-colors",
             location.pathname === "/bills"
-              ? "text-primary"
-              : "text-surface-foreground"
+              ? "text-primary bg-surface-hover"
+              : "text-surface-foreground hover:bg-surface-hover/50"
           )}
         >
           <ReceiptPoundSterling className="h-6 w-6" />
@@ -54,10 +54,10 @@ export default function MobileNav() {
         <Link
           to="/expenses"
           className={cn(
-            "flex flex-col items-center justify-center flex-1 h-full",
+            "flex flex-col items-center justify-center flex-1 h-full transition-colors",
             location.pathname === "/expenses"
-              ? "text-primary"
-              : "text-surface-foreground"
+              ? "text-primary bg-surface-hover"
+              : "text-surface-foreground hover:bg-surface-hover/50"
           )}
         >
           <BoxIcon className="h-6 w-6" />
@@ -66,10 +66,10 @@ export default function MobileNav() {
         <Link
           to="/savings"
           className={cn(
-            "flex flex-col items-center justify-center flex-1 h-full",
+            "flex flex-col items-center justify-center flex-1 h-full transition-colors",
             location.pathname === "/savings"
-              ? "text-primary"
-              : "text-surface-foreground"
+              ? "text-primary bg-surface-hover"
+              : "text-surface-foreground hover:bg-surface-hover/50"
           )}
         >
           <BarChartIcon className="h-6 w-6" />
