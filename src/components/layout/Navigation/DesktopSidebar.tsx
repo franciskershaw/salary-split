@@ -70,6 +70,27 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
         ))}
       </nav>
 
+      <div className="mt-4 space-y-1">
+        {settingsNavItems.map((item) => (
+          <Link
+            key={item.href}
+            to={item.href}
+            onClick={item.onClick}
+            className={cn(
+              "flex items-center px-4 py-4 rounded-lg font-medium transition-colors",
+              item.href === "#"
+                ? "text-destructive hover:bg-surface-hover/50"
+                : location.pathname === item.href
+                  ? "text-primary bg-surface-hover"
+                  : "text-surface-foreground hover:bg-surface-hover/50"
+            )}
+          >
+            <span className="mr-3 text-lg">{item.icon}</span>
+            {item.label}
+          </Link>
+        ))}
+      </div>
+
       <div className="mt-auto pt-4 border-t border-surface-border">
         <div className="flex items-center px-2 py-2">
           <Avatar className="size-10 shrink-0">
@@ -86,27 +107,6 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
               {user?.email}
             </p>
           </div>
-        </div>
-
-        <div className="mt-4 space-y-1">
-          {settingsNavItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              onClick={item.onClick}
-              className={cn(
-                "flex items-center px-4 py-4 rounded-lg font-medium transition-colors",
-                item.href === "#"
-                  ? "text-destructive hover:bg-surface-hover/50"
-                  : location.pathname === item.href
-                    ? "text-primary bg-surface-hover"
-                    : "text-surface-foreground hover:bg-surface-hover/50"
-              )}
-            >
-              <span className="mr-3 text-lg">{item.icon}</span>
-              {item.label}
-            </Link>
-          ))}
         </div>
       </div>
     </aside>

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useTheme } from "@/contexts/Theme/ThemeContext";
 import useUser from "@/hooks/user/useUser";
 
+import DesktopSidebar from "../Navigation/DesktopSidebar";
 import MobileHeader from "../Navigation/MobileHeader";
 import MobileNav from "../Navigation/MobileNav";
 
@@ -22,11 +23,35 @@ const SharedLayout = () => {
         darkMode ? "dark" : ""
       }`}
     >
-      {user && <MobileHeader user={user} />}
-      <main>
-        <Outlet />
-      </main>
-      {user && <MobileNav />}
+      {user ? (
+        <>
+          {/* Mobile Header - Only visible on mobile */}
+          <div className="md:hidden">
+            <MobileHeader user={user} />
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:flex min-h-screen">
+            <DesktopSidebar user={user} />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <main>
+              <Outlet />
+            </main>
+            <MobileNav />
+          </div>
+        </>
+      ) : (
+        <main>
+          <Outlet />
+        </main>
+      )}
+
       <Toaster />
     </div>
   );
