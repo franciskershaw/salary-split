@@ -1,10 +1,14 @@
 import "./App.css";
 
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
 function App() {
   return (
-    <>
-      <div className="text-3xl font-bold underline">SalarySplit</div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<div>Hello World</div>} />
+      </Routes>
+    </Router>
   );
 }
 
