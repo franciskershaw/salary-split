@@ -20,7 +20,7 @@ export default function MobileNav() {
           className={cn(
             "flex flex-col items-center justify-center flex-1 h-full",
             location.pathname === "/"
-              ? "text-primary-600 dark:text-primary-400"
+              ? "text-primary"
               : "text-surface-foreground"
           )}
         >
@@ -32,7 +32,7 @@ export default function MobileNav() {
           className={cn(
             "flex flex-col items-center justify-center flex-1 h-full",
             location.pathname === "/accounts"
-              ? "text-primary-600 dark:text-primary-400"
+              ? "text-primary"
               : "text-surface-foreground"
           )}
         >
@@ -44,7 +44,7 @@ export default function MobileNav() {
           className={cn(
             "flex flex-col items-center justify-center flex-1 h-full",
             location.pathname === "/bills"
-              ? "text-primary-600 dark:text-primary-400"
+              ? "text-primary"
               : "text-surface-foreground"
           )}
         >
@@ -56,7 +56,7 @@ export default function MobileNav() {
           className={cn(
             "flex flex-col items-center justify-center flex-1 h-full",
             location.pathname === "/expenses"
-              ? "text-primary-600 dark:text-primary-400"
+              ? "text-primary"
               : "text-surface-foreground"
           )}
         >
@@ -68,7 +68,7 @@ export default function MobileNav() {
           className={cn(
             "flex flex-col items-center justify-center flex-1 h-full",
             location.pathname === "/savings"
-              ? "text-primary-600 dark:text-primary-400"
+              ? "text-primary"
               : "text-surface-foreground"
           )}
         >

@@ -1,9 +1,4 @@
-import {
-  DollarSignIcon,
-  LogOutIcon,
-  SettingsIcon,
-  UserIcon,
-} from "lucide-react";
+import { DollarSignIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -24,9 +19,7 @@ const MobileHeader = ({ user }: { user: User }) => {
     <header className="bg-surface text-surface-foreground p-4 md:p-6 border-b border-surface-border flex items-center justify-between sticky top-0 z-10 shadow-sm">
       <div className="md:hidden flex items-center">
         <DollarSignIcon className="mr-2 h-7 w-7" />
-        <h1 className="text-xl font-semibold text-primary-600 dark:text-primary-400">
-          SalarySplit
-        </h1>
+        <h1 className="text-xl font-semibold text-primary">SalarySplit</h1>
       </div>
 
       <div className="flex items-center gap-4">
@@ -34,9 +27,14 @@ const MobileHeader = ({ user }: { user: User }) => {
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="p-2 text-surface-foreground hover:bg-surface-hover rounded-full transition-colors"
+              className="p-1 hover:bg-surface-hover rounded-full transition-colors"
             >
-              <UserIcon className="h-5 w-5" />
+              <Avatar className="size-10">
+                <AvatarFallback>
+                  {user?.name.firstName.charAt(0)}
+                  {user?.name.lastName.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-64">
