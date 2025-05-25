@@ -1,6 +1,8 @@
 import {
   BarChartIcon,
   BoxIcon,
+  DollarSignIcon,
+  HomeIcon,
   LogOutIcon,
   ReceiptPoundSterling,
   SettingsIcon,
@@ -44,7 +46,7 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
   const { logout } = useAuth();
 
   const mainNavItems = [
-    { href: "/dashboard", icon: <BarChartIcon />, label: "Dashboard" },
+    { href: "/dashboard", icon: <HomeIcon />, label: "Home" },
     { href: "/accounts", icon: <WalletCards />, label: "Accounts" },
     { href: "/bills", icon: <ReceiptPoundSterling />, label: "Bills" },
     { href: "/expenses", icon: <BoxIcon />, label: "Expenses" },
@@ -58,6 +60,13 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
 
   return (
     <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-surface-border p-4">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-primary-600 flex items-center">
+          <DollarSignIcon className="mr-2 h-7 w-7" />
+          SalarySplit
+        </h1>
+        <p className="text-sm text-gray-500  mt-1">Financial Planner</p>
+      </div>
       <nav className="space-y-4 flex-1">
         {mainNavItems.map((item) => (
           <NavItem

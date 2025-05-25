@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useTheme } from "@/contexts/Theme/ThemeContext";
 import useUser from "@/hooks/user/useUser";
 
+import DesktopHeader from "../Navigation/DesktopHeader";
 import DesktopSidebar from "../Navigation/DesktopSidebar";
 import MobileHeader from "../Navigation/MobileHeader";
 import MobileNav from "../Navigation/MobileNav";
@@ -33,9 +34,12 @@ const SharedLayout = () => {
           {/* Desktop Layout */}
           <div className="hidden md:flex min-h-screen">
             <DesktopSidebar user={user} />
-            <main className="flex-1">
-              <Outlet />
-            </main>
+            <div className="flex-1 flex flex-col">
+              <DesktopHeader />
+              <main className="flex-1">
+                <Outlet />
+              </main>
+            </div>
           </div>
 
           {/* Mobile Layout */}
