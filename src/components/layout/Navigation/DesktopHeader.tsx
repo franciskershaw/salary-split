@@ -50,9 +50,9 @@ export default function DesktopHeader() {
 
   return (
     <header className="bg-surface border-b border-surface-border p-6">
-      <h1 className="text-2xl font-semibold text-surface-foreground">
+      <h2 className="text-xl font-semibold text-surface-foreground">
         {currentPage.title}
-      </h1>
+      </h2>
       <p className="text-sm text-surface-foreground/70 mt-1">{description}</p>
     </header>
   );

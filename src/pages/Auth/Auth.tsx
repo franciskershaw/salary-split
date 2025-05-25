@@ -4,7 +4,6 @@ import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import Heading from "@/components/ui/heading";
 import useUser from "@/hooks/user/useUser";
 import usePageTitle from "@/hooks/utility/usePageTitle";
 
@@ -29,13 +28,9 @@ const Auth = () => {
   return (
     <div className="flex items-center justify-center h-screen rounded-md">
       <div className="flex flex-col items-center justify-center border rounded-sm p-8 w-full max-w-[400px]">
-        <Heading
-          type="h1"
-          fontWeight="font-semibold"
-          className="mb-4 text-center"
-        >
+        <h1 className="mb-4 text-center text-2xl font-semibold">
           Salary Split
-        </Heading>
+        </h1>
 
         {/* Google Login Button */}
         <Button
