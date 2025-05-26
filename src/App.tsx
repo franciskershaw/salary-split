@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PrivateRoute from "./components/layout/PrivateRoute/PrivateRoute";
 import SharedLayout from "./components/layout/SharedLayout/SharedLayout";
 import Auth from "./pages/Auth/Auth";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Auth />} />
           <Route path="/dashboard" element={<PrivateRoute />}>
-            <Route index element={<div>Dashboard</div>} />
+            <Route index element={<Dashboard />} />
           </Route>
           <Route path="/accounts" element={<PrivateRoute />}>
             <Route index element={<div>Accounts</div>} />

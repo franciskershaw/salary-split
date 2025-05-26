@@ -29,7 +29,7 @@ const MobileHeader = ({ user }: { user: User }) => {
               type="button"
               className="p-1 hover:bg-surface-hover rounded-full transition-colors"
             >
-              <Avatar className="size-10">
+              <Avatar className="size-12">
                 <AvatarFallback>
                   {user?.name.firstName.charAt(0)}
                   {user?.name.lastName.charAt(0)}
