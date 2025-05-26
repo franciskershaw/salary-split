@@ -28,7 +28,6 @@ const useUpdateSalary = () => {
   return useMutation({
     mutationFn: updateSalary,
     onSuccess: (data) => {
-      console.log(data);
       queryClient.setQueryData([queryKeys.user], (oldData: User) => {
         return {
           ...oldData,
