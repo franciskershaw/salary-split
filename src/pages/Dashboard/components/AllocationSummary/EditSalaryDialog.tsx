@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit2 } from "lucide-react";
@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/dialog";
 import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
+
+import useUpdateSalary from "../../hooks/useUpdateSalary";
 
 const formSchema = z.object({
   salary: z.coerce.number().min(0, "Salary must be a positive number"),
@@ -26,7 +29,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const EditSalaryDialog = ({ value }: { value: number }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,13 +38,14 @@ const EditSalaryDialog = ({ value }: { value: number }) => {
     },
   });
 
+  const { mutate: updateSalary, isPending } = useUpdateSalary();
+
   const onSubmit = (values: FormValues) => {
-    try {
-      console.log(values);
-      setOpen(false);
-    } catch (error) {
-      console.error(error);
-    }
+    updateSalary(values.salary, {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    });
   };
 
   return (
@@ -62,17 +67,29 @@ const EditSalaryDialog = ({ value }: { value: number }) => {
           This will update your monthly take-home salary used for calculations.
         </DialogDescription>
         <Form form={form} onSubmit={onSubmit}>
-          <FormInput name="salary" label="Monthly Take-Home Salary">
-            <Input
-              type="number"
-              placeholder="Enter your monthly take-home salary"
-            />
-          </FormInput>
+          <div className="relative">
+            <FormInput name="salary" label="Monthly Take-Home Salary">
+              <Input
+                type="number"
+                placeholder="Enter your monthly take-home salary"
+              />
+            </FormInput>
+            {isPending && (
+              <LoadingOverlay
+                message="Updating salary..."
+                opacity="light"
+                spinnerSize="md"
+                fixedInDialog
+              />
+            )}
+          </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Saving..." : "Save Changes"}
+            </Button>
           </DialogFooter>
         </Form>
       </DialogContent>

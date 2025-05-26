@@ -19,6 +19,7 @@ export interface User {
   defaultTheme: Theme;
   createdAt: string;
   updatedAt: string;
+  accessToken: string;
 }
 
 export interface AuthResponse extends User {
