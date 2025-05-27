@@ -1,3 +1,10 @@
+import {
+  CURRENT_ACCOUNT,
+  INVESTMENT_ACCOUNT,
+  JOINT_ACCOUNT,
+  SAVINGS_ACCOUNT,
+} from "@/constants/api";
+
 export type Currency = "GBP" | "USD" | "EUR";
 export type Theme = "light" | "dark";
 export type UserRole = "user" | "admin";
@@ -16,12 +23,25 @@ export interface User {
   takeHomePay: number;
   payDay: string;
   defaultCurrency: Currency;
+  defaultAccount?: string;
   defaultTheme: Theme;
   createdAt: string;
   updatedAt: string;
   accessToken: string;
 }
 
-export interface AuthResponse extends User {
-  accessToken: string;
+export interface Account {
+  _id: string;
+  name: string;
+  institution?: string;
+  amount: number;
+  acceptsFunds: boolean;
+  receivesSalary?: boolean;
+  type:
+    | typeof CURRENT_ACCOUNT
+    | typeof SAVINGS_ACCOUNT
+    | typeof INVESTMENT_ACCOUNT
+    | typeof JOINT_ACCOUNT;
+  createdBy: string;
+  createdAt: string;
 }
