@@ -220,6 +220,7 @@ interface FormInputWrapperProps extends React.PropsWithChildren {
   label?: string;
   showMessage?: boolean;
   className?: string;
+  labelPosition?: "top" | "left" | "right";
 }
 
 function FormInput({
@@ -228,19 +229,31 @@ function FormInput({
   children,
   showMessage = true,
   className,
+  labelPosition = "top",
 }: FormInputWrapperProps) {
   return (
     <FormField
       name={name}
       render={({ field }) => (
         <FormFieldContext.Provider value={{ name: field.name }}>
-          <FormItem className={className}>
-            {label && <FormLabel>{label}</FormLabel>}
+          <FormItem
+            className={cn(
+              labelPosition !== "top" && "flex items-center gap-2",
+              className
+            )}
+          >
+            {label && labelPosition === "left" && (
+              <FormLabel>{label}</FormLabel>
+            )}
+            {label && labelPosition === "top" && <FormLabel>{label}</FormLabel>}
             <FormControl>
               {React.cloneElement(children as React.ReactElement, {
                 ...field,
               })}
             </FormControl>
+            {label && labelPosition === "right" && (
+              <FormLabel>{label}</FormLabel>
+            )}
             {showMessage && <FormMessage />}
           </FormItem>
         </FormFieldContext.Provider>
