@@ -14,6 +14,7 @@ import {
 } from "@/constants/api";
 
 import useAddAccount from "../../hooks/useAddAccount";
+import useGetAccounts from "../../hooks/useGetAccounts";
 import { accountFormSchema, type AccountFormValues } from "./types";
 
 const accountTypes = [
@@ -23,7 +24,14 @@ const accountTypes = [
   { value: JOINT_ACCOUNT, label: "Joint Account" },
 ];
 
-const CreateAccountForm = ({ closeModal }: { closeModal: () => void }) => {
+interface CreateAccountFormProps {
+  onSuccess?: () => void;
+}
+
+const CreateAccountForm = ({ onSuccess }: CreateAccountFormProps) => {
+  const { accounts } = useGetAccounts();
+  const isFirstAccount = accounts?.length === 0;
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
@@ -31,65 +39,109 @@ const CreateAccountForm = ({ closeModal }: { closeModal: () => void }) => {
       institution: "",
       amount: 0,
       type: CURRENT_ACCOUNT,
-      acceptsFunds: true,
+      acceptsFunds: isFirstAccount ? true : false,
       receivesSalary: false,
+      isDefault: isFirstAccount,
     },
   });
 
   const { addAccount, isPending } = useAddAccount();
 
   const onSubmit = (values: AccountFormValues) => {
-    addAccount(values);
-    closeModal();
+    addAccount(values, {
+      onSuccess: () => {
+        onSuccess?.();
+      },
+    });
+  };
+
+  const isDefault = form.watch("isDefault") as boolean;
+
+  // Handle default account toggle
+  const handleDefaultToggle = (checked: boolean) => {
+    form.setValue("isDefault", checked);
+    if (checked) {
+      form.setValue("acceptsFunds", true);
+    }
   };
 
   return (
     <Form form={form} onSubmit={onSubmit}>
-      <FormInput name="name" label="Account Name">
-        <Input autoComplete="off" placeholder="Enter account name" />
-      </FormInput>
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <FormInput name="name" label="Account Name">
+            <Input autoComplete="off" placeholder="Enter account name" />
+          </FormInput>
 
-      <FormInput name="institution" label="Institution (Optional)">
-        <Input placeholder="Enter bank or institution name" />
-      </FormInput>
+          <FormInput name="institution" label="Institution (Optional)">
+            <Input placeholder="Enter bank or institution name" />
+          </FormInput>
 
-      <FormInput name="amount" label="Current Balance">
-        <Input type="number" placeholder="Enter current balance" />
-      </FormInput>
+          <FormInput name="amount" label="Current Balance">
+            <Input
+              type="number"
+              inputMode="decimal"
+              placeholder="Enter current balance"
+              min={0}
+              step="0.01"
+              onKeyDown={(e) => {
+                if (e.key === "-") {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </FormInput>
 
-      <FormSelect name="type" label="Account Type" options={accountTypes} />
+          <FormSelect name="type" label="Account Type" options={accountTypes} />
+        </div>
 
-      <div className="flex items-center justify-between">
-        <FormInput
-          name="acceptsFunds"
-          label="Can Receive Funds"
-          labelPosition="left"
-        >
-          <Switch
-            checked={form.watch("acceptsFunds")}
-            onCheckedChange={(checked: boolean) =>
-              form.setValue("acceptsFunds", checked)
-            }
-          />
-        </FormInput>
+        <div className="rounded-lg border p-4 space-y-4">
+          <h3 className="font-medium">Account Settings</h3>
 
-        <FormInput
-          name="receivesSalary"
-          label="Receives Salary"
-          labelPosition="left"
-        >
-          <Switch
-            checked={form.watch("receivesSalary")}
-            onCheckedChange={(checked: boolean) =>
-              form.setValue("receivesSalary", checked)
-            }
-          />
-        </FormInput>
+          <FormInput
+            name="isDefault"
+            label="Default Account"
+            labelPosition="left"
+          >
+            <Switch
+              checked={isDefault || isFirstAccount}
+              onCheckedChange={handleDefaultToggle}
+              disabled={isFirstAccount}
+            />
+          </FormInput>
+
+          <FormInput
+            name="acceptsFunds"
+            label="Can Receive Funds"
+            labelPosition="left"
+          >
+            <Switch
+              checked={form.watch("acceptsFunds") as boolean}
+              onCheckedChange={(checked: boolean) =>
+                form.setValue("acceptsFunds", checked)
+              }
+              disabled={isDefault}
+            />
+          </FormInput>
+
+          <FormInput
+            name="receivesSalary"
+            label="Receives Salary"
+            labelPosition="left"
+          >
+            <Switch
+              checked={form.watch("receivesSalary") as boolean}
+              onCheckedChange={(checked: boolean) =>
+                form.setValue("receivesSalary", checked)
+              }
+            />
+          </FormInput>
+        </div>
+
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Creating..." : "Create Account"}
+        </Button>
       </div>
-
-      <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? "Creating..." : "Create Account"}
-      </Button>
     </Form>
   );
 };

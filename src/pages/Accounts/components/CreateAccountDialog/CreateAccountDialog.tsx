@@ -16,10 +16,10 @@ interface CreateAccountDialogProps {
 }
 
 const CreateAccountDialog = ({ trigger }: CreateAccountDialogProps) => {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -29,7 +29,7 @@ const CreateAccountDialog = ({ trigger }: CreateAccountDialogProps) => {
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
-          <CreateAccountForm closeModal={() => setOpen(false)} />
+          <CreateAccountForm onSuccess={() => setIsOpen(false)} />
         </div>
       </DialogContent>
     </Dialog>
