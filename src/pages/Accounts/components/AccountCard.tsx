@@ -24,6 +24,7 @@ import { cn, formatCurrency } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
 
 import CreateAccountDialog from "./CreateAccountDialog/CreateAccountDialog";
+import DeleteAccountDialog from "./DeleteAccountDialog/DeleteAccountDialog";
 
 type AccountCardProps = {
   account: Account;
@@ -90,6 +91,7 @@ const getAccountTypeLabel = (type: Account["type"]) => {
 
 export function AccountCard({ account }: AccountCardProps) {
   const [editAccountDialogOpen, setEditAccountDialogOpen] = useState(false);
+  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false);
   const { name, type, institution, amount } = account;
   const { bg, text, badge } = getAccountColors(type);
   const icon = getAccountIcon(type);
@@ -145,14 +147,13 @@ export function AccountCard({ account }: AccountCardProps) {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onSelect={() => {
-                    setEditAccountDialogOpen(true);
-                  }}
-                >
+                <DropdownMenuItem onSelect={() => setEditAccountDialogOpen(true)}>
                   Edit account
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive focus:text-destructive">
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onSelect={() => setDeleteAccountDialogOpen(true)}
+                >
                   Delete account
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -164,6 +165,11 @@ export function AccountCard({ account }: AccountCardProps) {
         account={account}
         open={editAccountDialogOpen}
         onOpenChange={setEditAccountDialogOpen}
+      />
+      <DeleteAccountDialog
+        account={account}
+        open={deleteAccountDialogOpen}
+        onOpenChange={setDeleteAccountDialogOpen}
       />
     </>
   );
