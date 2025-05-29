@@ -13,24 +13,43 @@ import type { Account } from "@/types/globalTypes";
 import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
 
 interface CreateAccountDialogProps {
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   account?: Account;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const CreateAccountDialog = ({
   trigger,
   account,
+  open: controlledOpen,
+  onOpenChange,
 }: CreateAccountDialogProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
+
+  const setIsOpen = (open: boolean) => {
+    if (isControlled && onOpenChange) {
+      onOpenChange(open);
+    } else {
+      setUncontrolledOpen(open);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New Account</DialogTitle>
+          <DialogTitle>
+            {account ? "Edit Account" : "Create New Account"}
+          </DialogTitle>
           <DialogDescription className="sr-only">
-            Add a new account to track your finances. Fill in the details below.
+            {account
+              ? "Edit your account details below."
+              : "Add a new account to track your finances. Fill in the details below."}
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
