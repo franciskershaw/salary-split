@@ -147,7 +147,9 @@ export function AccountCard({ account }: AccountCardProps) {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onSelect={() => setEditAccountDialogOpen(true)}>
+                <DropdownMenuItem
+                  onSelect={() => setEditAccountDialogOpen(true)}
+                >
                   Edit account
                 </DropdownMenuItem>
                 <DropdownMenuItem

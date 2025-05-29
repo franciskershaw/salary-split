@@ -124,7 +124,7 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
             <Switch
               checked={isDefault || isFirstAccount}
               onCheckedChange={handleDefaultToggle}
-              disabled={isFirstAccount}
+              disabled={isFirstAccount || (isEditing && isDefault)}
             />
           </FormInput>
 
