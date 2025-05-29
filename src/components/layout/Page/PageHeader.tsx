@@ -1,17 +1,24 @@
 const PageHeader = ({
   title,
   description,
+  action,
 }: {
   title: string;
   description?: string;
+  action?: React.ReactNode;
 }) => {
   return (
-    <div className="flex flex-col gap-1">
-      <h1 className="text-2xl font-bold dark:text-white">{title}</h1>
+    <header className="bg-surface border-b border-surface-border p-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-surface-foreground">
+          {title}
+        </h2>
+        {action && <div>{action}</div>}
+      </div>
       {description && (
-        <p className="text-gray-500 dark:text-gray-400">{description}</p>
+        <p className="text-sm text-surface-foreground/70 mt-1">{description}</p>
       )}
-    </div>
+    </header>
   );
 };
 
