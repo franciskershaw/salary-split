@@ -1,12 +1,5 @@
 import { useState } from "react";
 
-import {
-  Banknote,
-  BarChartIcon,
-  CreditCardIcon,
-  PiggyBankIcon,
-} from "lucide-react";
-
 import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -14,87 +7,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  CURRENT_ACCOUNT,
-  INVESTMENT_ACCOUNT,
-  JOINT_ACCOUNT,
-  SAVINGS_ACCOUNT,
-} from "@/constants/api";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
 
+import { getAccountTypeInfo } from "../helper/helper";
 import CreateAccountDialog from "./CreateAccountDialog/CreateAccountDialog";
 import DeleteAccountDialog from "./DeleteAccountDialog/DeleteAccountDialog";
 
 type AccountCardProps = {
   account: Account;
+  hideDropdown?: boolean;
 };
 
-const getAccountIcon = (type: Account["type"]) => {
-  switch (type) {
-    case CURRENT_ACCOUNT:
-      return <Banknote className="h-5 w-5" />;
-    case JOINT_ACCOUNT:
-      return <CreditCardIcon className="h-5 w-5" />;
-    case SAVINGS_ACCOUNT:
-      return <PiggyBankIcon className="h-5 w-5" />;
-    case INVESTMENT_ACCOUNT:
-      return <BarChartIcon className="h-5 w-5" />;
-  }
-};
-
-const getAccountColors = (type: Account["type"]) => {
-  switch (type) {
-    case CURRENT_ACCOUNT:
-      return {
-        bg: "bg-blue-100 dark:bg-blue-900/30",
-        text: "text-blue-600 dark:text-blue-400",
-        badge:
-          "bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400",
-      };
-    case JOINT_ACCOUNT:
-      return {
-        bg: "bg-green-100 dark:bg-green-900/30",
-        text: "text-green-600 dark:text-green-400",
-        badge:
-          "bg-green-50 dark:bg-green-900/50 text-green-600 dark:text-green-400",
-      };
-    case SAVINGS_ACCOUNT:
-      return {
-        bg: "bg-purple-100 dark:bg-purple-900/30",
-        text: "text-purple-600 dark:text-purple-400",
-        badge:
-          "bg-purple-50 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400",
-      };
-    case INVESTMENT_ACCOUNT:
-      return {
-        bg: "bg-amber-100 dark:bg-amber-900/30",
-        text: "text-amber-600 dark:text-amber-400",
-        badge:
-          "bg-amber-50 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400",
-      };
-  }
-};
-
-const getAccountTypeLabel = (type: Account["type"]) => {
-  switch (type) {
-    case CURRENT_ACCOUNT:
-      return "Current";
-    case JOINT_ACCOUNT:
-      return "Joint";
-    case SAVINGS_ACCOUNT:
-      return "Savings";
-    case INVESTMENT_ACCOUNT:
-      return "Investment";
-  }
-};
-
-export function AccountCard({ account }: AccountCardProps) {
+export function AccountCard({ account, hideDropdown }: AccountCardProps) {
   const [editAccountDialogOpen, setEditAccountDialogOpen] = useState(false);
   const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false);
   const { name, type, institution, amount } = account;
-  const { bg, text, badge } = getAccountColors(type);
-  const icon = getAccountIcon(type);
+  const { icon: Icon, colors } = getAccountTypeInfo(type);
 
   return (
     <>
@@ -104,14 +33,16 @@ export function AccountCard({ account }: AccountCardProps) {
             <div
               className={cn(
                 "w-10 h-10 rounded-full flex items-center justify-center",
-                bg,
-                text
+                colors.bg,
+                colors.text
               )}
             >
-              {icon}
+              <Icon className="h-5 w-5" />
             </div>
-            <span className={cn("text-xs px-2 py-1 rounded-full", badge)}>
-              {getAccountTypeLabel(type)}
+            <span
+              className={cn("text-xs px-2 py-1 rounded-full", colors.badge)}
+            >
+              {getAccountTypeInfo(type).label.split(" ")[0]}
             </span>
           </div>
           <h3 className="font-medium dark:text-white">{name}</h3>
@@ -126,40 +57,42 @@ export function AccountCard({ account }: AccountCardProps) {
                 {formatCurrency(amount)}
               </span>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="cursor-pointer text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+            {!hideDropdown && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="cursor-pointer text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="1" />
+                      <circle cx="19" cy="12" r="1" />
+                      <circle cx="5" cy="12" r="1" />
+                    </svg>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onSelect={() => setEditAccountDialogOpen(true)}
                   >
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="19" cy="12" r="1" />
-                    <circle cx="5" cy="12" r="1" />
-                  </svg>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onSelect={() => setEditAccountDialogOpen(true)}
-                >
-                  Edit account
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive"
-                  onSelect={() => setDeleteAccountDialogOpen(true)}
-                >
-                  Delete account
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    Edit account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onSelect={() => setDeleteAccountDialogOpen(true)}
+                  >
+                    Delete account
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </CardContent>
       </Card>
