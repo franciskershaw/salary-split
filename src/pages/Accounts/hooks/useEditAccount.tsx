@@ -30,13 +30,17 @@ const useEditAccount = () => {
       toast.success("Account edited successfully");
       queryClient.invalidateQueries({ queryKey: [queryKeys.accounts] });
       queryClient.setQueryData([queryKeys.user], (oldData: User) => {
-        return {
-          ...oldData,
-          defaultAccount: updatedUser.defaultAccount,
-        };
+        if (updatedUser) {
+          return {
+            ...oldData,
+            defaultAccount: updatedUser.defaultAccount,
+          };
+        }
+        return oldData;
       });
     },
     onError: (error: AxiosError<{ message: string }>) => {
+      console.log(error);
       toast.error(error.response?.data?.message || error.message);
     },
     onSettled: () => {

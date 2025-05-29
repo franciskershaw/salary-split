@@ -10,7 +10,7 @@ const PageHeader = ({
   return (
     <header className="bg-surface border-b border-surface-border p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-surface-foreground">
+        <h2 className="text-2xl font-semibold text-surface-foreground">
           {title}
         </h2>
         {action && <div>{action}</div>}
