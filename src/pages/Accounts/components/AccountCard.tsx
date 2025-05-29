@@ -7,6 +7,12 @@ import {
 
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   CURRENT_ACCOUNT,
   INVESTMENT_ACCOUNT,
   JOINT_ACCOUNT,
@@ -14,6 +20,8 @@ import {
 } from "@/constants/api";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
+
+import CreateAccountDialog from "./CreateAccountDialog/CreateAccountDialog";
 
 type AccountCardProps = {
   account: Account;
@@ -112,23 +120,40 @@ export function AccountCard({ account }: AccountCardProps) {
               {formatCurrency(amount)}
             </span>
           </div>
-          <button className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="19" cy="12" r="1" />
-              <circle cx="5" cy="12" r="1" />
-            </svg>
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="cursor-pointer text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="19" cy="12" r="1" />
+                  <circle cx="5" cy="12" r="1" />
+                </svg>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <CreateAccountDialog
+                account={account}
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    Edit account
+                  </DropdownMenuItem>
+                }
+              />
+              <DropdownMenuItem className="text-destructive focus:text-destructive">
+                Delete account
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardContent>
     </Card>

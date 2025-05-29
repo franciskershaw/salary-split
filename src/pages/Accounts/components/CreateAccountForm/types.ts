@@ -8,6 +8,7 @@ import {
 } from "@/constants/api";
 
 export const accountFormSchema = z.object({
+  _id: z.string().optional(),
   name: z.string().min(1, "Account name is required"),
   institution: z.string().optional(),
   amount: z.coerce

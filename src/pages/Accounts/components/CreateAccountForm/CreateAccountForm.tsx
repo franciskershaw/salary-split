@@ -12,8 +12,11 @@ import {
   JOINT_ACCOUNT,
   SAVINGS_ACCOUNT,
 } from "@/constants/api";
+import useUser from "@/hooks/user/useUser";
+import type { Account } from "@/types/globalTypes";
 
 import useAddAccount from "../../hooks/useAddAccount";
+import useEditAccount from "../../hooks/useEditAccount";
 import useGetAccounts from "../../hooks/useGetAccounts";
 import { accountFormSchema, type AccountFormValues } from "./types";
 
@@ -26,33 +29,48 @@ const accountTypes = [
 
 interface CreateAccountFormProps {
   onSuccess?: () => void;
+  account?: Account;
 }
 
-const CreateAccountForm = ({ onSuccess }: CreateAccountFormProps) => {
+const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   const { accounts } = useGetAccounts();
+  const { user } = useUser();
   const isFirstAccount = accounts?.length === 0;
+  const isEditing = !!account;
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
-      name: "",
-      institution: "",
-      amount: 0,
-      type: CURRENT_ACCOUNT,
-      acceptsFunds: isFirstAccount ? true : false,
-      receivesSalary: false,
-      isDefault: isFirstAccount,
+      _id: account?._id,
+      name: account?.name ?? "",
+      institution: account?.institution ?? "",
+      amount: account?.amount ?? 0,
+      type: account?.type ?? CURRENT_ACCOUNT,
+      acceptsFunds: account?.acceptsFunds ?? (isFirstAccount ? true : false),
+      receivesSalary: account?.receivesSalary ?? false,
+      isDefault: isFirstAccount || user?.defaultAccount === account?._id,
     },
   });
 
-  const { addAccount, isPending } = useAddAccount();
+  const { addAccount, isPending: isAddingPending } = useAddAccount();
+  const { editAccount, isPending: isEditingPending } = useEditAccount();
+
+  const isPending = isAddingPending || isEditingPending;
 
   const onSubmit = (values: AccountFormValues) => {
-    addAccount(values, {
-      onSuccess: () => {
-        onSuccess?.();
-      },
-    });
+    if (isEditing) {
+      editAccount(values, {
+        onSuccess: () => {
+          onSuccess?.();
+        },
+      });
+    } else {
+      addAccount(values, {
+        onSuccess: () => {
+          onSuccess?.();
+        },
+      });
+    }
   };
 
   const isDefault = form.watch("isDefault") as boolean;
@@ -139,7 +157,13 @@ const CreateAccountForm = ({ onSuccess }: CreateAccountFormProps) => {
         </div>
 
         <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? "Creating..." : "Create Account"}
+          {isPending
+            ? isEditing
+              ? "Saving..."
+              : "Creating..."
+            : isEditing
+              ? "Save Changes"
+              : "Create Account"}
         </Button>
       </div>
     </Form>

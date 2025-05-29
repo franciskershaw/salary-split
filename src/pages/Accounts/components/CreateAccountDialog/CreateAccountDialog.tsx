@@ -8,14 +8,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { Account } from "@/types/globalTypes";
 
 import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
 
 interface CreateAccountDialogProps {
   trigger: React.ReactNode;
+  account?: Account;
 }
 
-const CreateAccountDialog = ({ trigger }: CreateAccountDialogProps) => {
+const CreateAccountDialog = ({
+  trigger,
+  account,
+}: CreateAccountDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,7 +34,10 @@ const CreateAccountDialog = ({ trigger }: CreateAccountDialogProps) => {
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
-          <CreateAccountForm onSuccess={() => setIsOpen(false)} />
+          <CreateAccountForm
+            onSuccess={() => setIsOpen(false)}
+            account={account}
+          />
         </div>
       </DialogContent>
     </Dialog>
