@@ -3,6 +3,11 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { AccountCard } from "../../../Accounts/components/AccountCard";
 import NoAccounts from "../../../Accounts/components/NoAccounts";
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
+import {
+  createSummaryAccounts,
+  getAccountTypeInfo,
+  groupAccountsByType,
+} from "../../../Dashboard/helper/helper";
 
 const AccountsOverview = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
@@ -20,11 +25,17 @@ const AccountsOverview = () => {
     return <NoAccounts />;
   }
 
+  const accountsByType = groupAccountsByType(accounts);
+  const summaryAccounts = createSummaryAccounts(
+    accountsByType,
+    (type) => getAccountTypeInfo(type).label
+  );
+
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold">Accounts Overview</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {accounts?.map((account) => (
+        {summaryAccounts.map((account) => (
           <AccountCard key={account._id} account={account} />
         ))}
       </div>
