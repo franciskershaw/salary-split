@@ -1,8 +1,8 @@
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
+import { AccountCard } from "../../../Accounts/components/AccountCard";
+import NoAccounts from "../../../Accounts/components/NoAccounts";
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
-import { AccountCard } from "./AccountCard";
-import NoAccounts from "./NoAccounts";
 
 const AccountsOverview = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
