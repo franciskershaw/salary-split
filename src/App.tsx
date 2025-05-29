@@ -4,6 +4,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import PrivateRoute from "./components/layout/PrivateRoute/PrivateRoute";
 import SharedLayout from "./components/layout/SharedLayout/SharedLayout";
+import Accounts from "./pages/Accounts/Accounts";
 import Auth from "./pages/Auth/Auth";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
@@ -17,7 +18,7 @@ function App() {
             <Route index element={<Dashboard />} />
           </Route>
           <Route path="/accounts" element={<PrivateRoute />}>
-            <Route index element={<div>Accounts</div>} />
+            <Route index element={<Accounts />} />
           </Route>
           <Route path="/bills" element={<PrivateRoute />}>
             <Route index element={<div>Bills</div>} />
