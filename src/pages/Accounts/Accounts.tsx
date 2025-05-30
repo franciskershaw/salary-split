@@ -41,7 +41,7 @@ const Accounts = () => {
         action={
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button size="sm" className="bg-primary hover:bg-primary/90">
                 <Settings className="w-4 h-4" />
                 Actions
               </Button>
@@ -54,12 +54,17 @@ const Accounts = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         }
+        secondaryAction={
+          accounts?.length ? <TotalBalance accounts={accounts} /> : null
+        }
       />
       {!accounts?.length ? (
         <NoAccounts />
       ) : (
         <>
-          <TotalBalance accounts={accounts} />
+          <div className="lg:hidden">
+            <TotalBalance accounts={accounts} />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {accounts?.map((account) => (
               <AccountCard key={account._id} account={account} />

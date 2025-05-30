@@ -101,7 +101,9 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Card
-          className={`lg:max-w-1/4 shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-4 md:px-2`}
+          className={`shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-4 md:px-2 ${
+            accounts.length > 0 ? "md:min-w-[200px]" : ""
+          }`}
         >
           <CardContent className="p-4 md:p-2">
             <div className="flex items-center justify-between">
