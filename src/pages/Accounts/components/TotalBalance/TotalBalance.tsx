@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Filter } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -21,8 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
+import { Form, FormInput } from "@/components/ui/form";
 import useUser from "@/hooks/user/useUser";
 import { formatCurrency } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
@@ -46,6 +47,7 @@ type TotalBalanceProps = {
 export function TotalBalance({ accounts }: TotalBalanceProps) {
   const { user } = useUser();
   const { updateAccountFilters, isPending } = useUpdateAccountFilters();
+  const [open, setOpen] = useState(false);
 
   const defaultValues = {
     current:
@@ -69,7 +71,11 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
       type: type as Account["type"],
       enabled,
     }));
-    updateAccountFilters(filters);
+    updateAccountFilters(filters, {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    });
   };
 
   const filteredAccounts = accounts.filter((account) =>
@@ -92,10 +98,10 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
     selectedTypes.length === 4 ? "All Accounts" : selectedTypes.join(", ");
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Card
-          className={`md:max-w-1/4 shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-4 md:px-2`}
+          className={`lg:max-w-1/4 shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-4 md:px-2`}
         >
           <CardContent className="p-4 md:p-2">
             <div className="flex items-center justify-between">
@@ -126,22 +132,22 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
               {Object.keys(defaultValues).map((type) => {
                 const { label } = getAccountTypeInfo(type as Account["type"]);
                 return (
-                  <FormField
+                  <FormInput
                     key={type}
-                    control={form.control}
-                    name={type as keyof AccountFiltersForm}
-                    render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <Label>{label}</Label>
-                      </FormItem>
-                    )}
-                  />
+                    name={type}
+                    label={label}
+                    labelPosition="right"
+                  >
+                    <Checkbox
+                      checked={form.watch(type as keyof AccountFiltersForm)}
+                      onCheckedChange={(checked) =>
+                        form.setValue(
+                          type as keyof AccountFiltersForm,
+                          checked as boolean
+                        )
+                      }
+                    />
+                  </FormInput>
                 );
               })}
             </div>

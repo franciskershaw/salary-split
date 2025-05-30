@@ -234,30 +234,40 @@ function FormInput({
   return (
     <FormField
       name={name}
-      render={({ field }) => (
-        <FormFieldContext.Provider value={{ name: field.name }}>
-          <FormItem
-            className={cn(
-              labelPosition !== "top" && "flex items-center gap-2",
-              className
-            )}
-          >
-            {label && labelPosition === "left" && (
-              <FormLabel>{label}</FormLabel>
-            )}
-            {label && labelPosition === "top" && <FormLabel>{label}</FormLabel>}
-            <FormControl>
-              {React.cloneElement(children as React.ReactElement, {
-                ...field,
-              })}
-            </FormControl>
-            {label && labelPosition === "right" && (
-              <FormLabel>{label}</FormLabel>
-            )}
-            {showMessage && <FormMessage />}
-          </FormItem>
-        </FormFieldContext.Provider>
-      )}
+      render={({ field }) => {
+        const renderLabel = () => {
+          if (!label) return null;
+          return <FormLabel>{label}</FormLabel>;
+        };
+
+        const renderControl = () => (
+          <FormControl>
+            {React.cloneElement(children as React.ReactElement, {
+              ...field,
+            })}
+          </FormControl>
+        );
+
+        return (
+          <FormFieldContext.Provider value={{ name: field.name }}>
+            <FormItem className={cn("space-y-2", className)}>
+              {labelPosition === "top" ? (
+                <>
+                  {renderLabel()}
+                  {renderControl()}
+                </>
+              ) : (
+                <div className="flex items-center gap-2">
+                  {labelPosition === "left" && renderLabel()}
+                  {renderControl()}
+                  {labelPosition === "right" && renderLabel()}
+                </div>
+              )}
+              {showMessage && <FormMessage />}
+            </FormItem>
+          </FormFieldContext.Provider>
+        );
+      }}
     />
   );
 }
