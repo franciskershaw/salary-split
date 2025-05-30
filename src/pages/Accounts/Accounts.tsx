@@ -1,8 +1,16 @@
-import { Plus } from "lucide-react";
+import { useState } from "react";
+
+import { MoreHorizontal, Plus } from "lucide-react";
 
 import PageHeader from "@/components/layout/Page/PageHeader";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 import { AccountCard } from "./components/AccountCard";
@@ -12,6 +20,7 @@ import useGetAccounts from "./hooks/useGetAccounts";
 
 const Accounts = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
+  const [newAccountDialogOpen, setNewAccountDialogOpen] = useState(false);
 
   if (fetchingAccounts) {
     return (
@@ -29,14 +38,20 @@ const Accounts = () => {
         title="Accounts"
         description="Manage your bank accounts and track balances"
         action={
-          <CreateAccountDialog
-            trigger={
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button className="bg-primary hover:bg-primary/90">
-                <Plus className="w-4 h-4" />
-                New
+                <MoreHorizontal className="w-4 h-4 mr-2" />
+                Actions
               </Button>
-            }
-          />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => setNewAccountDialogOpen(true)}>
+                <Plus className="w-4 h-4 mr-2" />
+                New Account
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         }
       />
       {!accounts?.length ? (
@@ -50,6 +65,10 @@ const Accounts = () => {
           </div>
         </>
       )}
+      <CreateAccountDialog
+        open={newAccountDialogOpen}
+        onOpenChange={setNewAccountDialogOpen}
+      />
     </PageWrapper>
   );
 };
