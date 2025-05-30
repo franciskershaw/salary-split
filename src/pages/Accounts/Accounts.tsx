@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Plus, Settings } from "lucide-react";
+import { ListOrdered, Plus, Settings } from "lucide-react";
 
 import PageHeader from "@/components/layout/Page/PageHeader";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
@@ -16,12 +16,14 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { AccountCard } from "./components/AccountCard";
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
 import NoAccounts from "./components/NoAccounts";
+import ReorderAccountsDialog from "./components/ReorderAccountsDialog/ReorderAccountsDialog";
 import { TotalBalance } from "./components/TotalBalance/TotalBalance";
 import useGetAccounts from "./hooks/useGetAccounts";
 
 const Accounts = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
   const [newAccountDialogOpen, setNewAccountDialogOpen] = useState(false);
+  const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
   if (fetchingAccounts) {
     return (
@@ -51,6 +53,10 @@ const Accounts = () => {
                 <Plus className="w-4 h-4" />
                 New Account
               </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setReorderDialogOpen(true)}>
+                <ListOrdered className="w-4 h-4" />
+                Reorder accounts
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         }
@@ -76,6 +82,13 @@ const Accounts = () => {
         open={newAccountDialogOpen}
         onOpenChange={setNewAccountDialogOpen}
       />
+      {accounts && (
+        <ReorderAccountsDialog
+          open={reorderDialogOpen}
+          onOpenChange={setReorderDialogOpen}
+          accounts={accounts}
+        />
+      )}
     </PageWrapper>
   );
 };
