@@ -25,9 +25,15 @@ export interface User {
   defaultCurrency: Currency;
   defaultAccount?: string;
   defaultTheme: Theme;
+  accountFilters: AccountFilter[];
   createdAt: string;
   updatedAt: string;
   accessToken: string;
+}
+
+export interface AccountFilter {
+  type: Account["type"];
+  enabled: boolean;
 }
 
 export interface Account {

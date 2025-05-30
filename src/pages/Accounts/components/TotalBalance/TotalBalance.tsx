@@ -1,6 +1,7 @@
-import { useState } from "react";
-
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Filter } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,38 +21,59 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
+import useUser from "@/hooks/user/useUser";
 import { formatCurrency } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
 
 import { getAccountTypeInfo } from "../../helper/helper";
+import useUpdateAccountFilters from "../../hooks/useUpdateAccountFilters";
+
+const accountFiltersSchema = z.object({
+  current: z.boolean(),
+  joint: z.boolean(),
+  savings: z.boolean(),
+  investment: z.boolean(),
+});
+
+type AccountFiltersForm = z.infer<typeof accountFiltersSchema>;
 
 type TotalBalanceProps = {
   accounts: Account[];
 };
 
-type AccountTypeSelection = {
-  [key in Account["type"]]: boolean;
-};
-
 export function TotalBalance({ accounts }: TotalBalanceProps) {
-  const [selectedAccountTypes, setSelectedAccountTypes] =
-    useState<AccountTypeSelection>({
-      current: true,
-      joint: true,
-      savings: true,
-      investment: true,
-    });
+  const { user } = useUser();
+  const { updateAccountFilters, isPending } = useUpdateAccountFilters();
 
-  const handleAccountTypeToggle = (type: Account["type"]) => {
-    setSelectedAccountTypes((prev) => ({
-      ...prev,
-      [type]: !prev[type],
-    }));
+  const defaultValues = {
+    current:
+      user?.accountFilters?.find((f) => f.type === "current")?.enabled ?? true,
+    joint:
+      user?.accountFilters?.find((f) => f.type === "joint")?.enabled ?? true,
+    savings:
+      user?.accountFilters?.find((f) => f.type === "savings")?.enabled ?? true,
+    investment:
+      user?.accountFilters?.find((f) => f.type === "investment")?.enabled ??
+      true,
   };
 
-  const filteredAccounts = accounts.filter(
-    (account) => selectedAccountTypes[account.type]
+  const form = useForm<AccountFiltersForm>({
+    resolver: zodResolver(accountFiltersSchema),
+    defaultValues,
+  });
+
+  const onSubmit = (values: AccountFiltersForm) => {
+    const filters = Object.entries(values).map(([type, enabled]) => ({
+      type: type as Account["type"],
+      enabled,
+    }));
+    updateAccountFilters(filters);
+  };
+
+  const filteredAccounts = accounts.filter((account) =>
+    form.watch(account.type)
   );
 
   const totalBalance = filteredAccounts.reduce(
@@ -59,7 +81,7 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
     0
   );
 
-  const selectedTypes = Object.entries(selectedAccountTypes)
+  const selectedTypes = Object.entries(form.watch())
     .filter(([, isSelected]) => isSelected)
     .map(
       ([type]) =>
@@ -98,30 +120,43 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
             calculation
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4">
-          <div className="space-y-3">
-            {Object.entries(selectedAccountTypes).map(([type, selected]) => {
-              const { label } = getAccountTypeInfo(type as Account["type"]);
-              return (
-                <div key={type} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={type}
-                    checked={selected}
-                    onCheckedChange={() =>
-                      handleAccountTypeToggle(type as Account["type"])
-                    }
+        <Form form={form} onSubmit={onSubmit}>
+          <div className="py-4">
+            <div className="space-y-3">
+              {Object.keys(defaultValues).map((type) => {
+                const { label } = getAccountTypeInfo(type as Account["type"]);
+                return (
+                  <FormField
+                    key={type}
+                    control={form.control}
+                    name={type as keyof AccountFiltersForm}
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <Label>{label}</Label>
+                      </FormItem>
+                    )}
                   />
-                  <Label htmlFor={type}>{label}</Label>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button>Apply</Button>
-          </DialogClose>
-        </DialogFooter>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" onClick={() => form.reset()}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={isPending}>
+              Apply
+            </Button>
+          </DialogFooter>
+        </Form>
       </DialogContent>
     </Dialog>
   );
