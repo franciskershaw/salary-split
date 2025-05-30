@@ -8,7 +8,7 @@ const PageHeader = ({
   action?: React.ReactNode;
 }) => {
   return (
-    <header className="bg-surface border-b border-surface-border p-6">
+    <header className="bg-surface border-b border-surface-border p-4 md:p-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-surface-foreground">
           {title}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { MoreHorizontal, Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 
 import PageHeader from "@/components/layout/Page/PageHeader";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
@@ -16,6 +16,7 @@ import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { AccountCard } from "./components/AccountCard";
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
 import NoAccounts from "./components/NoAccounts";
+import { TotalBalance } from "./components/TotalBalance/TotalBalance";
 import useGetAccounts from "./hooks/useGetAccounts";
 
 const Accounts = () => {
@@ -41,13 +42,13 @@ const Accounts = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="bg-primary hover:bg-primary/90">
-                <MoreHorizontal className="w-4 h-4 mr-2" />
+                <Settings className="w-4 h-4" />
                 Actions
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onSelect={() => setNewAccountDialogOpen(true)}>
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-4 h-4" />
                 New Account
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -58,6 +59,7 @@ const Accounts = () => {
         <NoAccounts />
       ) : (
         <>
+          <TotalBalance accounts={accounts} />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {accounts?.map((account) => (
               <AccountCard key={account._id} account={account} />
