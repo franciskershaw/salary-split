@@ -1,16 +1,6 @@
 import { useState } from "react";
 
-import { ListOrdered, Plus, Settings } from "lucide-react";
-
-import PageHeader from "@/components/layout/Page/PageHeader";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 import { AccountCard } from "./components/AccountCard";
@@ -36,34 +26,15 @@ const Accounts = () => {
   }
 
   return (
-    <PageWrapper>
-      <PageHeader
-        title="Accounts"
-        description="Manage your bank accounts and track balances"
-        action={
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="sm" className="bg-primary hover:bg-primary/90">
-                <Settings className="w-4 h-4" />
-                Actions
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onSelect={() => setNewAccountDialogOpen(true)}>
-                <Plus className="w-4 h-4" />
-                New Account
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setReorderDialogOpen(true)}>
-                <ListOrdered className="w-4 h-4" />
-                Reorder accounts
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        }
-        secondaryAction={
-          accounts?.length ? <TotalBalance accounts={accounts} /> : null
-        }
-      />
+    <PageWrapper
+      title="Accounts"
+      description="Manage your bank accounts and track balances"
+      openCreateDialog={() => setNewAccountDialogOpen(true)}
+      openReorderDialog={() => setReorderDialogOpen(true)}
+      totalComponent={
+        accounts?.length ? <TotalBalance accounts={accounts} /> : null
+      }
+    >
       {!accounts?.length ? (
         <NoAccounts />
       ) : (

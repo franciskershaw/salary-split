@@ -1,4 +1,3 @@
-import PageHeader from "@/components/layout/Page/PageHeader";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import useUser from "@/hooks/user/useUser";
 
@@ -9,11 +8,10 @@ const Dashboard = () => {
   const { user } = useUser();
 
   return (
-    <PageWrapper>
-      <PageHeader
-        title="Dashboard"
-        description={`Welcome back, ${user?.name.firstName}!`}
-      />
+    <PageWrapper
+      title="Dashboard"
+      description={`Welcome back, ${user?.name.firstName}!`}
+    >
       <AllocationSummary />
       <AccountsOverview />
     </PageWrapper>

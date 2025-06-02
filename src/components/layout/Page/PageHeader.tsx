@@ -1,14 +1,57 @@
+import { useMemo } from "react";
+
+import { ListOrdered, Plus, Settings } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 const PageHeader = ({
   title,
   description,
-  action,
-  secondaryAction,
+  totalComponent,
+  openCreateDialog,
+  openReorderDialog,
 }: {
   title: string;
   description?: string;
-  action?: React.ReactNode;
-  secondaryAction?: React.ReactNode;
+  totalComponent?: React.ReactNode;
+  openCreateDialog?: () => void;
+  openReorderDialog?: () => void;
 }) => {
+  const actionsContent = useMemo(() => {
+    if (!openCreateDialog && !openReorderDialog) return null;
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" className="bg-primary hover:bg-primary/90">
+            <Settings className="w-4 h-4" />
+            Actions
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {openCreateDialog && (
+            <DropdownMenuItem onSelect={() => openCreateDialog()}>
+              <Plus className="w-4 h-4" />
+              New Account
+            </DropdownMenuItem>
+          )}
+          {openReorderDialog && (
+            <DropdownMenuItem onSelect={() => openReorderDialog()}>
+              <ListOrdered className="w-4 h-4" />
+              Reorder accounts
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }, [openCreateDialog, openReorderDialog]);
+
   return (
     <header className="bg-surface border-b border-surface-border p-4 lg:p-6">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -18,9 +61,13 @@ const PageHeader = ({
               <h2 className="text-2xl font-semibold text-surface-foreground">
                 {title}
               </h2>
-              {action && <div className="hidden lg:block">{action}</div>}
+              {actionsContent && (
+                <div className="hidden lg:block">{actionsContent}</div>
+              )}
             </div>
-            {action && <div className="lg:hidden">{action}</div>}
+            {actionsContent && (
+              <div className="lg:hidden">{actionsContent}</div>
+            )}
           </div>
           {description && (
             <p className="text-sm text-surface-foreground/70 mt-1">
@@ -28,8 +75,8 @@ const PageHeader = ({
             </p>
           )}
         </div>
-        {secondaryAction && (
-          <div className="hidden lg:block">{secondaryAction}</div>
+        {totalComponent && (
+          <div className="hidden lg:block">{totalComponent}</div>
         )}
       </div>
     </header>
