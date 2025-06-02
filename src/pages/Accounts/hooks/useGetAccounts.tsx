@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { useQuery } from "@tanstack/react-query";
 
 import useAxios from "@/hooks/axios/useAxios";
@@ -24,7 +26,18 @@ const useGetAccounts = () => {
     retry: false,
   });
 
-  return { accounts, fetchingAccounts };
+  const accountsWhichAcceptFunds = useMemo(
+    () =>
+      accounts
+        ?.filter((account) => account.acceptsFunds)
+        .map((account) => ({
+          value: account._id,
+          label: `${account.name}${account.institution ? ` (${account.institution})` : ""}`,
+        })),
+    [accounts]
+  );
+
+  return { accounts, fetchingAccounts, accountsWhichAcceptFunds };
 };
 
 export default useGetAccounts;

@@ -1,3 +1,5 @@
+import React, { useEffect } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -7,7 +9,7 @@ import { FormSelect } from "@/components/ui/select";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
-// import useAddBill from "../../hooks/useAddBill";
+import useAddBill from "../../hooks/useAddBill";
 // import useEditBill from "../../hooks/useEditBill";
 import { billFormSchema, type BillFormValues } from "./types";
 
@@ -16,21 +18,14 @@ interface CreateBillFormProps {
   bill?: Bill;
   children?:
     | React.ReactNode
-    | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode); // For render prop pattern to pass submit button
+    | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
 const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
-  const { accounts } = useGetAccounts();
+  const { accountsWhichAcceptFunds } = useGetAccounts();
   const isEditing = !!bill;
 
   // Convert accounts to select options
-  const accountOptions =
-    accounts
-      ?.filter((account) => account.acceptsFunds)
-      .map((account) => ({
-        value: account._id,
-        label: `${account.name}${account.institution ? ` (${account.institution})` : ""}`,
-      })) || [];
 
   // Split between options
   const splitBetweenOptions = Array.from({ length: 10 }, (_, i) => ({
@@ -38,10 +33,10 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
     label: i + 1 === 1 ? "1 person (just me)" : `${i + 1} people`,
   }));
 
-  // Due date options
-  const dueDateOptions = [
+  // Due date type options
+  const dueDateTypeOptions = [
     { value: "1", label: "1st of every month" },
-    { value: "last", label: "Last day of every month" },
+    { value: "31", label: "Last day of every month" },
     { value: "custom", label: "Custom day..." },
   ];
 
@@ -63,41 +58,43 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
         | "8"
         | "9"
         | "10",
-      dueDate: "1" as const,
-      customDay: 1,
+      dueDate: typeof bill?.dueDate === "number" ? bill.dueDate : 1,
+      dueDateType:
+        typeof bill?.dueDate === "number"
+          ? bill.dueDate === 1
+            ? "1"
+            : bill.dueDate === 31
+              ? "31"
+              : "custom"
+          : "1",
     },
   });
 
-  // Commented out for now - uncomment when backend hooks are ready
-  // const { addBill, isPending: isAddingPending } = useAddBill();
+  const { addBill, isPending: isAddingPending } = useAddBill();
   // const { editBill, isPending: isEditingPending } = useEditBill();
-  // const isPending = isAddingPending || isEditingPending;
-  const isPending = false; // Temporary
+  const isPending = isAddingPending;
 
   const onSubmit = (values: BillFormValues) => {
-    console.log("Bill form values:", values); // Temporary for testing
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { dueDateType, ...submitValues } = values;
 
-    // Uncomment when backend hooks are ready
-    // if (isEditing) {
-    //   editBill(values, {
-    //     onSuccess: () => {
-    //       onSuccess?.();
-    //     },
-    //   });
-    // } else {
-    //   addBill(values, {
-    //     onSuccess: () => {
-    //       onSuccess?.();
-    //     },
-    //   });
-    // }
-
-    // Temporary success callback for testing
-    onSuccess?.();
+    addBill(submitValues, {
+      onSuccess: () => {
+        onSuccess?.();
+      },
+    });
   };
 
-  // Watch due date to show/hide custom day input
-  const dueDate = form.watch("dueDate");
+  // Watch dueDateType to show/hide custom input and update dueDate
+  const dueDateType = form.watch("dueDateType");
+
+  useEffect(() => {
+    if (dueDateType === "1") {
+      form.setValue("dueDate", 1);
+    } else if (dueDateType === "31") {
+      form.setValue("dueDate", 31);
+    }
+  }, [dueDateType, form]);
 
   return (
     <Form form={form} onSubmit={onSubmit}>
@@ -124,18 +121,18 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
             name="account"
             label="Account"
             placeholder="Select account to pay from"
-            options={accountOptions}
+            options={accountsWhichAcceptFunds ?? []}
           />
 
           <FormSelect
-            name="dueDate"
+            name="dueDateType"
             label="Due Date"
             placeholder="When is this bill due each month?"
-            options={dueDateOptions}
+            options={dueDateTypeOptions}
           />
 
-          {dueDate === "custom" && (
-            <FormInput name="customDay" label="Day of Month">
+          {dueDateType === "custom" && (
+            <FormInput name="dueDate" label="Day of Month">
               <Input
                 type="number"
                 min={1}
@@ -145,28 +142,22 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
             </FormInput>
           )}
 
-          {dueDate && dueDate !== "custom" && (
+          {dueDateType && dueDateType !== "custom" && (
             <div className="text-sm text-gray-500">
-              {dueDate === "last" &&
+              {dueDateType === "31" &&
                 "We'll automatically use the last day of each month"}
-              {dueDate === "1" && "Bill will be due on the 1st of every month"}
+              {dueDateType === "1" &&
+                "Bill will be due on the 1st of every month"}
             </div>
           )}
         </div>
 
-        <div className="rounded-lg border p-4 space-y-4">
-          <h3 className="font-medium">Split Options</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Split this bill between multiple people
-          </p>
-
-          <FormSelect
-            name="splitBetween"
-            label="Split Between"
-            placeholder="Select number of people"
-            options={splitBetweenOptions}
-          />
-        </div>
+        <FormSelect
+          name="splitBetween"
+          label="Split Between"
+          placeholder="Select number of people"
+          options={splitBetweenOptions}
+        />
 
         {children && typeof children === "function"
           ? children({ isPending, isEditing })

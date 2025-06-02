@@ -12,8 +12,8 @@ export const billFormSchema = z.object({
     ),
   account: z.string().min(1, "Please provide an account ID."),
   splitBetween: z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]),
-  dueDate: z.enum(["1", "last", "custom"]),
-  customDay: z.coerce.number().min(1).max(31),
+  dueDate: z.coerce.number().min(1).max(31),
+  dueDateType: z.enum(["1", "31", "custom"]).optional(), // Helper field to track UI state
 });
 
 export type BillFormValues = z.infer<typeof billFormSchema>;
