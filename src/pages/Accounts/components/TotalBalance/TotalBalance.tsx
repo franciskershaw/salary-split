@@ -122,7 +122,7 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Customize Total Balance</DialogTitle>
+          <DialogTitle>Customise Total Balance</DialogTitle>
           <DialogDescription>
             Select which account types to include in your total balance
             calculation
@@ -130,7 +130,7 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
         </DialogHeader>
         <Form form={form} onSubmit={onSubmit}>
           <div className="py-4">
-            <div className="space-y-3">
+            <div className="space-y-5">
               {Object.keys(defaultValues).map((type) => {
                 const { label } = getAccountTypeInfo(type as Account["type"]);
                 return (
