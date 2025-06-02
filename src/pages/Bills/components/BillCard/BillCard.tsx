@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn, formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import type { Bill } from "@/types/globalTypes";
 
 type BillCardProps = {
@@ -20,18 +20,24 @@ type BillCardProps = {
 export function BillCard({ bill, hideDropdown }: BillCardProps) {
   const [editBillDialogOpen, setEditBillDialogOpen] = useState(false);
   const [deleteBillDialogOpen, setDeleteBillDialogOpen] = useState(false);
-  const { name, amount, dueDate, accountName } = bill;
+  const { name, amount, dueDate, account } = bill;
 
-  // Calculate days until due
-  const daysUntilDue = Math.ceil(
-    (new Date(dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  // Determine status color based on days until due
-  const getStatusColor = () => {
-    if (daysUntilDue < 0) return "text-red-600 dark:text-red-400";
-    if (daysUntilDue <= 3) return "text-amber-600 dark:text-amber-400";
-    return "text-green-600 dark:text-green-400";
+  // Format due date display - assuming dueDate is stored as a number string or we need to parse it
+  const getDueDateDisplay = () => {
+    const dueDateNum =
+      typeof dueDate === "string" ? parseInt(dueDate) : dueDate;
+    if (dueDateNum === 31) {
+      return "Last day of month";
+    }
+    const suffix =
+      dueDateNum === 1 || dueDateNum === 21 || dueDateNum === 31
+        ? "st"
+        : dueDateNum === 2 || dueDateNum === 22
+          ? "nd"
+          : dueDateNum === 3 || dueDateNum === 23
+            ? "rd"
+            : "th";
+    return `${dueDateNum}${suffix} of month`;
   };
 
   return (
@@ -42,19 +48,14 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
             <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
               <Receipt className="h-5 w-5" />
             </div>
-            <span
-              className={cn("text-xs px-2 py-1 rounded-full", getStatusColor())}
-            >
-              {daysUntilDue < 0
-                ? "Overdue"
-                : daysUntilDue === 0
-                  ? "Due Today"
-                  : `${daysUntilDue} days left`}
+            <span className="text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+              Monthly
             </span>
           </div>
           <h3 className="font-medium dark:text-white">{name}</h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-3">
-            From {accountName}
+            From {account.name}
+            {account.institution ? ` (${account.institution})` : ""}
           </p>
           <div className="flex justify-between items-baseline">
             <div>
@@ -63,7 +64,7 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
               </span>
               <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                 <Calendar className="h-4 w-4 mr-1" />
-                {new Date(dueDate).toLocaleDateString()}
+                {getDueDateDisplay()}
               </div>
             </div>
             {!hideDropdown && (
@@ -106,6 +107,9 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
         </CardContent>
       </Card>
       {/* TODO: Add EditBillDialog and DeleteBillDialog components */}
+      {/* Dialogs will be implemented when backend is ready */}
+      {editBillDialogOpen && null}
+      {deleteBillDialogOpen && null}
     </>
   );
 }

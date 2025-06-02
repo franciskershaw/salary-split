@@ -57,7 +57,7 @@ export interface Bill {
   name: string;
   amount: number;
   dueDate: string;
-  account: string;
+  account: Account;
   splitBetween?: number;
   createdBy: string;
   createdAt: string;

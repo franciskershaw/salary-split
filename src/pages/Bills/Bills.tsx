@@ -1,26 +1,30 @@
 import { useState } from "react";
 
 import PageWrapper from "@/components/layout/Page/PageWrapper";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
+import NoAccounts from "../Accounts/components/NoAccounts/NoAccounts";
+import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import { BillCard } from "./components/BillCard/BillCard";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
-
-// Sample bill data
-const sampleBill = {
-  _id: "1",
-  name: "Netflix Subscription",
-  amount: 15.99,
-  dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
-  account: "1",
-  accountName: "Main Current Account",
-  createdBy: "user123",
-  createdAt: new Date().toISOString(),
-};
+import NoBills from "./components/NoBills/NoBills";
+import useGetBills from "./hooks/useGetBills";
 
 export default function Bills() {
-  // const { accounts, fetchingAccounts } = useGetAccounts();
+  const { bills, fetchingBills } = useGetBills();
+  const { accounts, fetchingAccounts } = useGetAccounts();
   const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
+
+  if (fetchingBills || fetchingAccounts) {
+    return (
+      <LoadingOverlay
+        message="Loading bills..."
+        opacity="light"
+        spinnerSize="md"
+      />
+    );
+  }
 
   return (
     <PageWrapper
@@ -29,11 +33,17 @@ export default function Bills() {
       openCreateDialog={() => setNewBillDialogOpen(true)}
       openReorderDialog={() => setReorderDialogOpen(true)}
     >
-      <>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <BillCard bill={sampleBill} />
-        </div>
-      </>
+      {!accounts?.length ? (
+        <NoAccounts />
+      ) : !bills?.length ? (
+        <NoBills />
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {bills?.map((bill) => <BillCard key={bill._id} bill={bill} />)}
+          </div>
+        </>
+      )}
       <CreateBillDialog
         open={newBillDialogOpen}
         onOpenChange={setNewBillDialogOpen}

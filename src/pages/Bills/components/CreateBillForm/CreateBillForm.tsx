@@ -25,8 +25,6 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
   const { accountsWhichAcceptFunds } = useGetAccounts();
   const isEditing = !!bill;
 
-  // Convert accounts to select options
-
   // Split between options
   const splitBetweenOptions = Array.from({ length: 10 }, (_, i) => ({
     value: (i + 1).toString(),
