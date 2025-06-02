@@ -65,6 +65,7 @@ function Form<TFieldValues extends FieldValues>({
         data-slot="form"
         onSubmit={form.handleSubmit(handleSubmit)}
         className={cn("space-y-4", className)}
+        noValidate
         {...formProps}
       >
         {children}

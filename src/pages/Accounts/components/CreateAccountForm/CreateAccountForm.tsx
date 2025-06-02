@@ -102,11 +102,6 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
               placeholder="Enter current balance"
               min={0}
               step="0.01"
-              onKeyDown={(e) => {
-                if (e.key === "-") {
-                  e.preventDefault();
-                }
-              }}
             />
           </FormInput>
 
