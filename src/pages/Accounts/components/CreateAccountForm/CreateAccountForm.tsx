@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
 import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
@@ -30,9 +29,10 @@ const accountTypes = [
 interface CreateAccountFormProps {
   onSuccess?: () => void;
   account?: Account;
+  children?: React.ReactNode | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
-const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
+const CreateAccountForm = ({ onSuccess, account, children }: CreateAccountFormProps) => {
   const { accounts } = useGetAccounts();
   const { user } = useUser();
   const isFirstAccount = accounts?.length === 0;
@@ -151,15 +151,7 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
           </FormInput>
         </div>
 
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending
-            ? isEditing
-              ? "Saving..."
-              : "Creating..."
-            : isEditing
-              ? "Save Changes"
-              : "Create Account"}
-        </Button>
+        {children && typeof children === "function" ? children({ isPending, isEditing }) : children}
       </div>
     </Form>
   );

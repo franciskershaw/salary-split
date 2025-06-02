@@ -38,13 +38,13 @@ const PageHeader = ({
           {openCreateDialog && (
             <DropdownMenuItem onSelect={() => openCreateDialog()}>
               <Plus className="w-4 h-4" />
-              New Account
+              New
             </DropdownMenuItem>
           )}
           {openReorderDialog && (
             <DropdownMenuItem onSelect={() => openReorderDialog()}>
               <ListOrdered className="w-4 h-4" />
-              Reorder accounts
+              Reorder
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

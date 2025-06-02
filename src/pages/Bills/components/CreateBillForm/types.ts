@@ -1,0 +1,19 @@
+import { z } from "zod";
+
+export const billFormSchema = z.object({
+  _id: z.string().optional(),
+  name: z.string().min(1, "Please provide a bill name."),
+  amount: z.coerce
+    .number()
+    .min(0.01, "Amount must be greater than 0")
+    .refine(
+      (val) => /^\d*\.?\d{0,2}$/.test(val.toString()),
+      "Amount can have at most 2 decimal places"
+    ),
+  account: z.string().min(1, "Please provide an account ID."),
+  splitBetween: z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]),
+  dueDate: z.enum(["1", "last", "custom"]),
+  customDay: z.coerce.number().min(1).max(31),
+});
+
+export type BillFormValues = z.infer<typeof billFormSchema>;

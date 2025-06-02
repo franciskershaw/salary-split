@@ -6,6 +6,7 @@ import PrivateRoute from "./components/layout/PrivateRoute/PrivateRoute";
 import SharedLayout from "./components/layout/SharedLayout/SharedLayout";
 import Accounts from "./pages/Accounts/Accounts";
 import Auth from "./pages/Auth/Auth";
+import Bills from "./pages/Bills/Bills";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
             <Route index element={<Accounts />} />
           </Route>
           <Route path="/bills" element={<PrivateRoute />}>
-            <Route index element={<div>Bills</div>} />
+            <Route index element={<Bills />} />
           </Route>
           <Route path="/expenses" element={<PrivateRoute />}>
             <Route index element={<div>Expenses</div>} />
