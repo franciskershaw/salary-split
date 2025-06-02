@@ -1,7 +1,7 @@
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
-import { AccountCard } from "../../../Accounts/components/AccountCard";
-import NoAccounts from "../../../Accounts/components/NoAccounts";
+import { AccountCard } from "../../../Accounts/components/AccountCard/AccountCard";
+import NoAccounts from "../../../Accounts/components/NoAccounts/NoAccounts";
 import {
   createSummaryAccounts,
   getAccountTypeInfo,

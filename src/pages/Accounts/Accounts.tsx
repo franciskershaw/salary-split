@@ -3,9 +3,9 @@ import { useState } from "react";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
-import { AccountCard } from "./components/AccountCard";
+import { AccountCard } from "./components/AccountCard/AccountCard";
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
-import NoAccounts from "./components/NoAccounts";
+import NoAccounts from "./components/NoAccounts/NoAccounts";
 import ReorderAccountsDialog from "./components/ReorderAccountsDialog/ReorderAccountsDialog";
 import { TotalBalance } from "./components/TotalBalance/TotalBalance";
 import useGetAccounts from "./hooks/useGetAccounts";
