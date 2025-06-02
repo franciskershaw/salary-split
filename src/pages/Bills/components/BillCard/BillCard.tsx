@@ -12,6 +12,8 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import type { Bill } from "@/types/globalTypes";
 
+import { getDueDateDisplay, getStatusInfo } from "../../helper/helper";
+
 type BillCardProps = {
   bill: Bill;
   hideDropdown?: boolean;
@@ -22,23 +24,7 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
   const [deleteBillDialogOpen, setDeleteBillDialogOpen] = useState(false);
   const { name, amount, dueDate, account } = bill;
 
-  // Format due date display - assuming dueDate is stored as a number string or we need to parse it
-  const getDueDateDisplay = () => {
-    const dueDateNum =
-      typeof dueDate === "string" ? parseInt(dueDate) : dueDate;
-    if (dueDateNum === 31) {
-      return "Last day of month";
-    }
-    const suffix =
-      dueDateNum === 1 || dueDateNum === 21 || dueDateNum === 31
-        ? "st"
-        : dueDateNum === 2 || dueDateNum === 22
-          ? "nd"
-          : dueDateNum === 3 || dueDateNum === 23
-            ? "rd"
-            : "th";
-    return `${dueDateNum}${suffix} of month`;
-  };
+  const statusInfo = getStatusInfo(dueDate);
 
   return (
     <>
@@ -48,8 +34,10 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
             <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
               <Receipt className="h-5 w-5" />
             </div>
-            <span className="text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-              Monthly
+            <span
+              className={`text-xs px-2 py-1 rounded-full ${statusInfo.className}`}
+            >
+              {statusInfo.text}
             </span>
           </div>
           <h3 className="font-medium dark:text-white">{name}</h3>
@@ -64,7 +52,7 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
               </span>
               <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                 <Calendar className="h-4 w-4 mr-1" />
-                {getDueDateDisplay()}
+                {getDueDateDisplay(dueDate)}
               </div>
             </div>
             {!hideDropdown && (
