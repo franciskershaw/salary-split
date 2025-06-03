@@ -16,6 +16,7 @@ export const expenseFormSchema = z.object({
   type: z.enum(Object.values(BILL_TYPES) as [BillType, ...BillType[]]),
   dueDate: z.coerce.number().min(1).max(31),
   dueDateType: z.enum(["1", "31", "custom"]).optional(), // Helper field to track UI state
+  splitBetween: z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]),
 });
 
 export type ExpenseFormValues = z.infer<typeof expenseFormSchema>;

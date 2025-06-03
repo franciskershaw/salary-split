@@ -12,6 +12,7 @@ import {
   type TotalBalanceConfig,
 } from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
+import { BillCard } from "../Bills/components/BillCard/BillCard";
 import { getBillTypeLabel, getUniqueBillTypes } from "../Bills/helper/helper";
 import CreateExpenseDialog from "./components/CreateExpenseDialog/CreateExpenseDialog";
 import ReorderExpensesDialog from "./components/ReorderExpensesDialog/ReorderExpensesDialog";
@@ -100,9 +101,9 @@ const Expenses = () => {
               isUpdating={isPending}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {expenses?.map((expense) => (
-              <p key={expense._id}>{expense.name}</p>
+              <BillCard key={expense._id} bill={expense} />
             ))}
           </div>
         </>

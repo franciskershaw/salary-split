@@ -7,7 +7,7 @@ import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { BILL_TYPES } from "@/constants/api";
-import type { Expense } from "@/types/globalTypes";
+import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
 import useAddExpense from "../../hooks/useAddExpense";
@@ -16,7 +16,7 @@ import { expenseFormSchema, type ExpenseFormValues } from "./types";
 
 interface CreateExpenseFormProps {
   onSuccess?: () => void;
-  expense?: Expense;
+  expense?: Bill;
   children?:
     | React.ReactNode
     | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
@@ -59,6 +59,17 @@ const CreateExpenseForm = ({
       amount: expense?.amount ?? 0,
       account: expense?.account?._id ?? "",
       type: expense?.type ?? BILL_TYPES.OTHER,
+      splitBetween: (expense?.splitBetween?.toString() ?? "1") as
+        | "1"
+        | "2"
+        | "3"
+        | "4"
+        | "5"
+        | "6"
+        | "7"
+        | "8"
+        | "9"
+        | "10",
       dueDate: typeof expense?.dueDate === "number" ? expense.dueDate : 1,
       dueDateType:
         typeof expense?.dueDate === "number"

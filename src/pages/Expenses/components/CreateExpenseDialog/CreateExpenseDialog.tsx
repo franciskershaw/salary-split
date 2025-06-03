@@ -1,13 +1,13 @@
 // src/pages/Bills/components/CreateBillDialog/CreateBillDialog.tsx
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog";
 import FormDialogFooter from "@/components/layout/Dialogs/FormDialogFooter";
-import type { Expense } from "@/types/globalTypes";
+import type { Bill } from "@/types/globalTypes";
 
 import CreateExpenseForm from "../CreateExpenseForm/CreateExpenseForm";
 
 interface CreateExpenseDialogProps {
   trigger?: React.ReactNode;
-  expense?: Expense;
+  expense?: Bill;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }

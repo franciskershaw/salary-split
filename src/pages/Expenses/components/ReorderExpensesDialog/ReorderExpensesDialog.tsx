@@ -14,14 +14,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getBillTypeInfo } from "@/pages/Bills/helper/helper";
-import type { Expense } from "@/types/globalTypes";
+import type { Bill } from "@/types/globalTypes";
 
 import useReorderExpenses from "../../hooks/useReorderExpenses";
 
 interface ReorderExpensesDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  expenses: Expense[];
+  expenses: Bill[];
 }
 
 export default function ReorderExpensesDialog({
