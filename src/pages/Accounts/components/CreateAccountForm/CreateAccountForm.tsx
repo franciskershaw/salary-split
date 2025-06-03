@@ -6,10 +6,7 @@ import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import {
-  CURRENT_ACCOUNT,
-  INVESTMENT_ACCOUNT,
-  JOINT_ACCOUNT,
-  SAVINGS_ACCOUNT,
+  ACCOUNT_TYPES,
 } from "@/constants/api";
 import useUser from "@/hooks/user/useUser";
 import type { Account } from "@/types/globalTypes";
@@ -20,10 +17,10 @@ import useGetAccounts from "../../hooks/useGetAccounts";
 import { accountFormSchema, type AccountFormValues } from "./types";
 
 const accountTypes = [
-  { value: CURRENT_ACCOUNT, label: "Current Account" },
-  { value: SAVINGS_ACCOUNT, label: "Savings Account" },
-  { value: INVESTMENT_ACCOUNT, label: "Investment Account" },
-  { value: JOINT_ACCOUNT, label: "Joint Account" },
+  { value: ACCOUNT_TYPES.CURRENT, label: "Current Account" },
+  { value: ACCOUNT_TYPES.SAVINGS, label: "Savings Account" },
+  { value: ACCOUNT_TYPES.INVESTMENT, label: "Investment Account" },
+  { value: ACCOUNT_TYPES.JOINT, label: "Joint Account" },
 ];
 
 interface CreateAccountFormProps {
@@ -45,7 +42,7 @@ const CreateAccountForm = ({ onSuccess, account, children }: CreateAccountFormPr
       name: account?.name ?? "",
       institution: account?.institution ?? "",
       amount: account?.amount ?? 0,
-      type: account?.type ?? CURRENT_ACCOUNT,
+      type: account?.type ?? ACCOUNT_TYPES.CURRENT,
       acceptsFunds: account?.acceptsFunds ?? (isFirstAccount ? true : false),
       receivesSalary: account?.receivesSalary ?? false,
       isDefault: isFirstAccount || user?.defaultAccount === account?._id,

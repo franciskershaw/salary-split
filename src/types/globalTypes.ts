@@ -1,9 +1,4 @@
-import {
-  CURRENT_ACCOUNT,
-  INVESTMENT_ACCOUNT,
-  JOINT_ACCOUNT,
-  SAVINGS_ACCOUNT,
-} from "@/constants/api";
+import { type AccountType, type BillType } from "@/constants/api";
 
 export type Currency = "GBP" | "USD" | "EUR";
 export type Theme = "light" | "dark";
@@ -26,6 +21,7 @@ export interface User {
   defaultAccount?: string;
   defaultTheme: Theme;
   accountFilters: AccountFilter[];
+  billFilters: BillFilter[];
   createdAt: string;
   updatedAt: string;
   accessToken: string;
@@ -36,6 +32,11 @@ export interface AccountFilter {
   enabled: boolean;
 }
 
+export interface BillFilter {
+  type: Bill["type"];
+  enabled: boolean;
+}
+
 export interface Account {
   _id: string;
   name: string;
@@ -43,11 +44,7 @@ export interface Account {
   amount: number;
   acceptsFunds: boolean;
   receivesSalary?: boolean;
-  type:
-    | typeof CURRENT_ACCOUNT
-    | typeof SAVINGS_ACCOUNT
-    | typeof INVESTMENT_ACCOUNT
-    | typeof JOINT_ACCOUNT;
+  type: AccountType;
   createdBy: string;
   createdAt: string;
 }
@@ -58,6 +55,7 @@ export interface Bill {
   amount: number;
   dueDate: string;
   account: Account;
+  type: BillType;
   splitBetween?: number;
   createdBy: string;
   createdAt: string;

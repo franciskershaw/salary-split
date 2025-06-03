@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-import {
-  CURRENT_ACCOUNT,
-  INVESTMENT_ACCOUNT,
-  JOINT_ACCOUNT,
-  SAVINGS_ACCOUNT,
-} from "@/constants/api";
+import { ACCOUNT_TYPES } from "@/constants/api";
 
 export const accountFormSchema = z.object({
   _id: z.string().optional(),
@@ -19,10 +14,10 @@ export const accountFormSchema = z.object({
       "Amount can have at most 2 decimal places"
     ),
   type: z.enum([
-    CURRENT_ACCOUNT,
-    SAVINGS_ACCOUNT,
-    INVESTMENT_ACCOUNT,
-    JOINT_ACCOUNT,
+    ACCOUNT_TYPES.CURRENT,
+    ACCOUNT_TYPES.SAVINGS,
+    ACCOUNT_TYPES.INVESTMENT,
+    ACCOUNT_TYPES.JOINT,
   ]),
   acceptsFunds: z.boolean(),
   receivesSalary: z.boolean(),

@@ -1,5 +1,28 @@
 export const INVALID_ACCESS_TOKEN = "INVALID_ACCESS_TOKEN";
-export const CURRENT_ACCOUNT = "current";
-export const SAVINGS_ACCOUNT = "savings";
-export const INVESTMENT_ACCOUNT = "investment";
-export const JOINT_ACCOUNT = "joint";
+
+// Account Types
+export const ACCOUNT_TYPES = {
+  CURRENT: "current",
+  SAVINGS: "savings",
+  INVESTMENT: "investment",
+  JOINT: "joint",
+} as const;
+export type AccountType = (typeof ACCOUNT_TYPES)[keyof typeof ACCOUNT_TYPES];
+
+// Bill Types
+export const BILL_TYPES = {
+  HOUSING: "housing",
+  UTILITIES: "utilities",
+  COMMUNICATION: "communication",
+  ENTERTAINMENT: "entertainment",
+  INSURANCE: "insurance",
+  TRANSPORT: "transport",
+  FINANCIAL: "financial",
+  HEALTHCARE: "healthcare",
+  BUSINESS: "business",
+  EDUCATION: "education",
+  FOOD: "food",
+  PERSONAL: "personal",
+  OTHER: "other",
+} as const;
+export type BillType = (typeof BILL_TYPES)[keyof typeof BILL_TYPES];
