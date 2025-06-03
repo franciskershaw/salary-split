@@ -20,12 +20,13 @@ import { getBillTypeLabel, getUniqueBillTypes } from "./helper/helper";
 import useGetBills from "./hooks/useGetBills";
 import useUpdateBillFilters from "./hooks/useUpdateBillFilters";
 
-export default function Bills() {
+const Bills = () => {
   const { bills, fetchingBills } = useGetBills();
   const { user } = useUser();
   const { accounts, fetchingAccounts } = useGetAccounts();
-  const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
   const { updateBillFilters, isPending } = useUpdateBillFilters();
+
+  const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
   // Get unique bill types that the user actually has bills for
@@ -119,4 +120,6 @@ export default function Bills() {
       )}
     </PageWrapper>
   );
-}
+};
+
+export default Bills;

@@ -13,27 +13,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Bill } from "@/types/globalTypes";
+import { getBillTypeInfo } from "@/pages/Bills/helper/helper";
+import type { Expense } from "@/types/globalTypes";
 
-import { getBillTypeInfo } from "../../helper/helper";
-import useReorderBills from "../../hooks/useReorderbills";
+import useReorderExpenses from "../../hooks/useReorderExpenses";
 
-interface ReorderBillsDialogProps {
+interface ReorderExpensesDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  bills: Bill[];
+  expenses: Expense[];
 }
 
-const ReorderBillsDialog = ({
+export default function ReorderExpensesDialog({
   open,
   onOpenChange,
-  bills,
-}: ReorderBillsDialogProps) => {
-  const [items, setItems] = useState(bills);
-  const { reorderBills, isPending } = useReorderBills();
+  expenses,
+}: ReorderExpensesDialogProps) {
+  const [items, setItems] = useState(expenses);
+  const { reorderExpenses, isPending } = useReorderExpenses();
 
   const handleReorder = () => {
-    reorderBills(items.map((bill) => bill._id));
+    reorderExpenses(items.map((expense) => expense._id));
     onOpenChange(false);
   };
 
@@ -41,9 +41,9 @@ const ReorderBillsDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] flex flex-col">
         <DialogHeader className="pb-2">
-          <DialogTitle>Reorder Bills</DialogTitle>
+          <DialogTitle>Reorder Expenses</DialogTitle>
           <DialogDescription>
-            Drag and drop bills to change their order
+            Drag and drop expenses to change their order
           </DialogDescription>
         </DialogHeader>
 
@@ -54,16 +54,16 @@ const ReorderBillsDialog = ({
             onReorder={setItems}
             className="space-y-1.5"
           >
-            {items.map((bill) => {
-              const { icon: Icon, colors } = getBillTypeInfo(bill.type);
+            {items.map((expense) => {
+              const { icon: Icon, colors } = getBillTypeInfo(expense.type);
               return (
                 <Reorder.Item
-                  key={bill._id}
-                  value={bill}
+                  key={expense._id}
+                  value={expense}
                   className="flex items-center gap-2 rounded-lg border border-surface-border bg-surface p-3 cursor-grab active:cursor-grabbing"
                 >
                   <GripVertical className="h-4 w-4 text-muted-foreground" />
-                  <span className="flex-1 text-sm">{bill.name}</span>
+                  <span className="flex-1 text-sm">{expense.name}</span>
                   <Icon className={`h-4 w-4 ${colors.text}`} />
                 </Reorder.Item>
               );
@@ -82,6 +82,4 @@ const ReorderBillsDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
-
-export default ReorderBillsDialog;
+}

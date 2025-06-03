@@ -22,6 +22,7 @@ export interface User {
   defaultTheme: Theme;
   accountFilters: AccountFilter[];
   billFilters: BillFilter[];
+  expenseFilters: BillFilter[];
   createdAt: string;
   updatedAt: string;
   accessToken: string;

@@ -22,6 +22,7 @@ const Accounts = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
   const { user } = useUser();
   const { updateAccountFilters, isPending } = useUpdateAccountFilters();
+
   const [newAccountDialogOpen, setNewAccountDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
