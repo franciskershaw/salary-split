@@ -15,6 +15,7 @@ import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import { BillCard } from "./components/BillCard/BillCard";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
 import NoBills from "./components/NoBills/NoBills";
+import ReorderBillsDialog from "./components/ReorderBillsDialog/ReorderBillsDialog";
 import { getBillTypeLabel, getUniqueBillTypes } from "./helper/helper";
 import useGetBills from "./hooks/useGetBills";
 import useUpdateBillFilters from "./hooks/useUpdateBillFilters";
@@ -25,7 +26,7 @@ export default function Bills() {
   const { accounts, fetchingAccounts } = useGetAccounts();
   const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
   const { updateBillFilters, isPending } = useUpdateBillFilters();
-  // const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
+  const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
   // Get unique bill types that the user actually has bills for
   const userBillTypes = getUniqueBillTypes(bills);
@@ -68,7 +69,7 @@ export default function Bills() {
       title="Bills"
       description="Manage your recurring monthly payments"
       openCreateDialog={() => setNewBillDialogOpen(true)}
-      // openReorderDialog={() => setReorderDialogOpen(true)}
+      openReorderDialog={() => setReorderDialogOpen(true)}
       totalComponent={
         bills?.length ? (
           <TotalBalance
@@ -105,13 +106,13 @@ export default function Bills() {
         open={newBillDialogOpen}
         onOpenChange={setNewBillDialogOpen}
       />
-      {/* {accounts && (
-        <ReorderAccountsDialog
+      {bills && (
+        <ReorderBillsDialog
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
-          accounts={accounts}
+          bills={bills}
         />
-      )} */}
+      )}
     </PageWrapper>
   );
 }
