@@ -18,6 +18,7 @@ import {
   getSplitInfo,
 } from "../../helper/helper";
 import CreateBillDialog from "../CreateBillDialog/CreateBillDialog";
+import DeleteBillDialog from "../DeleteBillDialog/DeleteBillDialog";
 
 type BillCardProps = {
   bill: Bill;
@@ -117,11 +118,11 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
         open={editBillDialogOpen}
         onOpenChange={setEditBillDialogOpen}
       />
-      {/* <DeleteBillDialog
+      <DeleteBillDialog
         bill={bill}
         open={deleteBillDialogOpen}
         onOpenChange={setDeleteBillDialogOpen}
-      /> */}
+      />
     </>
   );
 }
