@@ -1,4 +1,9 @@
-import { PiggyBank, ReceiptPoundSterling, WalletCards } from "lucide-react";
+import {
+  CreditCard,
+  PiggyBank,
+  ReceiptPoundSterling,
+  WalletCards,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import CreateAccountDialog from "@/pages/Accounts/components/CreateAccountDialog/CreateAccountDialog";
@@ -33,9 +38,9 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       dialog: CreateBillDialog,
     },
     expenses: {
-      icon: ReceiptPoundSterling,
-      iconBg: "bg-red-100 dark:bg-red-900/30",
-      iconColor: "text-blue-500 dark:text-blue-400",
+      icon: CreditCard,
+      iconBg: "bg-purple-100 dark:bg-purple-900/30",
+      iconColor: "text-purple-500 dark:text-purple-400",
       title: "No Expenses Yet",
       description: "You haven't created any expenses yet.",
       buttonText: "Create Expense",
