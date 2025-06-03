@@ -17,6 +17,7 @@ import {
   getDueDateDisplay,
   getSplitInfo,
 } from "../../helper/helper";
+import CreateBillDialog from "../CreateBillDialog/CreateBillDialog";
 
 type BillCardProps = {
   bill: Bill;
@@ -111,10 +112,16 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
           </div>
         </CardContent>
       </Card>
-      {/* TODO: Add EditBillDialog and DeleteBillDialog components */}
-      {/* Dialogs will be implemented when backend is ready */}
-      {editBillDialogOpen && null}
-      {deleteBillDialogOpen && null}
+      <CreateBillDialog
+        bill={bill}
+        open={editBillDialogOpen}
+        onOpenChange={setEditBillDialogOpen}
+      />
+      {/* <DeleteBillDialog
+        bill={bill}
+        open={deleteBillDialogOpen}
+        onOpenChange={setDeleteBillDialogOpen}
+      /> */}
     </>
   );
 }

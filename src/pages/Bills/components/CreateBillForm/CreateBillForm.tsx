@@ -11,7 +11,7 @@ import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
 import useAddBill from "../../hooks/useAddBill";
-// import useEditBill from "../../hooks/useEditBill";
+import useEditBill from "../../hooks/useEditBill";
 import { billFormSchema, type BillFormValues } from "./types";
 
 interface CreateBillFormProps {
@@ -85,18 +85,26 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
   });
 
   const { addBill, isPending: isAddingPending } = useAddBill();
-  // const { editBill, isPending: isEditingPending } = useEditBill();
-  const isPending = isAddingPending;
+  const { editBill, isPending: isEditingPending } = useEditBill();
+
+  const isPending = isAddingPending || isEditingPending;
 
   const onSubmit = (values: BillFormValues) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { dueDateType, ...submitValues } = values;
-
-    addBill(submitValues, {
-      onSuccess: () => {
-        onSuccess?.();
-      },
-    });
+    if (isEditing) {
+      editBill(submitValues, {
+        onSuccess: () => {
+          onSuccess?.();
+        },
+      });
+    } else {
+      addBill(submitValues, {
+        onSuccess: () => {
+          onSuccess?.();
+        },
+      });
+    }
   };
 
   // Watch dueDateType to show/hide custom input and update dueDate
