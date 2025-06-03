@@ -35,7 +35,7 @@ const CreateExpenseDialog = ({
             <FormDialogFooter
               isPending={isPending}
               isEditing={isEditing}
-              itemName="Bill"
+              itemName="Expense"
             />
           )}
         </CreateExpenseForm>
