@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Calendar } from "lucide-react";
 
+import DeleteDialog from "@/components/layout/Dialogs/DeleteDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -17,8 +18,8 @@ import {
   getDueDateDisplay,
   getSplitInfo,
 } from "../../helper/helper";
+import useDeleteBill from "../../hooks/useDeleteBill";
 import CreateBillDialog from "../CreateBillDialog/CreateBillDialog";
-import DeleteBillDialog from "../DeleteBillDialog/DeleteBillDialog";
 
 type BillCardProps = {
   bill: Bill;
@@ -29,7 +30,7 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
   const [editBillDialogOpen, setEditBillDialogOpen] = useState(false);
   const [deleteBillDialogOpen, setDeleteBillDialogOpen] = useState(false);
   const { name, amount, dueDate, account, type, splitBetween } = bill;
-
+  const { deleteBill, isPending } = useDeleteBill();
   const billTypeInfo = getBillTypeInfo(type);
   const splitInfo = getSplitInfo(splitBetween);
   const BillTypeIcon = billTypeInfo.icon;
@@ -118,10 +119,19 @@ export function BillCard({ bill, hideDropdown }: BillCardProps) {
         open={editBillDialogOpen}
         onOpenChange={setEditBillDialogOpen}
       />
-      <DeleteBillDialog
-        bill={bill}
+      <DeleteDialog
         open={deleteBillDialogOpen}
         onOpenChange={setDeleteBillDialogOpen}
+        title="Delete Bill"
+        description={`Are you sure you want to delete ${bill.name}? This action cannot be undone.`}
+        onDelete={() => {
+          deleteBill(bill._id, {
+            onSuccess: () => {
+              setDeleteBillDialogOpen(false);
+            },
+          });
+        }}
+        isPending={isPending}
       />
     </>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import DeleteDialog from "@/components/layout/Dialogs/DeleteDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -11,8 +12,8 @@ import { cn, formatCurrency } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
 
 import { getAccountTypeInfo } from "../../helper/helper";
+import useDeleteAccount from "../../hooks/useDeleteAccount";
 import CreateAccountDialog from "../CreateAccountDialog/CreateAccountDialog";
-import DeleteAccountDialog from "../DeleteAccountDialog/DeleteAccountDialog";
 
 type AccountCardProps = {
   account: Account;
@@ -24,6 +25,7 @@ export function AccountCard({ account, hideDropdown }: AccountCardProps) {
   const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false);
   const { name, type, institution, amount } = account;
   const { icon: Icon, colors } = getAccountTypeInfo(type);
+  const { deleteAccount, isPending } = useDeleteAccount();
 
   return (
     <>
@@ -101,10 +103,19 @@ export function AccountCard({ account, hideDropdown }: AccountCardProps) {
         open={editAccountDialogOpen}
         onOpenChange={setEditAccountDialogOpen}
       />
-      <DeleteAccountDialog
-        account={account}
+      <DeleteDialog
         open={deleteAccountDialogOpen}
         onOpenChange={setDeleteAccountDialogOpen}
+        title="Delete Account"
+        description={`Are you sure you want to delete ${account.name}? This action cannot be undone.`}
+        onDelete={() => {
+          deleteAccount(account._id, {
+            onSuccess: () => {
+              setDeleteAccountDialogOpen(false);
+            },
+          });
+        }}
+        isPending={isPending}
       />
     </>
   );

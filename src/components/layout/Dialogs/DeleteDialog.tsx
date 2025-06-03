@@ -9,43 +9,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Bill } from "@/types/globalTypes";
 
-import useDeleteBill from "../../hooks/useDeleteBill";
-
-interface DeleteBillDialogProps {
-  bill: Bill;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+interface DeleteDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description: string;
+  onDelete: () => void;
+  isPending: boolean;
 }
 
-const DeleteBillDialog = ({
-  bill,
+const DeleteDialog = ({
   open,
   onOpenChange,
-}: DeleteBillDialogProps) => {
-  const { deleteBill, isPending } = useDeleteBill();
-
-  const handleDelete = () => {
-    deleteBill(bill._id, {
-      onSuccess: () => {
-        onOpenChange?.(false);
-      },
-    });
-  };
-
+  title,
+  description,
+  onDelete,
+  isPending,
+}: DeleteDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-5 w-5" />
-            Delete Bill
+            {title}
           </DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete {bill.name}? This action cannot be
-            undone.
-          </DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0">
           <Button
@@ -55,12 +45,8 @@ const DeleteBillDialog = ({
           >
             Cancel
           </Button>
-          <Button
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isPending}
-          >
-            {isPending ? "Deleting..." : "Delete Bill"}
+          <Button variant="destructive" onClick={onDelete} disabled={isPending}>
+            {isPending ? "Deleting..." : title}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -68,4 +54,4 @@ const DeleteBillDialog = ({
   );
 };
 
-export default DeleteBillDialog;
+export default DeleteDialog;
