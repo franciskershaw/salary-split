@@ -1,7 +1,7 @@
+import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 import { AccountCard } from "../../../Accounts/components/AccountCard/AccountCard";
-import NoAccounts from "../../../Accounts/components/NoAccounts/NoAccounts";
 import {
   createSummaryAccounts,
   getAccountTypeInfo,
@@ -22,7 +22,7 @@ const AccountsOverview = () => {
     );
 
   if (!accounts?.length) {
-    return <NoAccounts />;
+    return <EmptyState type="accounts" />;
   }
 
   const accountsByType = groupAccountsByType(accounts);

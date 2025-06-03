@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import useUser from "@/hooks/user/useUser";
@@ -7,7 +8,6 @@ import type { Account } from "@/types/globalTypes";
 
 import { AccountCard } from "./components/AccountCard/AccountCard";
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
-import NoAccounts from "./components/NoAccounts/NoAccounts";
 import ReorderAccountsDialog from "./components/ReorderAccountsDialog/ReorderAccountsDialog";
 import {
   TotalBalance,
@@ -107,7 +107,7 @@ const Accounts = () => {
       }
     >
       {!accounts?.length ? (
-        <NoAccounts />
+        <EmptyState type="accounts" />
       ) : (
         <>
           <div className="lg:hidden">

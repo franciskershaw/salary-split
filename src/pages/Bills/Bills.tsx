@@ -1,11 +1,11 @@
 import { useState } from "react";
 
+import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import useUser from "@/hooks/user/useUser";
 import type { Bill } from "@/types/globalTypes";
 
-import NoAccounts from "../Accounts/components/NoAccounts/NoAccounts";
 import {
   TotalBalance,
   type FilterConfig,
@@ -14,7 +14,6 @@ import {
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import { BillCard } from "./components/BillCard/BillCard";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
-import NoBills from "./components/NoBills/NoBills";
 import ReorderBillsDialog from "./components/ReorderBillsDialog/ReorderBillsDialog";
 import { getBillTypeLabel, getUniqueBillTypes } from "./helper/helper";
 import useGetBills from "./hooks/useGetBills";
@@ -88,9 +87,9 @@ const Bills = () => {
       }
     >
       {!accounts?.length ? (
-        <NoAccounts />
+        <EmptyState type="accounts" />
       ) : !bills?.length ? (
-        <NoBills />
+        <EmptyState type="bills" />
       ) : (
         <>
           <div className="lg:hidden">
