@@ -21,7 +21,7 @@ export default function Bills() {
   const { user } = useUser();
   const { accounts, fetchingAccounts } = useGetAccounts();
   const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
-  const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
+  // const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
   const billFilterConfigs: FilterConfig[] =
     bills?.map((bill) => ({
@@ -54,7 +54,7 @@ export default function Bills() {
       title="Bills"
       description="Manage your recurring monthly payments"
       openCreateDialog={() => setNewBillDialogOpen(true)}
-      openReorderDialog={() => setReorderDialogOpen(true)}
+      // openReorderDialog={() => setReorderDialogOpen(true)}
       totalComponent={
         bills?.length ? (
           <TotalBalance

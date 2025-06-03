@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
+import { BILL_TYPES } from "@/constants/api";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
@@ -21,9 +22,23 @@ interface CreateBillFormProps {
     | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
+// Helper function to convert bill type to readable label
+const getBillTypeLabel = (type: string) => {
+  return type
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
 const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
   const { accountsWhichAcceptFunds } = useGetAccounts();
   const isEditing = !!bill;
+
+  // Bill type options
+  const billTypeOptions = Object.values(BILL_TYPES).map((type) => ({
+    value: type,
+    label: getBillTypeLabel(type),
+  }));
 
   // Split between options
   const splitBetweenOptions = Array.from({ length: 10 }, (_, i) => ({
@@ -44,7 +59,8 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
       _id: bill?._id,
       name: bill?.name ?? "",
       amount: bill?.amount ?? 0,
-      account: bill?.account ?? "",
+      account: bill?.account?._id ?? "",
+      type: bill?.type ?? BILL_TYPES.OTHER,
       splitBetween: (bill?.splitBetween?.toString() ?? "1") as
         | "1"
         | "2"
@@ -104,6 +120,13 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
               placeholder="e.g. Netflix, Electricity, Rent"
             />
           </FormInput>
+
+          <FormSelect
+            name="type"
+            label="Bill Type"
+            placeholder="Select bill category"
+            options={billTypeOptions}
+          />
 
           <FormInput name="amount" label="Amount">
             <Input
