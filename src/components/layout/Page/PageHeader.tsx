@@ -55,9 +55,9 @@ const PageHeader = ({
   return (
     <header className="bg-surface border-b border-surface-border p-4 lg:p-6">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 min-w-0">
               <h2 className="text-2xl font-semibold text-surface-foreground">
                 {title}
               </h2>
@@ -75,9 +75,9 @@ const PageHeader = ({
             </p>
           )}
         </div>
-        {totalComponent && (
-          <div className="hidden lg:block">{totalComponent}</div>
-        )}
+        <div className="hidden lg:block lg:flex-shrink-0">
+          {totalComponent || <div className="" />}
+        </div>
       </div>
     </header>
   );

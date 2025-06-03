@@ -24,134 +24,144 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form, FormInput } from "@/components/ui/form";
-import useUser from "@/hooks/user/useUser";
 import { formatCurrency } from "@/lib/utils";
-import type { Account } from "@/types/globalTypes";
 
-import { getAccountTypeInfo } from "../../helper/helper";
-import useUpdateAccountFilters from "../../hooks/useUpdateAccountFilters";
+// Generic types for reusability
+export interface FilterableItem {
+  type: string;
+  amount: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any; // Allow additional properties
+}
 
-const accountFiltersSchema = z.object({
-  current: z.boolean(),
-  joint: z.boolean(),
-  savings: z.boolean(),
-  investment: z.boolean(),
-});
+export interface FilterConfig {
+  type: string;
+  label: string;
+  enabled: boolean;
+}
 
-type AccountFiltersForm = z.infer<typeof accountFiltersSchema>;
+export interface TotalBalanceConfig {
+  title: string;
+  dialogTitle: string;
+  dialogDescription: string;
+  allItemsLabel: string;
+}
 
-type TotalBalanceProps = {
-  accounts: Account[];
+type TotalBalanceProps<T extends FilterableItem> = {
+  items: T[];
+  filterConfigs: FilterConfig[];
+  config: TotalBalanceConfig;
+  onFiltersUpdate: (filters: FilterConfig[]) => void;
+  isUpdating?: boolean;
 };
 
-export function TotalBalance({ accounts }: TotalBalanceProps) {
-  const { user } = useUser();
-  const { updateAccountFilters, isPending } = useUpdateAccountFilters();
+export function TotalBalance<T extends FilterableItem>({
+  items,
+  filterConfigs,
+  config,
+  onFiltersUpdate,
+  isUpdating = false,
+}: TotalBalanceProps<T>) {
   const [open, setOpen] = useState(false);
 
-  const defaultValues = {
-    current:
-      user?.accountFilters?.find((f) => f.type === "current")?.enabled ?? true,
-    joint:
-      user?.accountFilters?.find((f) => f.type === "joint")?.enabled ?? true,
-    savings:
-      user?.accountFilters?.find((f) => f.type === "savings")?.enabled ?? true,
-    investment:
-      user?.accountFilters?.find((f) => f.type === "investment")?.enabled ??
-      true,
+  // Create dynamic schema based on filter configs
+  const createSchema = () => {
+    const schemaObj: Record<string, z.ZodBoolean> = {};
+    filterConfigs.forEach((filter) => {
+      schemaObj[filter.type] = z.boolean();
+    });
+    return z.object(schemaObj);
   };
 
-  const form = useForm<AccountFiltersForm>({
-    resolver: zodResolver(accountFiltersSchema),
+  const schema = createSchema();
+  type FiltersForm = z.infer<typeof schema>;
+
+  const defaultValues = filterConfigs.reduce(
+    (acc, filter) => {
+      acc[filter.type] = filter.enabled;
+      return acc;
+    },
+    {} as Record<string, boolean>
+  );
+
+  const form = useForm<FiltersForm>({
+    resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const onSubmit = (values: AccountFiltersForm) => {
-    const filters = Object.entries(values).map(([type, enabled]) => ({
-      type: type as Account["type"],
-      enabled,
+  const onSubmit = (values: FiltersForm) => {
+    const updatedFilters = filterConfigs.map((filter) => ({
+      ...filter,
+      enabled: values[filter.type],
     }));
-    updateAccountFilters(filters, {
-      onSuccess: () => {
-        setOpen(false);
-      },
-    });
+    onFiltersUpdate(updatedFilters);
+    setOpen(false);
   };
 
-  const filteredAccounts = accounts.filter((account) =>
-    form.watch(account.type)
-  );
+  const filteredItems = items.filter((item) => form.watch(item.type));
 
-  const totalBalance = filteredAccounts.reduce(
-    (sum, account) => sum + account.amount,
+  const totalBalance = filteredItems.reduce(
+    (sum, item) => sum + item.amount,
     0
   );
 
   const selectedTypes = Object.entries(form.watch())
     .filter(([, isSelected]) => isSelected)
-    .map(
-      ([type]) =>
-        getAccountTypeInfo(type as Account["type"]).label.split(" ")[0]
-    );
+    .map(([type]) => {
+      const filterConfig = filterConfigs.find((f) => f.type === type);
+      return filterConfig?.label.split(" ")[0] || type;
+    });
 
   const totalDescription =
-    selectedTypes.length === 4 ? "All Accounts" : selectedTypes.join(", ");
+    selectedTypes.length === filterConfigs.length
+      ? config.allItemsLabel
+      : selectedTypes.join(", ");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Card
-          className={`shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-4 md:px-2 ${
-            accounts.length > 0 ? "md:min-w-[200px]" : ""
-          }`}
-        >
-          <CardContent className="p-4 md:p-2">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardDescription className="text-sm">
-                  Total Balance ({totalDescription})
+        <Card className="shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-1.5 md:px-3 lg:py-1 lg:px-2 min-w-0">
+          <CardContent className="p-4 md:p-0 lg:p-0">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <CardDescription className="text-sm lg:text-xs lg:leading-tight">
+                  {config.title} ({totalDescription})
                 </CardDescription>
-                <CardTitle className="text-2xl font-semibold">
+                <CardTitle className="text-xl lg:text-lg font-semibold truncate">
                   {formatCurrency(totalBalance)}
                 </CardTitle>
               </div>
-              <Filter className="h-4 w-4 text-gray-400" />
+              <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-gray-400 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Customise Total Balance</DialogTitle>
-          <DialogDescription>
-            Select which account types to include in your total balance
-            calculation
-          </DialogDescription>
+          <DialogTitle>{config.dialogTitle}</DialogTitle>
+          <DialogDescription>{config.dialogDescription}</DialogDescription>
         </DialogHeader>
         <Form form={form} onSubmit={onSubmit}>
           <div className="py-4">
             <div className="space-y-5">
-              {Object.keys(defaultValues).map((type) => {
-                const { label } = getAccountTypeInfo(type as Account["type"]);
-                return (
-                  <FormInput
-                    key={type}
-                    name={type}
-                    label={label}
-                    labelPosition="right"
-                  >
-                    <Checkbox
-                      checked={form.watch(type as keyof AccountFiltersForm)}
-                      onCheckedChange={(checked) =>
-                        form.setValue(
-                          type as keyof AccountFiltersForm,
-                          checked as boolean
-                        )
-                      }
-                    />
-                  </FormInput>
-                );
-              })}
+              {filterConfigs.map((filter) => (
+                <FormInput
+                  key={filter.type}
+                  name={filter.type}
+                  label={filter.label}
+                  labelPosition="right"
+                >
+                  <Checkbox
+                    checked={form.watch(filter.type as keyof FiltersForm)}
+                    onCheckedChange={(checked) =>
+                      form.setValue(
+                        filter.type as keyof FiltersForm,
+                        checked as boolean
+                      )
+                    }
+                  />
+                </FormInput>
+              ))}
             </div>
           </div>
           <DialogFooter>
@@ -160,7 +170,7 @@ export function TotalBalance({ accounts }: TotalBalanceProps) {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isUpdating}>
               Apply
             </Button>
           </DialogFooter>
