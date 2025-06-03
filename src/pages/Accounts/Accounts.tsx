@@ -87,8 +87,12 @@ const Accounts = () => {
     <PageWrapper
       title="Accounts"
       description="Manage your bank accounts and track balances"
-      openCreateDialog={() => setNewAccountDialogOpen(true)}
-      openReorderDialog={() => setReorderDialogOpen(true)}
+      openCreateDialog={
+        accounts?.length ? () => setNewAccountDialogOpen(true) : undefined
+      }
+      openReorderDialog={
+        accounts?.length ? () => setReorderDialogOpen(true) : undefined
+      }
       totalComponent={
         accounts?.length ? (
           <TotalBalance

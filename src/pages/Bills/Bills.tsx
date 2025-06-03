@@ -68,8 +68,12 @@ export default function Bills() {
     <PageWrapper
       title="Bills"
       description="Manage your recurring monthly payments"
-      openCreateDialog={() => setNewBillDialogOpen(true)}
-      openReorderDialog={() => setReorderDialogOpen(true)}
+      openCreateDialog={
+        bills?.length ? () => setNewBillDialogOpen(true) : undefined
+      }
+      openReorderDialog={
+        bills?.length ? () => setReorderDialogOpen(true) : undefined
+      }
       totalComponent={
         bills?.length ? (
           <TotalBalance

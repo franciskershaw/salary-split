@@ -11,7 +11,9 @@ import useAuth from "@/pages/Auth/hooks/useAuth";
 
 import { loginSchema, registerSchema } from "./localFormSchema";
 
-type FormData = z.infer<typeof loginSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>;
+type FormData = LoginFormData | RegisterFormData;
 
 const LocalForm = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -23,7 +25,8 @@ const LocalForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      name: "",
+      firstName: "",
+      lastName: "",
     },
     resolver: zodResolver(isRegister ? registerSchema : loginSchema),
   });
@@ -35,15 +38,20 @@ const LocalForm = () => {
 
   const onSubmit = (data: FormData) => {
     if (isRegister) {
+      const registerData = data as RegisterFormData;
       register({
-        name: data.name ?? "",
-        email: data.email,
-        password: data.password,
+        name: {
+          firstName: registerData.firstName,
+          lastName: registerData.lastName,
+        },
+        email: registerData.email,
+        password: registerData.password,
       });
     } else {
+      const loginData = data as LoginFormData;
       login({
-        email: data.email,
-        password: data.password,
+        email: loginData.email,
+        password: loginData.password,
       });
     }
   };
@@ -51,9 +59,14 @@ const LocalForm = () => {
   return (
     <Form {...{ form }} onSubmit={onSubmit}>
       {isRegister && (
-        <FormInput name="name" label="Name">
-          <Input placeholder="Enter your name" />
-        </FormInput>
+        <>
+          <FormInput name="firstName" label="First Name">
+            <Input placeholder="Enter your first name" />
+          </FormInput>
+          <FormInput name="lastName" label="Last Name">
+            <Input placeholder="Enter your last name" />
+          </FormInput>
+        </>
       )}
       <FormInput name="email" label="Email">
         <Input placeholder="Enter your email" />

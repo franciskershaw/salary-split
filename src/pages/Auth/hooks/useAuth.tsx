@@ -29,15 +29,25 @@ const useAuth = () => {
   };
 
   const register = async (data: {
-    name: string;
+    name: {
+      firstName: string;
+      lastName: string;
+    };
     email: string;
     password: string;
   }) => {
     try {
       const response = await api.post("/auth/register", data);
-      updateUser(response.data);
-      toast.success(`Welcome to Recommendable, ${data.name}`);
-      return response.data;
+      const userData = {
+        ...response.data,
+        name: {
+          firstName: data.name.firstName,
+          lastName: data.name.lastName,
+        },
+      };
+      updateUser(userData);
+      toast.success(`Welcome to Salary Split, ${data.name.firstName}`);
+      return userData;
     } catch (error) {
       if (error instanceof Error && "response" in error) {
         const serverError = error as {
