@@ -60,3 +60,15 @@ export interface Bill {
   createdBy: string;
   createdAt: string;
 }
+
+// interface Expense is the same as bill but without splitBetween
+export interface Expense {
+  _id: string;
+  name: string;
+  amount: number;
+  dueDate: string;
+  account: Account;
+  type: BillType;
+  createdBy: string;
+  createdAt: string;
+}
