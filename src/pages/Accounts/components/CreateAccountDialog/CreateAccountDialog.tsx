@@ -55,7 +55,7 @@ const CreateAccountDialog = ({
               : "Add a new account to track your finances. Fill in the details below."}
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="flex-1 overflow-y-auto min-h-0 pr-2 -mr-2">
           <CreateAccountForm
             onSuccess={() => setIsOpen(false)}

@@ -53,12 +53,9 @@ const CreateBillDialog = ({
               : "Add a new bill to track your finances. Fill in the details below."}
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="flex-1 overflow-y-auto min-h-0 pr-2 -mr-2">
-          <CreateBillForm 
-            onSuccess={() => setIsOpen(false)} 
-            bill={bill}
-          >
+          <CreateBillForm onSuccess={() => setIsOpen(false)} bill={bill}>
             {({ isPending, isEditing }) => (
               <DialogFooter className="sticky bottom-0 bg-background pt-4 mt-6 border-t">
                 <DialogClose asChild>
