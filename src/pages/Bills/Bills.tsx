@@ -3,6 +3,7 @@ import { useState } from "react";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import useUser from "@/hooks/user/useUser";
+import type { Bill } from "@/types/globalTypes";
 
 import NoAccounts from "../Accounts/components/NoAccounts/NoAccounts";
 import {
@@ -14,22 +15,26 @@ import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import { BillCard } from "./components/BillCard/BillCard";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
 import NoBills from "./components/NoBills/NoBills";
+import { getBillTypeLabel, getUniqueBillTypes } from "./helper/helper";
 import useGetBills from "./hooks/useGetBills";
+import useUpdateBillFilters from "./hooks/useUpdateBillFilters";
 
 export default function Bills() {
   const { bills, fetchingBills } = useGetBills();
   const { user } = useUser();
   const { accounts, fetchingAccounts } = useGetAccounts();
   const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
+  const { updateBillFilters, isPending } = useUpdateBillFilters();
   // const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  const billFilterConfigs: FilterConfig[] =
-    bills?.map((bill) => ({
-      type: bill.type,
-      label: bill.name,
-      enabled:
-        user?.billFilters?.find((f) => f.type === bill._id)?.enabled ?? true,
-    })) ?? [];
+  // Get unique bill types that the user actually has bills for
+  const userBillTypes = getUniqueBillTypes(bills);
+
+  const billFilterConfigs: FilterConfig[] = userBillTypes.map((type) => ({
+    type,
+    label: getBillTypeLabel(type, bills),
+    enabled: user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
+  }));
 
   const totalBalanceConfig: TotalBalanceConfig = {
     title: "Total Amount of Bills",
@@ -37,6 +42,15 @@ export default function Bills() {
     dialogDescription:
       "Select which bills to include in your total amount of bills calculation",
     allItemsLabel: "All Bills",
+  };
+
+  const handleFiltersUpdate = (filters: FilterConfig[]) => {
+    const billFilters = filters.map((filter) => ({
+      type: filter.type as Bill["type"],
+      enabled: filter.enabled,
+    }));
+
+    updateBillFilters(billFilters);
   };
 
   if (fetchingBills || fetchingAccounts) {
@@ -61,8 +75,8 @@ export default function Bills() {
             items={bills}
             filterConfigs={billFilterConfigs}
             config={totalBalanceConfig}
-            // onFiltersUpdate={handleFiltersUpdate}
-            // isUpdating={isPending}
+            onFiltersUpdate={handleFiltersUpdate}
+            isUpdating={isPending}
           />
         ) : null
       }
@@ -73,6 +87,15 @@ export default function Bills() {
         <NoBills />
       ) : (
         <>
+          <div className="lg:hidden">
+            <TotalBalance
+              items={bills}
+              filterConfigs={billFilterConfigs}
+              config={totalBalanceConfig}
+              onFiltersUpdate={handleFiltersUpdate}
+              isUpdating={isPending}
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {bills?.map((bill) => <BillCard key={bill._id} bill={bill} />)}
           </div>

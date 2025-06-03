@@ -1,3 +1,5 @@
+import type { Bill } from "@/types/globalTypes";
+
 /**
  * Calculate the next due date based on the dueDate number (1-31)
  */
@@ -86,4 +88,28 @@ export const getDueDateDisplay = (dueDate: string | number): string => {
           : "th";
 
   return `${dueDateNum}${suffix} of month`;
+};
+
+export const getBillTypeLabel = (type: string, bills?: Bill[]) => {
+  if (!bills) {
+    return type
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  }
+
+  const billsOfType = bills.filter((bill) => bill.type === type);
+  const billNames = billsOfType.map((bill) => bill.name).join(", ");
+
+  const typeLabel = type
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+
+  return `${typeLabel} (${billNames})`;
+};
+
+export const getUniqueBillTypes = (bills?: Bill[]) => {
+  if (!bills?.length) return [];
+  return [...new Set(bills.map((bill) => bill.type))];
 };

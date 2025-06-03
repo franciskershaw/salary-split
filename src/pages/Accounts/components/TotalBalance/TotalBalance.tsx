@@ -115,7 +115,9 @@ export function TotalBalance<T extends FilterableItem>({
   const totalDescription =
     selectedTypes.length === filterConfigs.length
       ? config.allItemsLabel
-      : selectedTypes.join(", ");
+      : selectedTypes.length <= 2
+        ? selectedTypes.join(", ")
+        : `${selectedTypes.length} filters selected`;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
