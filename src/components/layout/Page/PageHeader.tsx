@@ -70,7 +70,7 @@ const PageHeader = ({
             )}
           </div>
           {description && (
-            <p className="text-sm text-surface-foreground/70 mt-1">
+            <p className="text-surface-foreground/70 mt-4">
               {description}
             </p>
           )}
