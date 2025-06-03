@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Calendar, Trash2 } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 import DeleteDialog from "@/components/layout/Dialogs/DeleteDialog";
 import { Card, CardContent } from "@/components/ui/card";
