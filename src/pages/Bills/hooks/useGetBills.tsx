@@ -18,7 +18,7 @@ const useGetBills = () => {
     return response.data;
   };
 
-  const { data: bills, isLoading: fetchingBills } = useQuery({
+  const { data: bills = [], isLoading: fetchingBills } = useQuery({
     queryKey: [queryKeys.bills],
     queryFn: getBills,
     retry: false,

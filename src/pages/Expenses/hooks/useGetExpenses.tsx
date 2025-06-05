@@ -18,7 +18,7 @@ const useGetExpenses = () => {
     return response.data;
   };
 
-  const { data: expenses, isLoading: fetchingExpenses } = useQuery({
+  const { data: expenses = [], isLoading: fetchingExpenses } = useQuery({
     queryKey: [queryKeys.expenses],
     queryFn: getExpenses,
     retry: false,

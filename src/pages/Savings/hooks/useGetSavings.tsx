@@ -18,7 +18,7 @@ const useGetSavings = () => {
     return response.data;
   };
 
-  const { data: savings, isLoading: fetchingSavings } = useQuery({
+  const { data: savings = [], isLoading: fetchingSavings } = useQuery({
     queryKey: [queryKeys.savings],
     queryFn: getSavings,
     retry: false,

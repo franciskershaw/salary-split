@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
-import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import useUser from "@/hooks/user/useUser";
 import type { Account } from "@/types/globalTypes";
 
@@ -74,16 +73,6 @@ const Accounts = () => {
     updateAccountFilters(accountFilters);
   };
 
-  if (fetchingAccounts) {
-    return (
-      <LoadingOverlay
-        message="Loading accounts..."
-        opacity="light"
-        spinnerSize="md"
-      />
-    );
-  }
-
   return (
     <PageWrapper
       title="Accounts"
@@ -105,6 +94,8 @@ const Accounts = () => {
           />
         ) : null
       }
+      isLoading={fetchingAccounts && !accounts.length}
+      loadingMessage="Loading accounts..."
     >
       {!accounts?.length ? (
         <EmptyState type="accounts" />

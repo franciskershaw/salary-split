@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
-import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import useUser from "@/hooks/user/useUser";
 import type { Bill } from "@/types/globalTypes";
 
@@ -54,15 +53,8 @@ const Bills = () => {
     updateBillFilters(billFilters);
   };
 
-  if (fetchingBills || fetchingAccounts) {
-    return (
-      <LoadingOverlay
-        message="Loading bills..."
-        opacity="light"
-        spinnerSize="md"
-      />
-    );
-  }
+  const isLoading =
+    (fetchingBills || fetchingAccounts) && (!bills.length || !accounts.length);
 
   return (
     <PageWrapper
@@ -85,6 +77,8 @@ const Bills = () => {
           />
         ) : null
       }
+      isLoading={isLoading}
+      loadingMessage="Loading bills..."
     >
       {!accounts?.length ? (
         <EmptyState type="accounts" />

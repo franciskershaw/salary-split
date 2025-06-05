@@ -20,7 +20,7 @@ const useGetAccounts = () => {
     return response.data;
   };
 
-  const { data: accounts, isLoading: fetchingAccounts } = useQuery({
+  const { data: accounts = [], isLoading: fetchingAccounts } = useQuery({
     queryKey: [queryKeys.accounts],
     queryFn: getAccounts,
     retry: false,

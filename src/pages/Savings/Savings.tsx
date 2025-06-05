@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
-import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateSavingsDialog from "./components/CreateSavingsDialog/CreateSavingsDialog";
@@ -17,26 +16,22 @@ const Savings = () => {
   const [newSavingsDialogOpen, setNewSavingsDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  if (fetchingSavings || fetchingAccounts) {
-    return (
-      <LoadingOverlay
-        message="Loading savings..."
-        opacity="light"
-        spinnerSize="md"
-      />
-    );
-  }
+  const isLoading =
+    (fetchingSavings || fetchingAccounts) &&
+    (!savings.length || !accounts.length);
 
   return (
     <PageWrapper
       title="Savings"
-      description="Track one-time or short-term savings"
+      description="Track how much you're aiming to save this month"
       openCreateDialog={
         savings?.length ? () => setNewSavingsDialogOpen(true) : undefined
       }
       openReorderDialog={
         savings?.length ? () => setReorderDialogOpen(true) : undefined
       }
+      isLoading={isLoading}
+      loadingMessage="Loading savings..."
     >
       {!accounts?.length ? (
         <EmptyState type="accounts" />

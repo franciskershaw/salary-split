@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
-import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import useUser from "@/hooks/user/useUser";
 import type { Bill } from "@/types/globalTypes";
 
@@ -54,15 +53,9 @@ const Expenses = () => {
     updateExpenseFilters(expenseFilters);
   };
 
-  if (fetchingExpenses || fetchingAccounts) {
-    return (
-      <LoadingOverlay
-        message="Loading expenses..."
-        opacity="light"
-        spinnerSize="md"
-      />
-    );
-  }
+  const isLoading =
+    (fetchingExpenses || fetchingAccounts) &&
+    (!expenses.length || !accounts.length);
 
   return (
     <PageWrapper
@@ -85,6 +78,8 @@ const Expenses = () => {
           />
         ) : null
       }
+      isLoading={isLoading}
+      loadingMessage="Loading expenses..."
     >
       {!accounts?.length ? (
         <EmptyState type="accounts" />

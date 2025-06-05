@@ -39,6 +39,10 @@ const useUser = () => {
     try {
       await api.post("/auth/logout");
       queryClient.setQueryData([queryKeys.user], null);
+      queryClient.removeQueries({ queryKey: [queryKeys.accounts] });
+      queryClient.removeQueries({ queryKey: [queryKeys.bills] });
+      queryClient.removeQueries({ queryKey: [queryKeys.expenses] });
+      queryClient.removeQueries({ queryKey: [queryKeys.savings] });
     } catch (error) {
       console.error(error);
     }
