@@ -15,9 +15,6 @@ const useEditBill = () => {
 
   const editBillFn = async (bill: BillFormValues) => {
     const { _id, ...billData } = bill;
-    console.log("Original bill:", bill);
-    console.log("Destructured _id:", _id);
-    console.log("billData after destructuring:", billData);
     const response = await api.put(`/bills/${_id}`, billData, {
       headers: {
         Authorization: `Bearer ${user?.accessToken}`,
