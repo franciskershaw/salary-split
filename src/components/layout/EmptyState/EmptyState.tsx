@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import CreateAccountDialog from "@/pages/Accounts/components/CreateAccountDialog/CreateAccountDialog";
 import CreateBillDialog from "@/pages/Bills/components/CreateBillDialog/CreateBillDialog";
 import CreateExpenseDialog from "@/pages/Expenses/components/CreateExpenseDialog/CreateExpenseDialog";
+import CreateSavingsDialog from "@/pages/Savings/components/CreateSavingsDialog/CreateSavingsDialog";
 
 type EmptyStateType = "accounts" | "bills" | "expenses" | "savings";
 
@@ -53,7 +54,7 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       title: "No Savings Yet",
       description: "You haven't created any savings goals yet.",
       buttonText: "Create Savings Goal",
-      dialog: CreateAccountDialog, // TODO: Replace with CreateSavingsDialog when available
+      dialog: CreateSavingsDialog,
     },
   } as const;
 

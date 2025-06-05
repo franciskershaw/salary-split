@@ -9,6 +9,7 @@ import Auth from "./pages/Auth/Auth";
 import Bills from "./pages/Bills/Bills";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Expenses from "./pages/Expenses/Expenses";
+import Savings from "./pages/Savings/Savings";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
             <Route index element={<Expenses />} />
           </Route>
           <Route path="/savings" element={<PrivateRoute />}>
-            <Route index element={<div>Savings</div>} />
+            <Route index element={<Savings />} />
           </Route>
           <Route path="/settings" element={<PrivateRoute />}>
             <Route index element={<div>Settings</div>} />
