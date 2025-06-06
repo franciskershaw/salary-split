@@ -1,5 +1,6 @@
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { getDisplayInfo } from "@/lib/display-info";
 
@@ -32,9 +33,11 @@ const AccountsOverview = () => {
   );
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Accounts Overview</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <Card className="flex flex-col gap-2 py-4">
+      <CardHeader>
+        <CardTitle className="text-xl">Accounts Overview</CardTitle>
+      </CardHeader>
+      <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryAccounts.map((account) => (
           <FeatureCard
             feature="accounts"
@@ -47,8 +50,8 @@ const AccountsOverview = () => {
             hideDropdown
           />
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

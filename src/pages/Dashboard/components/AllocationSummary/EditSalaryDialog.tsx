@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit2 } from "lucide-react";
@@ -28,7 +28,13 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const EditSalaryDialog = ({ value }: { value: number }) => {
+const EditSalaryDialog = ({
+  value,
+  children,
+}: {
+  value: number;
+  children?: ReactNode;
+}) => {
   const [open, setOpen] = useState(false);
 
   const form = useForm<FormValues>({
@@ -51,13 +57,15 @@ const EditSalaryDialog = ({ value }: { value: number }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6  hover:bg-primary-500/30"
-        >
-          <Edit2 className="h-3 w-3" />
-        </Button>
+        {children ?? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6  hover:bg-primary-500/30"
+          >
+            <Edit2 className="h-3 w-3" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

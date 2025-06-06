@@ -15,6 +15,7 @@ interface PageWrapperProps {
   openReorderDialog?: () => void;
   isLoading?: boolean;
   loadingMessage?: string;
+  customHeaderComponent?: React.ReactNode;
   totalBalanceConfig?: {
     items: Array<{ type: string; amount: number }>;
     filterConfigs?: FilterConfig[];
@@ -33,6 +34,7 @@ const PageWrapper = ({
   totalBalanceConfig,
   isLoading,
   loadingMessage = "Loading...",
+  customHeaderComponent,
 }: PageWrapperProps) => {
   return (
     <div className="mb-16 md:mb-0">
@@ -42,7 +44,8 @@ const PageWrapper = ({
         openCreateDialog={openCreateDialog}
         openReorderDialog={openReorderDialog}
         totalComponent={
-          !isLoading && totalBalanceConfig ? (
+          customHeaderComponent ??
+          (!isLoading && totalBalanceConfig ? (
             <TotalBalance
               items={totalBalanceConfig.items}
               filterConfigs={totalBalanceConfig.filterConfigs}
@@ -50,7 +53,7 @@ const PageWrapper = ({
               onFiltersUpdate={totalBalanceConfig.onFiltersUpdate}
               isUpdating={totalBalanceConfig.isUpdating}
             />
-          ) : undefined
+          ) : undefined)
         }
       />
       <div className="p-4">
@@ -62,16 +65,20 @@ const PageWrapper = ({
           />
         ) : (
           <div className="space-y-6">
-            {totalBalanceConfig && (
-              <div className="lg:hidden">
-                <TotalBalance
-                  items={totalBalanceConfig.items}
-                  filterConfigs={totalBalanceConfig.filterConfigs}
-                  config={totalBalanceConfig.config}
-                  onFiltersUpdate={totalBalanceConfig.onFiltersUpdate}
-                  isUpdating={totalBalanceConfig.isUpdating}
-                />
-              </div>
+            {customHeaderComponent ? (
+              <div className="lg:hidden">{customHeaderComponent}</div>
+            ) : (
+              totalBalanceConfig && (
+                <div className="lg:hidden">
+                  <TotalBalance
+                    items={totalBalanceConfig.items}
+                    filterConfigs={totalBalanceConfig.filterConfigs}
+                    config={totalBalanceConfig.config}
+                    onFiltersUpdate={totalBalanceConfig.onFiltersUpdate}
+                    isUpdating={totalBalanceConfig.isUpdating}
+                  />
+                </div>
+              )
             )}
             {children}
           </div>

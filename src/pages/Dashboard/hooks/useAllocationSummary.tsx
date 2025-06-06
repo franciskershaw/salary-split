@@ -23,7 +23,7 @@ const useAllocationSummary = () => {
   const { savings } = useGetSavings();
   const { user } = useUser();
 
-  const allocation = useMemo(() => {
+  const { allocation, remainingBalance } = useMemo(() => {
     const calculateAccountAllocation = (account: Account): Allocation => {
       const accountBills = bills.filter(
         (bill) => bill.account._id === account._id
@@ -59,7 +59,7 @@ const useAllocationSummary = () => {
     );
     const remainingBalance = (user?.takeHomePay ?? 0) - totalAllocated;
 
-    if (user?.defaultAccount) {
+    if (user?.defaultAccount && remainingBalance > 0) {
       const defaultAllocation = allocations.find(
         (allocation) => allocation.account._id === user.defaultAccount
       );
@@ -82,7 +82,12 @@ const useAllocationSummary = () => {
       }
     }
 
-    return allocations.filter(({ totalAllocated }) => totalAllocated > 0);
+    return {
+      allocation: allocations.filter(
+        ({ totalAllocated }) => totalAllocated > 0
+      ),
+      remainingBalance,
+    };
   }, [
     accounts,
     bills,
@@ -92,7 +97,11 @@ const useAllocationSummary = () => {
     user?.defaultAccount,
   ]);
 
-  return { allocation };
+  return {
+    allocation,
+    remainingBalance,
+    defaultAccountId: user?.defaultAccount,
+  };
 };
 
 export default useAllocationSummary;
