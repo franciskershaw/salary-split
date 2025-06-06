@@ -65,7 +65,7 @@ const Savings = () => {
               secondaryInfo={saving.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
                 <FormDialog
-                  item={{ saving }}
+                  item={{ savings: saving }}
                   open={open}
                   onOpenChange={onOpenChange}
                   title="Create New Savings Goal"
