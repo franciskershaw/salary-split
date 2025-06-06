@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
@@ -10,7 +11,7 @@ import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
-import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
+import CreateBillForm from "./components/CreateBillForm/CreateBillForm";
 import useDeleteBill from "./hooks/useDeleteBill";
 import useGetBills from "./hooks/useGetBills";
 import useUpdateBillFilters from "./hooks/useUpdateBillFilters";
@@ -88,10 +89,22 @@ const Bills = () => {
               item={bill}
               secondaryInfo={bill.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
-                <CreateBillDialog
-                  bill={bill}
+                <FormDialog
+                  item={bill}
                   open={open}
                   onOpenChange={onOpenChange}
+                  title="Create New Bill"
+                  description="Add a new bill to track your finances. Fill in the details below."
+                  editTitle="Edit Bill"
+                  editDescription="Edit your bill details below."
+                  onSubmit={() => {
+                    const form = document.querySelector("form");
+                    if (form) {
+                      form.requestSubmit();
+                    }
+                  }}
+                  form={CreateBillForm}
+                  formProps={{ bill }}
                 />
               )}
               deleteAction={deleteBill}
@@ -100,9 +113,18 @@ const Bills = () => {
           ))}
         </div>
       )}
-      <CreateBillDialog
+      <FormDialog
         open={newBillDialogOpen}
         onOpenChange={setNewBillDialogOpen}
+        title="Create New Bill"
+        description="Add a new bill to track your finances. Fill in the details below."
+        onSubmit={() => {
+          const form = document.querySelector("form");
+          if (form) {
+            form.requestSubmit();
+          }
+        }}
+        form={CreateBillForm}
       />
       {bills && (
         <ReorderDialog

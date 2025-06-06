@@ -6,10 +6,11 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import CreateAccountDialog from "@/pages/Accounts/components/CreateAccountDialog/CreateAccountDialog";
-import CreateBillDialog from "@/pages/Bills/components/CreateBillDialog/CreateBillDialog";
-import CreateExpenseDialog from "@/pages/Expenses/components/CreateExpenseDialog/CreateExpenseDialog";
-import CreateSavingsDialog from "@/pages/Savings/components/CreateSavingsDialog/CreateSavingsDialog";
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
+import CreateAccountForm from "@/pages/Accounts/components/CreateAccountForm/CreateAccountForm";
+import CreateBillForm from "@/pages/Bills/components/CreateBillForm/CreateBillForm";
+import CreateExpenseForm from "@/pages/Expenses/components/CreateExpenseForm/CreateExpenseForm";
+import CreateSavingsForm from "@/pages/Savings/components/CreateSavingsForm/CreateSavingsForm";
 
 type EmptyStateType = "accounts" | "bills" | "expenses" | "savings";
 
@@ -27,7 +28,10 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       description:
         "You haven't created any accounts yet. Create your first account to start managing your finances.",
       buttonText: "Create Account",
-      dialog: CreateAccountDialog,
+      form: CreateAccountForm,
+      formProps: {},
+      dialogTitle: "Create New Account",
+      dialogDescription: "Add a new account to track your finances. Fill in the details below.",
     },
     bills: {
       icon: ReceiptPoundSterling,
@@ -36,7 +40,10 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       title: "No Bills Yet",
       description: "You haven't created any bills yet.",
       buttonText: "Create Bill",
-      dialog: CreateBillDialog,
+      form: CreateBillForm,
+      formProps: {},
+      dialogTitle: "Create New Bill",
+      dialogDescription: "Add a new bill to track your payments.",
     },
     expenses: {
       icon: CreditCard,
@@ -45,7 +52,10 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       title: "No Expenses Yet",
       description: "You haven't created any expenses yet.",
       buttonText: "Create Expense",
-      dialog: CreateExpenseDialog,
+      form: CreateExpenseForm,
+      formProps: {},
+      dialogTitle: "Create New Expense",
+      dialogDescription: "Add a new expense to track your spending.",
     },
     savings: {
       icon: PiggyBank,
@@ -54,7 +64,10 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       title: "No Savings Yet",
       description: "You haven't created any savings goals yet.",
       buttonText: "Create Savings Goal",
-      dialog: CreateSavingsDialog,
+      form: CreateSavingsForm,
+      formProps: {},
+      dialogTitle: "Create New Savings Goal",
+      dialogDescription: "Add a new savings goal to track your progress.",
     },
   } as const;
 
@@ -65,7 +78,10 @@ const EmptyState = ({ type }: EmptyStateProps) => {
     title,
     description,
     buttonText,
-    dialog: Dialog,
+    form,
+    formProps,
+    dialogTitle,
+    dialogDescription,
   } = config[type];
 
   return (
@@ -75,12 +91,22 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       </div>
       <h2 className="text-xl font-semibold mb-2">{title}</h2>
       <p className="text-gray-600 mb-6 max-w-sm">{description}</p>
-      <Dialog
+      <FormDialog
         trigger={
           <Button className="bg-primary hover:bg-primary/90">
             {buttonText}
           </Button>
         }
+        title={dialogTitle}
+        description={dialogDescription}
+        onSubmit={() => {
+          const formEl = document.querySelector("form");
+          if (formEl) {
+            formEl.requestSubmit();
+          }
+        }}
+        form={form}
+        formProps={formProps}
       />
     </div>
   );

@@ -1,12 +1,13 @@
 import { useState } from "react";
 
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
-import CreateSavingsDialog from "./components/CreateSavingsDialog/CreateSavingsDialog";
+import CreateSavingsForm from "./components/CreateSavingsForm/CreateSavingsForm";
 import useDeleteSavings from "./hooks/useDeleteSavings";
 import useGetSavings from "./hooks/useGetSavings";
 
@@ -58,10 +59,22 @@ const Savings = () => {
               item={saving}
               secondaryInfo={saving.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
-                <CreateSavingsDialog
-                  savings={saving}
+                <FormDialog
+                  item={saving}
                   open={open}
                   onOpenChange={onOpenChange}
+                  title="Create New Savings Goal"
+                  description="Add a new savings goal to track your progress. Fill in the details below."
+                  editTitle="Edit Savings Goal"
+                  editDescription="Edit your savings goal details below."
+                  onSubmit={() => {
+                    const form = document.querySelector("form");
+                    if (form) {
+                      form.requestSubmit();
+                    }
+                  }}
+                  form={CreateSavingsForm}
+                  formProps={{ savings: saving }}
                 />
               )}
               deleteAction={deleteSavings}
@@ -70,9 +83,18 @@ const Savings = () => {
           ))}
         </div>
       )}
-      <CreateSavingsDialog
+      <FormDialog
         open={newSavingsDialogOpen}
         onOpenChange={setNewSavingsDialogOpen}
+        title="Create New Savings Goal"
+        description="Add a new savings goal to track your progress. Fill in the details below."
+        onSubmit={() => {
+          const form = document.querySelector("form");
+          if (form) {
+            form.requestSubmit();
+          }
+        }}
+        form={CreateSavingsForm}
       />
       {savings && (
         <ReorderDialog

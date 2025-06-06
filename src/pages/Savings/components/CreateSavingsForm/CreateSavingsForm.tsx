@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,16 +17,9 @@ import { savingsFormSchema, type SavingsFormValues } from "./types";
 interface CreateSavingsFormProps {
   onSuccess?: () => void;
   savings?: Bill;
-  children?:
-    | React.ReactNode
-    | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
-const CreateSavingsForm = ({
-  onSuccess,
-  savings,
-  children,
-}: CreateSavingsFormProps) => {
+const CreateSavingsForm = ({ onSuccess, savings }: CreateSavingsFormProps) => {
   const { accountsWhichAcceptFunds } = useGetAccounts();
   const isEditing = !!savings;
 
@@ -68,10 +61,8 @@ const CreateSavingsForm = ({
     },
   });
 
-  const { addSavings, isPending: isAddingPending } = useAddSavings();
-  const { editSavings, isPending: isEditingPending } = useEditSavings();
-
-  const isPending = isAddingPending || isEditingPending;
+  const { addSavings } = useAddSavings();
+  const { editSavings } = useEditSavings();
 
   const onSubmit = (values: SavingsFormValues) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -157,10 +148,6 @@ const CreateSavingsForm = ({
             </div>
           )}
         </div>
-
-        {children && typeof children === "function"
-          ? children({ isPending, isEditing })
-          : children}
       </div>
     </Form>
   );

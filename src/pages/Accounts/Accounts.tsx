@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
@@ -9,7 +10,7 @@ import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
 
-import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
+import CreateAccountForm from "./components/CreateAccountForm/CreateAccountForm";
 import useDeleteAccount from "./hooks/useDeleteAccount";
 import useGetAccounts from "./hooks/useGetAccounts";
 import useUpdateAccountFilters from "./hooks/useUpdateAccountFilters";
@@ -102,10 +103,22 @@ const Accounts = () => {
               item={account}
               secondaryInfo={account.institution}
               renderEditDialog={({ open, onOpenChange }) => (
-                <CreateAccountDialog
-                  account={account}
+                <FormDialog
+                  item={account}
                   open={open}
                   onOpenChange={onOpenChange}
+                  title="Create New Account"
+                  description="Add a new account to track your finances. Fill in the details below."
+                  editTitle="Edit Account"
+                  editDescription="Edit your account details below."
+                  onSubmit={() => {
+                    const form = document.querySelector("form");
+                    if (form) {
+                      form.requestSubmit();
+                    }
+                  }}
+                  form={CreateAccountForm}
+                  formProps={{ account }}
                 />
               )}
               deleteAction={deleteAccount}
@@ -114,9 +127,18 @@ const Accounts = () => {
           ))}
         </div>
       )}
-      <CreateAccountDialog
+      <FormDialog
         open={newAccountDialogOpen}
         onOpenChange={setNewAccountDialogOpen}
+        title="Create New Account"
+        description="Add a new account to track your finances. Fill in the details below."
+        onSubmit={() => {
+          const form = document.querySelector("form");
+          if (form) {
+            form.requestSubmit();
+          }
+        }}
+        form={CreateAccountForm}
       />
       {accounts && (
         <ReorderDialog

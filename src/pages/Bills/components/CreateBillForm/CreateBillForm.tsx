@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,9 +17,6 @@ import { billFormSchema, type BillFormValues } from "./types";
 interface CreateBillFormProps {
   onSuccess?: () => void;
   bill?: Bill;
-  children?:
-    | React.ReactNode
-    | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
 // Helper function to convert bill type to readable label
@@ -30,7 +27,7 @@ const getBillTypeLabel = (type: string) => {
     .join(" ");
 };
 
-const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
+const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
   const { accountsWhichAcceptFunds } = useGetAccounts();
   const isEditing = !!bill;
 
@@ -84,10 +81,8 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
     },
   });
 
-  const { addBill, isPending: isAddingPending } = useAddBill();
-  const { editBill, isPending: isEditingPending } = useEditBill();
-
-  const isPending = isAddingPending || isEditingPending;
+  const { addBill } = useAddBill();
+  const { editBill } = useEditBill();
 
   const onSubmit = (values: BillFormValues) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -187,10 +182,6 @@ const CreateBillForm = ({ onSuccess, bill, children }: CreateBillFormProps) => {
           placeholder="Select number of people"
           options={splitBetweenOptions}
         />
-
-        {children && typeof children === "function"
-          ? children({ isPending, isEditing })
-          : children}
       </div>
     </Form>
   );

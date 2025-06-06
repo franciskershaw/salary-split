@@ -1,13 +1,22 @@
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
+interface FormComponentProps {
+  onSuccess?: () => void;
+  [key: string]: unknown;
+}
+
+type FormComponent = React.ComponentType<FormComponentProps>;
 
 interface FormDialogProps<T> {
   trigger?: React.ReactNode;
@@ -18,11 +27,10 @@ interface FormDialogProps<T> {
   description: string;
   editTitle?: string;
   editDescription?: string;
-  children: (props: {
-    isOpen: boolean;
-    setIsOpen: (open: boolean) => void;
-    isEditing: boolean;
-  }) => React.ReactNode;
+  onSubmit: () => void;
+  isPending?: boolean;
+  form: FormComponent;
+  formProps?: Omit<FormComponentProps, "onSuccess">;
 }
 
 export function FormDialog<T>({
@@ -34,7 +42,10 @@ export function FormDialog<T>({
   description,
   editTitle,
   editDescription,
-  children,
+  onSubmit,
+  isPending = false,
+  form: FormComponent,
+  formProps,
 }: FormDialogProps<T>) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
 
@@ -50,6 +61,10 @@ export function FormDialog<T>({
     }
   };
 
+  const handleSuccess = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
@@ -62,7 +77,16 @@ export function FormDialog<T>({
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto min-h-0 pr-2 -mr-2">
-          {children({ isOpen, setIsOpen, isEditing })}
+          <FormComponent {...formProps} onSuccess={handleSuccess} />
+        </div>
+
+        <div className="flex-shrink-0 border-t pt-3 mt-2 flex justify-end gap-2">
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button onClick={onSubmit} disabled={isPending}>
+            {isEditing ? "Save Changes" : "Create"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

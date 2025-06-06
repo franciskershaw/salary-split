@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
@@ -10,7 +11,7 @@ import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
-import CreateExpenseDialog from "./components/CreateExpenseDialog/CreateExpenseDialog";
+import CreateExpenseForm from "./components/CreateExpenseForm/CreateExpenseForm";
 import useDeleteExpense from "./hooks/useDeleteExpense";
 import useGetExpenses from "./hooks/useGetExpenses";
 import useUpdateExpenseFilters from "./hooks/useUpdateExpenseFilters";
@@ -89,10 +90,22 @@ const Expenses = () => {
               item={expense}
               secondaryInfo={expense.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
-                <CreateExpenseDialog
-                  expense={expense}
+                <FormDialog
+                  item={expense}
                   open={open}
                   onOpenChange={onOpenChange}
+                  title="Create New Expense"
+                  description="Add a new expense to track your finances. Fill in the details below."
+                  editTitle="Edit Expense"
+                  editDescription="Edit your expense details below."
+                  onSubmit={() => {
+                    const form = document.querySelector("form");
+                    if (form) {
+                      form.requestSubmit();
+                    }
+                  }}
+                  form={CreateExpenseForm}
+                  formProps={{ expense }}
                 />
               )}
               deleteAction={deleteExpense}
@@ -101,9 +114,18 @@ const Expenses = () => {
           ))}
         </div>
       )}
-      <CreateExpenseDialog
+      <FormDialog
         open={newExpenseDialogOpen}
         onOpenChange={setNewExpenseDialogOpen}
+        title="Create New Expense"
+        description="Add a new expense to track your finances. Fill in the details below."
+        onSubmit={() => {
+          const form = document.querySelector("form");
+          if (form) {
+            form.requestSubmit();
+          }
+        }}
+        form={CreateExpenseForm}
       />
       {expenses && (
         <ReorderDialog

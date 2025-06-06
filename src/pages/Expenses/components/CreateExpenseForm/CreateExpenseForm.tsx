@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,9 +17,6 @@ import { expenseFormSchema, type ExpenseFormValues } from "./types";
 interface CreateExpenseFormProps {
   onSuccess?: () => void;
   expense?: Bill;
-  children?:
-    | React.ReactNode
-    | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
 // Helper function to convert bill type to readable label
@@ -30,11 +27,7 @@ const getBillTypeLabel = (type: string) => {
     .join(" ");
 };
 
-const CreateExpenseForm = ({
-  onSuccess,
-  expense,
-  children,
-}: CreateExpenseFormProps) => {
+const CreateExpenseForm = ({ onSuccess, expense }: CreateExpenseFormProps) => {
   const { accountsWhichAcceptFunds } = useGetAccounts();
   const isEditing = !!expense;
 
@@ -82,10 +75,8 @@ const CreateExpenseForm = ({
     },
   });
 
-  const { addExpense, isPending: isAddingPending } = useAddExpense();
-  const { editExpense, isPending: isEditingPending } = useEditExpense();
-
-  const isPending = isAddingPending || isEditingPending;
+  const { addExpense } = useAddExpense();
+  const { editExpense } = useEditExpense();
 
   const onSubmit = (values: ExpenseFormValues) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -178,10 +169,6 @@ const CreateExpenseForm = ({
             </div>
           )}
         </div>
-
-        {children && typeof children === "function"
-          ? children({ isPending, isEditing })
-          : children}
       </div>
     </Form>
   );

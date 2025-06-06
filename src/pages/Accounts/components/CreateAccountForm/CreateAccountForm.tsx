@@ -5,9 +5,7 @@ import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import {
-  ACCOUNT_TYPES,
-} from "@/constants/api";
+import { ACCOUNT_TYPES } from "@/constants/api";
 import useUser from "@/hooks/user/useUser";
 import type { Account } from "@/types/globalTypes";
 
@@ -26,10 +24,9 @@ const accountTypes = [
 interface CreateAccountFormProps {
   onSuccess?: () => void;
   account?: Account;
-  children?: React.ReactNode | ((props: { isPending: boolean; isEditing: boolean }) => React.ReactNode);
 }
 
-const CreateAccountForm = ({ onSuccess, account, children }: CreateAccountFormProps) => {
+const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   const { accounts } = useGetAccounts();
   const { user } = useUser();
   const isFirstAccount = accounts?.length === 0;
@@ -49,10 +46,8 @@ const CreateAccountForm = ({ onSuccess, account, children }: CreateAccountFormPr
     },
   });
 
-  const { addAccount, isPending: isAddingPending } = useAddAccount();
-  const { editAccount, isPending: isEditingPending } = useEditAccount();
-
-  const isPending = isAddingPending || isEditingPending;
+  const { addAccount } = useAddAccount();
+  const { editAccount } = useEditAccount();
 
   const onSubmit = (values: AccountFormValues) => {
     if (isEditing) {
@@ -147,8 +142,6 @@ const CreateAccountForm = ({ onSuccess, account, children }: CreateAccountFormPr
             />
           </FormInput>
         </div>
-
-        {children && typeof children === "function" ? children({ isPending, isEditing }) : children}
       </div>
     </Form>
   );
