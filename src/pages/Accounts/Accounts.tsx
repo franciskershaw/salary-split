@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
+import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import useUser from "@/hooks/user/useUser";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
 
-import { AccountCard } from "./components/AccountCard/AccountCard";
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
 import ReorderAccountsDialog from "./components/ReorderAccountsDialog/ReorderAccountsDialog";
 import {
@@ -13,7 +14,7 @@ import {
   type FilterConfig,
   type TotalBalanceConfig,
 } from "./components/TotalBalance/TotalBalance";
-import { getAccountTypeInfo } from "./helper/helper";
+import useDeleteAccount from "./hooks/useDeleteAccount";
 import useGetAccounts from "./hooks/useGetAccounts";
 import useUpdateAccountFilters from "./hooks/useUpdateAccountFilters";
 
@@ -21,35 +22,35 @@ const Accounts = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
   const { user } = useUser();
   const { updateAccountFilters, isPending } = useUpdateAccountFilters();
+  const { deleteAccount, isPending: isDeleting } = useDeleteAccount();
 
   const [newAccountDialogOpen, setNewAccountDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  // Configure filters for accounts
   const accountFilterConfigs: FilterConfig[] = [
     {
       type: "current",
-      label: getAccountTypeInfo("current").label,
+      label: getDisplayInfo("account", "current").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "current")?.enabled ??
         true,
     },
     {
       type: "joint",
-      label: getAccountTypeInfo("joint").label,
+      label: getDisplayInfo("account", "joint").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "joint")?.enabled ?? true,
     },
     {
       type: "savings",
-      label: getAccountTypeInfo("savings").label,
+      label: getDisplayInfo("account", "savings").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "savings")?.enabled ??
         true,
     },
     {
       type: "investment",
-      label: getAccountTypeInfo("investment").label,
+      label: getDisplayInfo("account", "investment").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "investment")?.enabled ??
         true,
@@ -94,7 +95,7 @@ const Accounts = () => {
           />
         ) : null
       }
-      isLoading={fetchingAccounts && !accounts.length}
+      isLoading={fetchingAccounts && !accounts?.length}
       loadingMessage="Loading accounts..."
     >
       {!accounts?.length ? (
@@ -112,7 +113,21 @@ const Accounts = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {accounts?.map((account) => (
-              <AccountCard key={account._id} account={account} />
+              <FeatureCard
+                key={account._id}
+                feature="account"
+                item={account}
+                secondaryInfo={account.institution}
+                renderEditDialog={({ open, onOpenChange }) => (
+                  <CreateAccountDialog
+                    account={account}
+                    open={open}
+                    onOpenChange={onOpenChange}
+                  />
+                )}
+                deleteAction={deleteAccount}
+                isDeleting={isDeleting}
+              />
             ))}
           </div>
         </>

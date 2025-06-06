@@ -1,11 +1,3 @@
-import {
-  Banknote,
-  BarChartIcon,
-  CreditCardIcon,
-  PiggyBankIcon,
-} from "lucide-react";
-
-import { ACCOUNT_TYPES } from "@/constants/api";
 import type { Account } from "@/types/globalTypes";
 
 type AccountTypeGroup = Record<Account["type"], Account[]>;
@@ -65,53 +57,4 @@ export const createSummaryAccounts = (
       getLabel(type as Account["type"])
     )
   );
-};
-
-export const getAccountTypeInfo = (type: Account["type"]) => {
-  switch (type) {
-    case ACCOUNT_TYPES.CURRENT:
-      return {
-        label: "Current Accounts",
-        icon: Banknote,
-        colors: {
-          bg: "bg-blue-100 dark:bg-blue-900/30",
-          text: "text-blue-600 dark:text-blue-400",
-          badge:
-            "bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400",
-        },
-      };
-    case ACCOUNT_TYPES.JOINT:
-      return {
-        label: "Joint Accounts",
-        icon: CreditCardIcon,
-        colors: {
-          bg: "bg-green-100 dark:bg-green-900/30",
-          text: "text-green-600 dark:text-green-400",
-          badge:
-            "bg-green-50 dark:bg-green-900/50 text-green-600 dark:text-green-400",
-        },
-      };
-    case ACCOUNT_TYPES.SAVINGS:
-      return {
-        label: "Savings Accounts",
-        icon: PiggyBankIcon,
-        colors: {
-          bg: "bg-purple-100 dark:bg-purple-900/30",
-          text: "text-purple-600 dark:text-purple-400",
-          badge:
-            "bg-purple-50 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400",
-        },
-      };
-    case ACCOUNT_TYPES.INVESTMENT:
-      return {
-        label: "Investment Accounts",
-        icon: BarChartIcon,
-        colors: {
-          bg: "bg-amber-100 dark:bg-amber-900/30",
-          text: "text-amber-600 dark:text-amber-400",
-          badge:
-            "bg-amber-50 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400",
-        },
-      };
-  }
 };

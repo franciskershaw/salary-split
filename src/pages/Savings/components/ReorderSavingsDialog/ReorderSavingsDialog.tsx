@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getBillTypeInfo } from "@/pages/Bills/helper/helper";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
 import useReorderSavings from "../../hooks/useReorderSavings";
@@ -55,7 +55,10 @@ export default function ReorderSavingsDialog({
             className="space-y-1.5"
           >
             {items.map((saving) => {
-              const { icon: Icon, colors } = getBillTypeInfo(saving.type);
+              const { icon: Icon, colors } = getDisplayInfo(
+                "savings",
+                saving.type
+              );
               return (
                 <Reorder.Item
                   key={saving._id}

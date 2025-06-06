@@ -13,9 +13,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
-import { getBillTypeInfo } from "../../helper/helper";
 import useReorderBills from "../../hooks/useReorderbills";
 
 interface ReorderBillsDialogProps {
@@ -55,7 +55,7 @@ const ReorderBillsDialog = ({
             className="space-y-1.5"
           >
             {items.map((bill) => {
-              const { icon: Icon, colors } = getBillTypeInfo(bill.type);
+              const { icon: Icon, colors } = getDisplayInfo("bill", bill.type);
               return (
                 <Reorder.Item
                   key={bill._id}

@@ -1,10 +1,10 @@
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
+import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import { getDisplayInfo } from "@/lib/display-info";
 
-import { AccountCard } from "../../../Accounts/components/AccountCard/AccountCard";
 import {
   createSummaryAccounts,
-  getAccountTypeInfo,
   groupAccountsByType,
 } from "../../../Accounts/helper/helper";
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
@@ -28,7 +28,7 @@ const AccountsOverview = () => {
   const accountsByType = groupAccountsByType(accounts);
   const summaryAccounts = createSummaryAccounts(
     accountsByType,
-    (type) => getAccountTypeInfo(type).label
+    (type) => getDisplayInfo("account", type, { isSummary: true }).label
   );
 
   return (
@@ -36,7 +36,15 @@ const AccountsOverview = () => {
       <h2 className="text-lg font-semibold">Accounts Overview</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryAccounts.map((account) => (
-          <AccountCard hideDropdown key={account._id} account={account} />
+          <FeatureCard
+            feature="account"
+            item={account}
+            renderEditDialog={() => null}
+            deleteAction={() => null}
+            isDeleting={false}
+            key={account._id}
+            hideDropdown
+          />
         ))}
       </div>
     </div>

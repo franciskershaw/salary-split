@@ -13,9 +13,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
 
-import { getAccountTypeInfo } from "../../helper/helper";
 import useReorderAccounts from "../../hooks/useReorderAccounts";
 
 interface ReorderAccountsDialogProps {
@@ -54,7 +54,10 @@ export default function ReorderAccountsDialog({
             className="space-y-2"
           >
             {items.map((account) => {
-              const { icon: Icon, colors } = getAccountTypeInfo(account.type);
+              const { icon: Icon, colors } = getDisplayInfo(
+                "account",
+                account.type
+              );
               return (
                 <Reorder.Item
                   key={account._id}

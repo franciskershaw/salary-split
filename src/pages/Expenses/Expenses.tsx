@@ -1,8 +1,10 @@
 import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
+import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import useUser from "@/hooks/user/useUser";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
 import {
@@ -11,10 +13,9 @@ import {
   type TotalBalanceConfig,
 } from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
-import { getBillTypeLabel, getUniqueBillTypes } from "../Bills/helper/helper";
 import CreateExpenseDialog from "./components/CreateExpenseDialog/CreateExpenseDialog";
-import { ExpenseCard } from "./components/ExpenseCard/ExpenseCard";
 import ReorderExpensesDialog from "./components/ReorderExpensesDialog/ReorderExpensesDialog";
+import useDeleteExpense from "./hooks/useDeleteExpense";
 import useGetExpenses from "./hooks/useGetExpenses";
 import useUpdateExpenseFilters from "./hooks/useUpdateExpenseFilters";
 
@@ -23,15 +24,16 @@ const Expenses = () => {
   const { user } = useUser();
   const { accounts, fetchingAccounts } = useGetAccounts();
   const { updateExpenseFilters, isPending } = useUpdateExpenseFilters();
+  const { deleteExpense, isPending: isDeleting } = useDeleteExpense();
 
   const [newExpenseDialogOpen, setNewExpenseDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  const userExpenseTypes = getUniqueBillTypes(expenses);
+  const userExpenseTypes = [...new Set(expenses?.map((exp) => exp.type) ?? [])];
 
   const expenseFilterConfigs: FilterConfig[] = userExpenseTypes.map((type) => ({
     type,
-    label: getBillTypeLabel(type, expenses),
+    label: getDisplayInfo("expense", type).label,
     enabled:
       user?.expenseFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
@@ -55,7 +57,7 @@ const Expenses = () => {
 
   const isLoading =
     (fetchingExpenses || fetchingAccounts) &&
-    (!expenses.length || !accounts.length);
+    (!expenses?.length || !accounts?.length);
 
   return (
     <PageWrapper
@@ -98,7 +100,20 @@ const Expenses = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {expenses?.map((expense) => (
-              <ExpenseCard key={expense._id} expense={expense} />
+              <FeatureCard
+                key={expense._id}
+                feature="expense"
+                item={expense}
+                renderEditDialog={({ open, onOpenChange }) => (
+                  <CreateExpenseDialog
+                    expense={expense}
+                    open={open}
+                    onOpenChange={onOpenChange}
+                  />
+                )}
+                deleteAction={deleteExpense}
+                isDeleting={isDeleting}
+              />
             ))}
           </div>
         </>

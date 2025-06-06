@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getBillTypeInfo } from "@/pages/Bills/helper/helper";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
 import useReorderExpenses from "../../hooks/useReorderExpenses";
@@ -55,7 +55,10 @@ export default function ReorderExpensesDialog({
             className="space-y-1.5"
           >
             {items.map((expense) => {
-              const { icon: Icon, colors } = getBillTypeInfo(expense.type);
+              const { icon: Icon, colors } = getDisplayInfo(
+                "expense",
+                expense.type
+              );
               return (
                 <Reorder.Item
                   key={expense._id}

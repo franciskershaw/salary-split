@@ -1,8 +1,10 @@
 import { useState } from "react";
 
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
+import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import useUser from "@/hooks/user/useUser";
+import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
 import {
@@ -11,10 +13,9 @@ import {
   type TotalBalanceConfig,
 } from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
-import { BillCard } from "./components/BillCard/BillCard";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
 import ReorderBillsDialog from "./components/ReorderBillsDialog/ReorderBillsDialog";
-import { getBillTypeLabel, getUniqueBillTypes } from "./helper/helper";
+import useDeleteBill from "./hooks/useDeleteBill";
 import useGetBills from "./hooks/useGetBills";
 import useUpdateBillFilters from "./hooks/useUpdateBillFilters";
 
@@ -23,16 +24,16 @@ const Bills = () => {
   const { user } = useUser();
   const { accounts, fetchingAccounts } = useGetAccounts();
   const { updateBillFilters, isPending } = useUpdateBillFilters();
+  const { deleteBill, isPending: isDeleting } = useDeleteBill();
 
   const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  // Get unique bill types that the user actually has bills for
-  const userBillTypes = getUniqueBillTypes(bills);
+  const userBillTypes = [...new Set(bills?.map((bill) => bill.type) ?? [])];
 
   const billFilterConfigs: FilterConfig[] = userBillTypes.map((type) => ({
     type,
-    label: getBillTypeLabel(type, bills),
+    label: getDisplayInfo("bill", type).label,
     enabled: user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
 
@@ -54,7 +55,8 @@ const Bills = () => {
   };
 
   const isLoading =
-    (fetchingBills || fetchingAccounts) && (!bills.length || !accounts.length);
+    (fetchingBills || fetchingAccounts) &&
+    (!bills?.length || !accounts?.length);
 
   return (
     <PageWrapper
@@ -96,7 +98,22 @@ const Bills = () => {
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {bills?.map((bill) => <BillCard key={bill._id} bill={bill} />)}
+            {bills?.map((bill) => (
+              <FeatureCard
+                key={bill._id}
+                feature="bill"
+                item={bill}
+                renderEditDialog={({ open, onOpenChange }) => (
+                  <CreateBillDialog
+                    bill={bill}
+                    open={open}
+                    onOpenChange={onOpenChange}
+                  />
+                )}
+                deleteAction={deleteBill}
+                isDeleting={isDeleting}
+              />
+            ))}
           </div>
         </>
       )}
