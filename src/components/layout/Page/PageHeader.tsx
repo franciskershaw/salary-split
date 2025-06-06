@@ -73,9 +73,11 @@ const PageHeader = ({
             <p className="text-surface-foreground/70 mt-4">{description}</p>
           )}
         </div>
-        <div className="hidden lg:block lg:flex-shrink-0">
-          {totalComponent || <div className="" />}
-        </div>
+        {totalComponent && (
+          <div className="hidden lg:block lg:flex-shrink-0">
+            {totalComponent}
+          </div>
+        )}
       </div>
     </header>
   );

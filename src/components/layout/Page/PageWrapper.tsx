@@ -53,7 +53,7 @@ const PageWrapper = ({
           ) : undefined
         }
       />
-      <div className="p-4 mt-6">
+      <div className="p-4">
         {isLoading ? (
           <LoadingOverlay
             message={loadingMessage}
