@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, ShoppingBasket } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { getDisplayInfo } from "@/lib/display-info";
@@ -86,13 +86,6 @@ export default function AllocationCard({
           >
             <div className="overflow-hidden">
               <div className="pt-4 mt-4 border-t space-y-4">
-                {funneledBalance > 0 && (
-                  <div className="flex items-center gap-2">
-                    <span className="inline-block bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-semibold px-2 py-1 rounded">
-                      Spending money left over: {formatCurrency(funneledBalance)}
-                    </span>
-                  </div>
-                )}
                 {bills.length > 0 && (
                   <BreakdownSection
                     title="Bills"
@@ -114,12 +107,49 @@ export default function AllocationCard({
                     feature="savings"
                   />
                 )}
+                {funneledBalance > 0 && (
+                  <div>
+                    <div className="font-semibold text-base mb-2">
+                      Spending Money
+                    </div>
+                    <ul className="space-y-2">
+                      <BreakdownItem
+                        icon={ShoppingBasket}
+                        iconClassName="text-emerald-700 dark:text-emerald-300"
+                        label="Available to Spend"
+                        amount={funneledBalance}
+                      />
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function BreakdownItem({
+  icon: Icon,
+  iconClassName,
+  label,
+  amount,
+}: {
+  icon: React.ElementType;
+  iconClassName: string;
+  label: string;
+  amount: number;
+}) {
+  return (
+    <li className="flex items-center justify-between text-base">
+      <div className="flex items-center gap-3 truncate max-w-[70%]">
+        <Icon className={`h-5 w-5 ${iconClassName} flex-shrink-0`} />
+        <span className="truncate">{label}</span>
+      </div>
+      <span className="font-medium">{formatCurrency(amount)}</span>
+    </li>
   );
 }
 
@@ -138,20 +168,14 @@ function BreakdownSection({
       <ul className="space-y-2">
         {items.map((item) => {
           const display = getDisplayInfo(feature, item.type);
-          const Icon = display.icon;
           return (
-            <li
+            <BreakdownItem
               key={item._id}
-              className="flex items-center justify-between text-base"
-            >
-              <div className="flex items-center gap-3 truncate max-w-[70%]">
-                <Icon
-                  className={`h-5 w-5 ${display.colors.text} flex-shrink-0`}
-                />
-                <span className="truncate">{item.name}</span>
-              </div>
-              <span className="font-medium">{formatCurrency(item.amount)}</span>
-            </li>
+              icon={display.icon}
+              iconClassName={display.colors.text}
+              label={item.name}
+              amount={item.amount}
+            />
           );
         })}
       </ul>

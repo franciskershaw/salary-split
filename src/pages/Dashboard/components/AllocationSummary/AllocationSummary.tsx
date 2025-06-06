@@ -26,21 +26,6 @@ const AllocationSummary = () => {
         ? "text-destructive"
         : "text-emerald-600 dark:text-emerald-400",
     },
-    {
-      label: "Bills",
-      value: totalBills,
-      className: "text-red-500 dark:text-red-400",
-    },
-    {
-      label: "Expenses",
-      value: totalExpenses,
-      className: "text-red-500 dark:text-red-400",
-    },
-    {
-      label: "Savings",
-      value: totalSavings,
-      className: "text-blue-500 dark:text-blue-400",
-    },
     ...(spendingMoney > 0
       ? [
           {
@@ -59,6 +44,21 @@ const AllocationSummary = () => {
           },
         ]
       : []),
+    {
+      label: "Bills",
+      value: totalBills,
+      className: "text-red-500 dark:text-red-400",
+    },
+    {
+      label: "Expenses",
+      value: totalExpenses,
+      className: "text-red-500 dark:text-red-400",
+    },
+    {
+      label: "Savings",
+      value: totalSavings,
+      className: "text-blue-500 dark:text-blue-400",
+    },
   ];
 
   return (
