@@ -6,7 +6,11 @@ import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
-import { FEATURE_ACCOUNTS, FEATURE_BILLS } from "@/constants/features";
+import {
+  BILL_FORM_ID,
+  FEATURE_ACCOUNTS,
+  FEATURE_BILLS,
+} from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
@@ -91,21 +95,15 @@ const Bills = () => {
               secondaryInfo={bill.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
                 <FormDialog
-                  item={bill}
+                  item={{ bill }}
                   open={open}
                   onOpenChange={onOpenChange}
                   title="Create New Bill"
                   description="Add a new bill to track your finances. Fill in the details below."
                   editTitle="Edit Bill"
                   editDescription="Edit your bill details below."
-                  onSubmit={() => {
-                    const form = document.querySelector("form");
-                    if (form) {
-                      form.requestSubmit();
-                    }
-                  }}
                   form={CreateBillForm}
-                  formProps={{ bill }}
+                  formId={BILL_FORM_ID}
                 />
               )}
               deleteAction={deleteBill}
@@ -119,13 +117,8 @@ const Bills = () => {
         onOpenChange={setNewBillDialogOpen}
         title="Create New Bill"
         description="Add a new bill to track your finances. Fill in the details below."
-        onSubmit={() => {
-          const form = document.querySelector("form");
-          if (form) {
-            form.requestSubmit();
-          }
-        }}
         form={CreateBillForm}
+        formId={BILL_FORM_ID}
       />
       {bills && (
         <ReorderDialog

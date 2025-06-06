@@ -7,7 +7,7 @@ import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
 import { ACCOUNT_TYPES } from "@/constants/api";
-import { FEATURE_ACCOUNTS } from "@/constants/features";
+import { ACCOUNT_FORM_ID, FEATURE_ACCOUNTS } from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
@@ -107,21 +107,15 @@ const Accounts = () => {
               secondaryInfo={account.institution}
               renderEditDialog={({ open, onOpenChange }) => (
                 <FormDialog
-                  item={account}
+                  item={{ account }}
                   open={open}
                   onOpenChange={onOpenChange}
                   title="Create New Account"
                   description="Add a new account to track your finances. Fill in the details below."
                   editTitle="Edit Account"
                   editDescription="Edit your account details below."
-                  onSubmit={() => {
-                    const form = document.querySelector("form");
-                    if (form) {
-                      form.requestSubmit();
-                    }
-                  }}
                   form={CreateAccountForm}
-                  formProps={{ account }}
+                  formId={ACCOUNT_FORM_ID}
                 />
               )}
               deleteAction={deleteAccount}
@@ -135,13 +129,8 @@ const Accounts = () => {
         onOpenChange={setNewAccountDialogOpen}
         title="Create New Account"
         description="Add a new account to track your finances. Fill in the details below."
-        onSubmit={() => {
-          const form = document.querySelector("form");
-          if (form) {
-            form.requestSubmit();
-          }
-        }}
         form={CreateAccountForm}
+        formId={ACCOUNT_FORM_ID}
       />
       {accounts && (
         <ReorderDialog

@@ -5,7 +5,11 @@ import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDial
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
-import { FEATURE_ACCOUNTS, FEATURE_SAVINGS } from "@/constants/features";
+import {
+  FEATURE_ACCOUNTS,
+  FEATURE_SAVINGS,
+  SAVINGS_FORM_ID,
+} from "@/constants/features";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateSavingsForm from "./components/CreateSavingsForm/CreateSavingsForm";
@@ -61,21 +65,15 @@ const Savings = () => {
               secondaryInfo={saving.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
                 <FormDialog
-                  item={saving}
+                  item={{ saving }}
                   open={open}
                   onOpenChange={onOpenChange}
                   title="Create New Savings Goal"
                   description="Add a new savings goal to track your progress. Fill in the details below."
                   editTitle="Edit Savings Goal"
                   editDescription="Edit your savings goal details below."
-                  onSubmit={() => {
-                    const form = document.querySelector("form");
-                    if (form) {
-                      form.requestSubmit();
-                    }
-                  }}
                   form={CreateSavingsForm}
-                  formProps={{ savings: saving }}
+                  formId={SAVINGS_FORM_ID}
                 />
               )}
               deleteAction={deleteSavings}
@@ -89,13 +87,8 @@ const Savings = () => {
         onOpenChange={setNewSavingsDialogOpen}
         title="Create New Savings Goal"
         description="Add a new savings goal to track your progress. Fill in the details below."
-        onSubmit={() => {
-          const form = document.querySelector("form");
-          if (form) {
-            form.requestSubmit();
-          }
-        }}
         form={CreateSavingsForm}
+        formId={SAVINGS_FORM_ID}
       />
       {savings && (
         <ReorderDialog

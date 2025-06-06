@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { BILL_TYPES } from "@/constants/api";
+import { EXPENSE_FORM_ID } from "@/constants/features";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
@@ -78,23 +79,26 @@ const CreateExpenseForm = ({ onSuccess, expense }: CreateExpenseFormProps) => {
   const { addExpense } = useAddExpense();
   const { editExpense } = useEditExpense();
 
-  const onSubmit = (values: ExpenseFormValues) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { dueDateType, ...submitValues } = values;
-    if (isEditing) {
-      editExpense(submitValues, {
-        onSuccess: () => {
-          onSuccess?.();
-        },
-      });
-    } else {
-      addExpense(submitValues, {
-        onSuccess: () => {
-          onSuccess?.();
-        },
-      });
-    }
-  };
+  const onSubmit = useCallback(
+    (values: ExpenseFormValues) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { dueDateType, ...submitValues } = values;
+      if (isEditing) {
+        editExpense(submitValues, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      } else {
+        addExpense(submitValues, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      }
+    },
+    [isEditing, editExpense, onSuccess, addExpense]
+  );
 
   // Watch dueDateType to show/hide custom input and update dueDate
   const dueDateType = form.watch("dueDateType");
@@ -108,7 +112,7 @@ const CreateExpenseForm = ({ onSuccess, expense }: CreateExpenseFormProps) => {
   }, [dueDateType, form]);
 
   return (
-    <Form form={form} onSubmit={onSubmit}>
+    <Form form={form} onSubmit={onSubmit} id={EXPENSE_FORM_ID}>
       <div className="space-y-6">
         <div className="space-y-4">
           <FormInput name="name" label="Expense Name">

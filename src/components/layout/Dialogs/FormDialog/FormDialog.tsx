@@ -11,10 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { Account, Bill } from "@/types/globalTypes";
 
 interface FormComponentProps {
   onSuccess?: () => void;
-  [key: string]: unknown;
+  children?: React.ReactNode;
+  [key: string]: Account | Bill | React.ReactNode | (() => void) | undefined;
 }
 
 type FormComponent = React.ComponentType<FormComponentProps>;
@@ -28,10 +30,9 @@ interface FormDialogProps<T> {
   description: string;
   editTitle?: string;
   editDescription?: string;
-  onSubmit: () => void;
+  formId: string;
   isPending?: boolean;
   form: FormComponent;
-  formProps?: Omit<FormComponentProps, "onSuccess">;
 }
 
 export function FormDialog<T>({
@@ -43,10 +44,9 @@ export function FormDialog<T>({
   description,
   editTitle,
   editDescription,
-  onSubmit,
+  formId,
   isPending = false,
   form: FormComponent,
-  formProps,
 }: FormDialogProps<T>) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
 
@@ -78,14 +78,14 @@ export function FormDialog<T>({
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto min-h-0 pr-2 -mr-2">
-          <FormComponent {...formProps} onSuccess={handleSuccess} />
+          <FormComponent {...item} onSuccess={handleSuccess} />
         </div>
 
         <DialogFooter className="flex-shrink-0 border-t pt-3 mt-2">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button onClick={onSubmit} disabled={isPending}>
+          <Button type="submit" form={formId} disabled={isPending}>
             {isEditing ? "Save Changes" : "Create"}
           </Button>
         </DialogFooter>

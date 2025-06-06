@@ -6,7 +6,11 @@ import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
-import { FEATURE_ACCOUNTS, FEATURE_EXPENSES } from "@/constants/features";
+import {
+  EXPENSE_FORM_ID,
+  FEATURE_ACCOUNTS,
+  FEATURE_EXPENSES,
+} from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
@@ -92,21 +96,15 @@ const Expenses = () => {
               secondaryInfo={expense.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
                 <FormDialog
-                  item={expense}
+                  item={{ expense }}
                   open={open}
                   onOpenChange={onOpenChange}
                   title="Create New Expense"
                   description="Add a new expense to track your finances. Fill in the details below."
                   editTitle="Edit Expense"
                   editDescription="Edit your expense details below."
-                  onSubmit={() => {
-                    const form = document.querySelector("form");
-                    if (form) {
-                      form.requestSubmit();
-                    }
-                  }}
                   form={CreateExpenseForm}
-                  formProps={{ expense }}
+                  formId={EXPENSE_FORM_ID}
                 />
               )}
               deleteAction={deleteExpense}
@@ -120,13 +118,8 @@ const Expenses = () => {
         onOpenChange={setNewExpenseDialogOpen}
         title="Create New Expense"
         description="Add a new expense to track your finances. Fill in the details below."
-        onSubmit={() => {
-          const form = document.querySelector("form");
-          if (form) {
-            form.requestSubmit();
-          }
-        }}
         form={CreateExpenseForm}
+        formId={EXPENSE_FORM_ID}
       />
       {expenses && (
         <ReorderDialog

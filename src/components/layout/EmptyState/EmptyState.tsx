@@ -7,6 +7,12 @@ import {
 
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import { Button } from "@/components/ui/button";
+import {
+  ACCOUNT_FORM_ID,
+  BILL_FORM_ID,
+  EXPENSE_FORM_ID,
+  SAVINGS_FORM_ID,
+} from "@/constants/features";
 import CreateAccountForm from "@/pages/Accounts/components/CreateAccountForm/CreateAccountForm";
 import CreateBillForm from "@/pages/Bills/components/CreateBillForm/CreateBillForm";
 import CreateExpenseForm from "@/pages/Expenses/components/CreateExpenseForm/CreateExpenseForm";
@@ -24,7 +30,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
         "You haven't created any accounts yet. Create your first account to start managing your finances.",
       buttonText: "Create Account",
       form: CreateAccountForm,
-      formProps: {},
+      formId: ACCOUNT_FORM_ID,
       dialogTitle: "Create New Account",
       dialogDescription:
         "Add a new account to track your finances. Fill in the details below.",
@@ -37,7 +43,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
       description: "You haven't created any bills yet.",
       buttonText: "Create Bill",
       form: CreateBillForm,
-      formProps: {},
+      formId: BILL_FORM_ID,
       dialogTitle: "Create New Bill",
       dialogDescription: "Add a new bill to track your payments.",
     },
@@ -49,7 +55,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
       description: "You haven't created any expenses yet.",
       buttonText: "Create Expense",
       form: CreateExpenseForm,
-      formProps: {},
+      formId: EXPENSE_FORM_ID,
       dialogTitle: "Create New Expense",
       dialogDescription: "Add a new expense to track your spending.",
     },
@@ -61,7 +67,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
       description: "You haven't created any savings goals yet.",
       buttonText: "Create Savings Goal",
       form: CreateSavingsForm,
-      formProps: {},
+      formId: SAVINGS_FORM_ID,
       dialogTitle: "Create New Savings Goal",
       dialogDescription: "Add a new savings goal to track your progress.",
     },
@@ -75,7 +81,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
     description,
     buttonText,
     form,
-    formProps,
+    formId,
     dialogTitle,
     dialogDescription,
   } = config[type];
@@ -95,14 +101,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
         }
         title={dialogTitle}
         description={dialogDescription}
-        onSubmit={() => {
-          const formEl = document.querySelector("form");
-          if (formEl) {
-            formEl.requestSubmit();
-          }
-        }}
         form={form}
-        formProps={formProps}
+        formId={formId}
       />
     </div>
   );

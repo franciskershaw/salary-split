@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { BILL_TYPES } from "@/constants/api";
+import { BILL_FORM_ID } from "@/constants/features";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
@@ -84,23 +85,26 @@ const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
   const { addBill } = useAddBill();
   const { editBill } = useEditBill();
 
-  const onSubmit = (values: BillFormValues) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { dueDateType, ...submitValues } = values;
-    if (isEditing) {
-      editBill(submitValues, {
-        onSuccess: () => {
-          onSuccess?.();
-        },
-      });
-    } else {
-      addBill(submitValues, {
-        onSuccess: () => {
-          onSuccess?.();
-        },
-      });
-    }
-  };
+  const onSubmit = useCallback(
+    (values: BillFormValues) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { dueDateType, ...submitValues } = values;
+      if (isEditing) {
+        editBill(submitValues, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      } else {
+        addBill(submitValues, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      }
+    },
+    [isEditing, editBill, onSuccess, addBill]
+  );
 
   // Watch dueDateType to show/hide custom input and update dueDate
   const dueDateType = form.watch("dueDateType");
@@ -114,7 +118,7 @@ const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
   }, [dueDateType, form]);
 
   return (
-    <Form form={form} onSubmit={onSubmit}>
+    <Form form={form} onSubmit={onSubmit} id={BILL_FORM_ID}>
       <div className="space-y-6">
         <div className="space-y-4">
           <FormInput name="name" label="Bill Name">

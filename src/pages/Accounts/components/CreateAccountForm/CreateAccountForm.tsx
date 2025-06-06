@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -6,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { ACCOUNT_TYPES } from "@/constants/api";
+import { ACCOUNT_FORM_ID } from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import type { Account } from "@/types/globalTypes";
 
@@ -27,6 +30,7 @@ interface CreateAccountFormProps {
 }
 
 const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
+  console.log(account);
   const { accounts } = useGetAccounts();
   const { user } = useUser();
   const isFirstAccount = accounts?.length === 0;
@@ -49,21 +53,24 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   const { addAccount } = useAddAccount();
   const { editAccount } = useEditAccount();
 
-  const onSubmit = (values: AccountFormValues) => {
-    if (isEditing) {
-      editAccount(values, {
-        onSuccess: () => {
-          onSuccess?.();
-        },
-      });
-    } else {
-      addAccount(values, {
-        onSuccess: () => {
-          onSuccess?.();
-        },
-      });
-    }
-  };
+  const onSubmit = useCallback(
+    (values: AccountFormValues) => {
+      if (isEditing) {
+        editAccount(values, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      } else {
+        addAccount(values, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      }
+    },
+    [isEditing, editAccount, onSuccess, addAccount]
+  );
 
   const isDefault = form.watch("isDefault") as boolean;
 
@@ -76,7 +83,7 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   };
 
   return (
-    <Form form={form} onSubmit={onSubmit}>
+    <Form form={form} onSubmit={onSubmit} id={ACCOUNT_FORM_ID}>
       <div className="space-y-6">
         <div className="space-y-4">
           <FormInput name="name" label="Account Name">
