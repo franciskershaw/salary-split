@@ -13,11 +13,7 @@ import CreateExpenseForm from "@/pages/Expenses/components/CreateExpenseForm/Cre
 import CreateSavingsForm from "@/pages/Savings/components/CreateSavingsForm/CreateSavingsForm";
 import type { Feature } from "@/types/globalTypes";
 
-interface EmptyStateProps {
-  type: Feature;
-}
-
-const EmptyState = ({ type }: EmptyStateProps) => {
+const EmptyState = ({ type }: { type: Feature }) => {
   const config = {
     accounts: {
       icon: WalletCards,
