@@ -1,8 +1,15 @@
 import "./App.css";
 
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 
-import PrivateRoute from "./components/layout/PrivateRoute/PrivateRoute";
+import useUser from "@/hooks/user/useUser";
+
 import SharedLayout from "./components/layout/SharedLayout/SharedLayout";
 import Accounts from "./pages/Accounts/Accounts";
 import Auth from "./pages/Auth/Auth";
@@ -10,6 +17,11 @@ import Bills from "./pages/Bills/Bills";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Expenses from "./pages/Expenses/Expenses";
 import Savings from "./pages/Savings/Savings";
+
+const PrivateRoute = () => {
+  const { user } = useUser();
+  return user ? <Outlet /> : <Navigate to="/" />;
+};
 
 function App() {
   return (
