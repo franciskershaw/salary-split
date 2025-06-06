@@ -1,51 +1,81 @@
-import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
-import { formatCurrency } from "@/lib/utils";
 
 import useAllocationSummary from "../../hooks/useAllocationSummary";
 import AllocationCard from "./AllocationCard";
+import SummaryStat from "./SummaryStat";
 
 const AllocationSummary = () => {
-  const { user } = useUser();
-  const { allocation, remainingBalance, defaultAccountId } =
-    useAllocationSummary();
+  const {
+    allocation,
+    remainingBalance,
+    defaultAccountId,
+    totalBills,
+    totalExpenses,
+    totalSavings,
+    totalAllocated,
+    overAllocated,
+    overAllocatedAmount,
+    spendingMoney,
+  } = useAllocationSummary();
 
-  const totalAllocated = allocation.reduce(
-    (sum, a) => sum + a.totalAllocated,
-    0
-  );
-  const overAllocated = (user?.takeHomePay ?? 0) < totalAllocated;
-  const overAllocatedAmount = totalAllocated - (user?.takeHomePay ?? 0);
+  const summaryStats = [
+    {
+      label: "Total Allocated",
+      value: totalAllocated,
+      className: overAllocated
+        ? "text-destructive"
+        : "text-emerald-600 dark:text-emerald-400",
+    },
+    {
+      label: "Bills",
+      value: totalBills,
+      className: "text-red-500 dark:text-red-400",
+    },
+    {
+      label: "Expenses",
+      value: totalExpenses,
+      className: "text-red-500 dark:text-red-400",
+    },
+    {
+      label: "Savings",
+      value: totalSavings,
+      className: "text-blue-500 dark:text-blue-400",
+    },
+    ...(spendingMoney > 0
+      ? [
+          {
+            label: "Spending Money",
+            value: spendingMoney,
+            className: "text-emerald-600 dark:text-emerald-400",
+          },
+        ]
+      : []),
+    ...(overAllocated
+      ? [
+          {
+            label: "Overallocated By",
+            value: overAllocatedAmount,
+            className: "text-destructive",
+          },
+        ]
+      : []),
+  ];
 
   return (
     <section className="space-y-2 md:space-y-4">
       <div className="flex flex-col md:flex-row gap-2 md:gap-8 mb-4">
-        <h2 className="text-xl font-semibold py-2">Payday Summary</h2>
-        <div className="flex gap-4 md:gap-6">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Total Allocated
-            </p>
-            <p
-              className={`text-xl font-bold ${
-                overAllocated
-                  ? "text-destructive"
-                  : "text-emerald-600 dark:text-emerald-400"
-              }`}
-            >
-              {formatCurrency(totalAllocated)}
-            </p>
+        <h2 className="text-xl font-semibold py-2 shrink-0">Payday Summary</h2>
+        <div className="flex-1 overflow-x-auto">
+          <div className="flex gap-x-6 pb-2">
+            {summaryStats.map((stat) => (
+              <SummaryStat
+                key={stat.label}
+                label={stat.label}
+                value={stat.value}
+                className={stat.className}
+              />
+            ))}
           </div>
-          {overAllocated && (
-            <div>
-              <p className="text-sm font-medium text-destructive">
-                Overallocated
-              </p>
-              <p className="text-xl font-bold text-destructive">
-                {formatCurrency(overAllocatedAmount)}
-              </p>
-            </div>
-          )}
         </div>
       </div>
 
@@ -53,7 +83,6 @@ const AllocationSummary = () => {
         {allocation.map((a) => {
           const display = getDisplayInfo("accounts", a.account.type);
           const isDefault = a.account._id === defaultAccountId;
-          // Only show funneled balance if it's positive and this is the default account
           const funneledBalance =
             isDefault && remainingBalance > 0 ? remainingBalance : 0;
           return (

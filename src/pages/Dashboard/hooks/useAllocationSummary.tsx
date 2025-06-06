@@ -23,7 +23,20 @@ const useAllocationSummary = () => {
   const { savings } = useGetSavings();
   const { user } = useUser();
 
-  const { allocation, remainingBalance } = useMemo(() => {
+  const summary = useMemo(() => {
+    const totalBills = bills.reduce(
+      (sum, bill) => sum + bill.amount / (bill.splitBetween || 1),
+      0
+    );
+    const totalExpenses = expenses.reduce(
+      (sum, expense) => sum + expense.amount,
+      0
+    );
+    const totalSavings = savings.reduce(
+      (sum, saving) => sum + saving.amount,
+      0
+    );
+
     const calculateAccountAllocation = (account: Account): Allocation => {
       const accountBills = bills.filter(
         (bill) => bill.account._id === account._id
@@ -53,14 +66,18 @@ const useAllocationSummary = () => {
     };
 
     const allocations = accounts.map(calculateAccountAllocation);
-    const totalAllocated = allocations.reduce(
-      (sum, { totalAllocated }) => sum + totalAllocated,
-      0
-    );
-    const remainingBalance = (user?.takeHomePay ?? 0) - totalAllocated;
+
+    const pureTotalAllocated = totalBills + totalExpenses + totalSavings;
+    const remainingBalance = (user?.takeHomePay ?? 0) - pureTotalAllocated;
+    const overAllocated = (user?.takeHomePay ?? 0) < pureTotalAllocated;
+    const overAllocatedAmount = pureTotalAllocated - (user?.takeHomePay ?? 0);
+    const spendingMoney =
+      remainingBalance > 0 && !overAllocated ? remainingBalance : 0;
+
+    const finalAllocations = [...allocations];
 
     if (user?.defaultAccount && remainingBalance > 0) {
-      const defaultAllocation = allocations.find(
+      const defaultAllocation = finalAllocations.find(
         (allocation) => allocation.account._id === user.defaultAccount
       );
 
@@ -71,7 +88,7 @@ const useAllocationSummary = () => {
           (account) => account._id === user.defaultAccount
         );
         if (defaultAccount) {
-          allocations.push({
+          finalAllocations.push({
             account: defaultAccount,
             bills: [],
             expenses: [],
@@ -83,10 +100,18 @@ const useAllocationSummary = () => {
     }
 
     return {
-      allocation: allocations.filter(
+      allocation: finalAllocations.filter(
         ({ totalAllocated }) => totalAllocated > 0
       ),
       remainingBalance,
+      totalBills,
+      totalExpenses,
+      totalSavings,
+      totalAllocated: pureTotalAllocated,
+      overAllocated,
+      overAllocatedAmount,
+      spendingMoney,
+      defaultAccountId: user?.defaultAccount,
     };
   }, [
     accounts,
@@ -97,11 +122,7 @@ const useAllocationSummary = () => {
     user?.defaultAccount,
   ]);
 
-  return {
-    allocation,
-    remainingBalance,
-    defaultAccountId: user?.defaultAccount,
-  };
+  return summary;
 };
 
 export default useAllocationSummary;
