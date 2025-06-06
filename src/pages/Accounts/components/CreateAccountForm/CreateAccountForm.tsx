@@ -30,7 +30,6 @@ interface CreateAccountFormProps {
 }
 
 const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
-  console.log(account);
   const { accounts } = useGetAccounts();
   const { user } = useUser();
   const isFirstAccount = accounts?.length === 0;

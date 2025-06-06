@@ -35,7 +35,7 @@ const PageWrapper = ({
   loadingMessage = "Loading...",
 }: PageWrapperProps) => {
   return (
-    <div className="space-y-6 p-4 mb-16 md:mb-0">
+    <div className="mb-16 md:mb-0">
       <PageHeader
         title={title}
         description={description}
@@ -53,28 +53,30 @@ const PageWrapper = ({
           ) : undefined
         }
       />
-      {isLoading ? (
-        <LoadingOverlay
-          message={loadingMessage}
-          opacity="light"
-          spinnerSize="md"
-        />
-      ) : (
-        <>
-          {totalBalanceConfig && (
-            <div className="lg:hidden">
-              <TotalBalance
-                items={totalBalanceConfig.items}
-                filterConfigs={totalBalanceConfig.filterConfigs}
-                config={totalBalanceConfig.config}
-                onFiltersUpdate={totalBalanceConfig.onFiltersUpdate}
-                isUpdating={totalBalanceConfig.isUpdating}
-              />
-            </div>
-          )}
-          {children}
-        </>
-      )}
+      <div className="p-4 mt-6">
+        {isLoading ? (
+          <LoadingOverlay
+            message={loadingMessage}
+            opacity="light"
+            spinnerSize="md"
+          />
+        ) : (
+          <div className="space-y-6">
+            {totalBalanceConfig && (
+              <div className="lg:hidden">
+                <TotalBalance
+                  items={totalBalanceConfig.items}
+                  filterConfigs={totalBalanceConfig.filterConfigs}
+                  config={totalBalanceConfig.config}
+                  onFiltersUpdate={totalBalanceConfig.onFiltersUpdate}
+                  isUpdating={totalBalanceConfig.isUpdating}
+                />
+              </div>
+            )}
+            {children}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
