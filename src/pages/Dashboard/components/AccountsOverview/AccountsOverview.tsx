@@ -39,6 +39,7 @@ const AccountsOverview = () => {
           <FeatureCard
             feature="accounts"
             item={account}
+            secondaryInfo={account.institution}
             renderEditDialog={() => null}
             deleteAction={() => null}
             isDeleting={false}
