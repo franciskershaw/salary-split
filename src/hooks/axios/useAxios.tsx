@@ -1,64 +1,92 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { queryKeys } from '../../reactQuery/queryKeys';
-import { User } from '../../types/types';
+import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-type Response<T> = Promise<T>;
+import { INVALID_ACCESS_TOKEN } from "@/constants/api";
+import queryKeys from "@/tanstackQuery/queryKeys";
+import type { User } from "@/types/globalTypes";
 
-type UseAxios = AxiosInstance & {
-  get: <T>(url: string, config?: AxiosRequestConfig) => Response<T>;
-  post: <T>(
-    url: string,
-    data?: any,
-    config?: AxiosRequestConfig
-  ) => Response<T>;
-  put: <T>(url: string, data?: any, config?: AxiosRequestConfig) => Response<T>;
-  delete: <T>(url: string, config?: AxiosRequestConfig) => Response<T>;
-};
+// For development on mobile over wifi
+const isDevelopmentNetwork =
+  import.meta.env.MODE === "development" &&
+  window.location.hostname !== "localhost";
 
-const useAxios = (): UseAxios => {
-  const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true,
-  });
-  const navigate = useNavigate();
+const apiBaseUrl = isDevelopmentNetwork
+  ? import.meta.env.VITE_API_URL_NETWORK
+  : import.meta.env.VITE_API_URL;
+
+const axiosInstance = axios.create({
+  baseURL: apiBaseUrl,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
+
+const useAxios = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const api = axiosInstance;
+
+  let isRefreshing = false;
+  let refreshSubscribers: ((token: string) => void)[] = [];
+
+  const addSubscriber = (callback: (token: string) => void) => {
+    refreshSubscribers.push(callback);
+  };
+
+  const notifySubscribers = (newToken: string) => {
+    refreshSubscribers.forEach((callback) => callback(newToken));
+    refreshSubscribers = [];
+  };
 
   api.interceptors.response.use(
     (response) => response,
     async (error) => {
+      const originalRequest = error.config;
+
       if (
-        error.response.status === 401 &&
-        (error.response.data.errorCode === 'SESSION_EXPIRED' ||
-          error.response.data.errorCode === 'INVALID_TOKEN')
+        error.response?.status === 401 &&
+        error.response.data.errorCode === INVALID_ACCESS_TOKEN
       ) {
-        try {
-          const originalRequest = error.config;
-          const response = await api.get(
-            `${import.meta.env.VITE_API_URL}/users/refreshToken`
-          );
-          originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
-          queryClient.setQueryData<User>([queryKeys.user], (oldData) => {
-            if (!oldData) {
-              return oldData;
-            }
-            return {
-              ...oldData,
-              accessToken: response.data.accessToken,
-            };
+        if (isRefreshing) {
+          return new Promise((resolve) => {
+            addSubscriber((token) => {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              resolve(api(originalRequest));
+            });
           });
+        }
+
+        isRefreshing = true;
+        try {
+          const { data } = await api.get("/auth/refresh-token");
+          const newAccessToken = data.accessToken;
+
+          queryClient.setQueryData<User>([queryKeys.user], (oldData) => {
+            if (!oldData) return oldData;
+            return { ...oldData, accessToken: newAccessToken };
+          });
+
+          notifySubscribers(newAccessToken);
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(originalRequest);
-        } catch (error) {
+        } catch (refreshError) {
+          toast.info("Session expired, please log in again.");
           queryClient.setQueryData([queryKeys.user], null);
-          navigate('/');
+          navigate("/");
+          return Promise.reject(refreshError);
+        } finally {
+          isRefreshing = false;
         }
       }
+
       return Promise.reject(error);
     }
   );
 
-  return api as UseAxios;
+  return api;
 };
 
 export default useAxios;
