@@ -1,12 +1,12 @@
 import { useState } from "react";
 
+import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateSavingsDialog from "./components/CreateSavingsDialog/CreateSavingsDialog";
-import ReorderSavingsDialog from "./components/ReorderSavingsDialog/ReorderSavingsDialog";
 import useDeleteSavings from "./hooks/useDeleteSavings";
 import useGetSavings from "./hooks/useGetSavings";
 
@@ -67,10 +67,11 @@ const Savings = () => {
         onOpenChange={setNewSavingsDialogOpen}
       />
       {savings && (
-        <ReorderSavingsDialog
+        <ReorderDialog
+          feature="savings"
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
-          savings={savings}
+          items={savings}
         />
       )}
     </PageWrapper>

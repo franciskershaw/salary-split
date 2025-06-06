@@ -13,27 +13,35 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { AccountType, BillType } from "@/constants/api";
 import { getDisplayInfo } from "@/lib/display-info";
-import type { Bill } from "@/types/globalTypes";
 
-import useReorderBills from "../../hooks/useReorderbills";
+import useReorderItems from "./useReorderItems";
 
-interface ReorderBillsDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  bills: Bill[];
+interface ReorderableItem {
+  _id: string;
+  name: string;
+  type: AccountType | BillType;
 }
 
-const ReorderBillsDialog = ({
+interface ReorderDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  items: ReorderableItem[];
+  feature: "bills" | "accounts" | "savings" | "expenses";
+}
+
+const ReorderDialog = ({
   open,
   onOpenChange,
-  bills,
-}: ReorderBillsDialogProps) => {
-  const [items, setItems] = useState(bills);
-  const { reorderBills, isPending } = useReorderBills();
+  items: initialItems,
+  feature,
+}: ReorderDialogProps) => {
+  const [items, setItems] = useState(initialItems);
+  const { reorderItems, isPending } = useReorderItems(feature);
 
   const handleReorder = () => {
-    reorderBills(items.map((bill) => bill._id));
+    reorderItems(items.map((item) => item._id));
     onOpenChange(false);
   };
 
@@ -41,9 +49,9 @@ const ReorderBillsDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] flex flex-col">
         <DialogHeader className="pb-2">
-          <DialogTitle>Reorder Bills</DialogTitle>
+          <DialogTitle>Reorder {feature}</DialogTitle>
           <DialogDescription>
-            Drag and drop bills to change their order
+            Drag and drop {feature} to change their order
           </DialogDescription>
         </DialogHeader>
 
@@ -54,16 +62,16 @@ const ReorderBillsDialog = ({
             onReorder={setItems}
             className="space-y-1.5"
           >
-            {items.map((bill) => {
-              const { icon: Icon, colors } = getDisplayInfo("bill", bill.type);
+            {items.map((item) => {
+              const { icon: Icon, colors } = getDisplayInfo(feature, item.type);
               return (
                 <Reorder.Item
-                  key={bill._id}
-                  value={bill}
+                  key={item._id}
+                  value={item}
                   className="flex items-center gap-2 rounded-lg border border-surface-border bg-surface p-3 cursor-grab active:cursor-grabbing"
                 >
                   <GripVertical className="h-4 w-4 text-muted-foreground" />
-                  <span className="flex-1 text-sm">{bill.name}</span>
+                  <span className="flex-1 text-sm">{item.name}</span>
                   <Icon className={`h-4 w-4 ${colors.text}`} />
                 </Reorder.Item>
               );
@@ -84,4 +92,4 @@ const ReorderBillsDialog = ({
   );
 };
 
-export default ReorderBillsDialog;
+export default ReorderDialog;

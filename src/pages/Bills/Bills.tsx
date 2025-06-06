@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
@@ -14,7 +15,6 @@ import {
 } from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
-import ReorderBillsDialog from "./components/ReorderBillsDialog/ReorderBillsDialog";
 import useDeleteBill from "./hooks/useDeleteBill";
 import useGetBills from "./hooks/useGetBills";
 import useUpdateBillFilters from "./hooks/useUpdateBillFilters";
@@ -33,7 +33,7 @@ const Bills = () => {
 
   const billFilterConfigs: FilterConfig[] = userBillTypes.map((type) => ({
     type,
-    label: getDisplayInfo("bill", type).label,
+    label: getDisplayInfo("bills", type).label,
     enabled: user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
 
@@ -101,7 +101,7 @@ const Bills = () => {
             {bills?.map((bill) => (
               <FeatureCard
                 key={bill._id}
-                feature="bill"
+                feature="bills"
                 item={bill}
                 secondaryInfo={bill.account?.name}
                 renderEditDialog={({ open, onOpenChange }) => (
@@ -123,10 +123,11 @@ const Bills = () => {
         onOpenChange={setNewBillDialogOpen}
       />
       {bills && (
-        <ReorderBillsDialog
+        <ReorderDialog
+          feature="bills"
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
-          bills={bills}
+          items={bills}
         />
       )}
     </PageWrapper>

@@ -28,7 +28,7 @@ const AccountsOverview = () => {
   const accountsByType = groupAccountsByType(accounts);
   const summaryAccounts = createSummaryAccounts(
     accountsByType,
-    (type) => getDisplayInfo("account", type, { isSummary: true }).label
+    (type) => getDisplayInfo("accounts", type, { isSummary: true }).label
   );
 
   return (
@@ -37,7 +37,7 @@ const AccountsOverview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryAccounts.map((account) => (
           <FeatureCard
-            feature="account"
+            feature="accounts"
             item={account}
             renderEditDialog={() => null}
             deleteAction={() => null}

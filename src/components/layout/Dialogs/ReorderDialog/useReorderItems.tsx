@@ -6,13 +6,15 @@ import useAxios from "@/hooks/axios/useAxios";
 import useUser from "@/hooks/user/useUser";
 import queryKeys from "@/tanstackQuery/queryKeys";
 
-const useReorderAccounts = () => {
+const useReorderItems = (
+  feature: "bills" | "accounts" | "savings" | "expenses"
+) => {
   const api = useAxios();
   const queryClient = useQueryClient();
   const { user } = useUser();
 
-  const reorderAccountsFn = async (accountIds: string[]) => {
-    const response = await api.put("/accounts/reorder", accountIds, {
+  const reorderItemsFn = async (itemIds: string[]) => {
+    const response = await api.put(`/${feature}/reorder`, itemIds, {
       headers: {
         Authorization: `Bearer ${user?.accessToken}`,
       },
@@ -20,22 +22,22 @@ const useReorderAccounts = () => {
     return response.data;
   };
 
-  const { mutate: reorderAccounts, isPending } = useMutation({
-    mutationFn: reorderAccountsFn,
+  const { mutate: reorderItems, isPending } = useMutation({
+    mutationFn: reorderItemsFn,
     onSuccess: () => {
-      toast.success("Accounts reordered successfully");
-      queryClient.invalidateQueries({ queryKey: [queryKeys.accounts] });
+      toast.success(`${feature} reordered successfully`);
+      queryClient.invalidateQueries({ queryKey: [queryKeys[feature]] });
     },
     onError: (error: AxiosError<{ message: string }>) => {
       console.log(error);
       toast.error(error.response?.data?.message || error.message);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.accounts] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys[feature]] });
     },
   });
 
-  return { reorderAccounts, isPending };
+  return { reorderItems, isPending };
 };
 
-export default useReorderAccounts;
+export default useReorderItems;

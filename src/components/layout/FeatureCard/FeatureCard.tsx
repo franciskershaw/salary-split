@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getDisplayInfo } from "@/lib/display-info";
 import { cn, formatCurrency } from "@/lib/utils";
-import type { Account, Bill } from "@/types/globalTypes";
+import type { Account, Bill, Feature } from "@/types/globalTypes";
 
 type FeatureCardProps = {
-  feature: "account" | "bill" | "expense" | "savings";
+  feature: Feature;
   item: Account | Bill;
   secondaryInfo?: ReactNode;
   bottomRightContent?: ReactNode;

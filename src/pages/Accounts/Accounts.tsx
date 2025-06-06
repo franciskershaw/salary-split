@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
@@ -8,7 +9,6 @@ import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
 
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
-import ReorderAccountsDialog from "./components/ReorderAccountsDialog/ReorderAccountsDialog";
 import {
   TotalBalance,
   type FilterConfig,
@@ -30,27 +30,27 @@ const Accounts = () => {
   const accountFilterConfigs: FilterConfig[] = [
     {
       type: "current",
-      label: getDisplayInfo("account", "current").label,
+      label: getDisplayInfo("accounts", "current").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "current")?.enabled ??
         true,
     },
     {
       type: "joint",
-      label: getDisplayInfo("account", "joint").label,
+      label: getDisplayInfo("accounts", "joint").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "joint")?.enabled ?? true,
     },
     {
       type: "savings",
-      label: getDisplayInfo("account", "savings").label,
+      label: getDisplayInfo("accounts", "savings").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "savings")?.enabled ??
         true,
     },
     {
       type: "investment",
-      label: getDisplayInfo("account", "investment").label,
+      label: getDisplayInfo("accounts", "investment").label,
       enabled:
         user?.accountFilters?.find((f) => f.type === "investment")?.enabled ??
         true,
@@ -115,7 +115,7 @@ const Accounts = () => {
             {accounts?.map((account) => (
               <FeatureCard
                 key={account._id}
-                feature="account"
+                feature="accounts"
                 item={account}
                 secondaryInfo={account.institution}
                 renderEditDialog={({ open, onOpenChange }) => (
@@ -137,10 +137,11 @@ const Accounts = () => {
         onOpenChange={setNewAccountDialogOpen}
       />
       {accounts && (
-        <ReorderAccountsDialog
+        <ReorderDialog
+          feature="accounts"
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
-          accounts={accounts}
+          items={accounts}
         />
       )}
     </PageWrapper>

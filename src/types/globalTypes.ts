@@ -5,6 +5,8 @@ export type Theme = "light" | "dark";
 export type UserRole = "user" | "admin";
 export type AuthProvider = "google" | "local";
 
+export type Feature = "accounts" | "bills" | "expenses" | "savings";
+
 export interface User {
   _id: string;
   email: string;

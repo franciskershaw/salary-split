@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
@@ -14,7 +15,6 @@ import {
 } from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateExpenseDialog from "./components/CreateExpenseDialog/CreateExpenseDialog";
-import ReorderExpensesDialog from "./components/ReorderExpensesDialog/ReorderExpensesDialog";
 import useDeleteExpense from "./hooks/useDeleteExpense";
 import useGetExpenses from "./hooks/useGetExpenses";
 import useUpdateExpenseFilters from "./hooks/useUpdateExpenseFilters";
@@ -33,7 +33,7 @@ const Expenses = () => {
 
   const expenseFilterConfigs: FilterConfig[] = userExpenseTypes.map((type) => ({
     type,
-    label: getDisplayInfo("expense", type).label,
+    label: getDisplayInfo("expenses", type).label,
     enabled:
       user?.expenseFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
@@ -102,7 +102,7 @@ const Expenses = () => {
             {expenses?.map((expense) => (
               <FeatureCard
                 key={expense._id}
-                feature="expense"
+                feature="expenses"
                 item={expense}
                 secondaryInfo={expense.account?.name}
                 renderEditDialog={({ open, onOpenChange }) => (
@@ -124,10 +124,11 @@ const Expenses = () => {
         onOpenChange={setNewExpenseDialogOpen}
       />
       {expenses && (
-        <ReorderExpensesDialog
+        <ReorderDialog
+          feature="expenses"
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
-          expenses={expenses}
+          items={expenses}
         />
       )}
     </PageWrapper>

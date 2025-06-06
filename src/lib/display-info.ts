@@ -145,7 +145,7 @@ const billTypeInfo: Record<BillType, DisplayInfo> = {
 };
 
 export const getDisplayInfo = (
-  feature: "account" | "bill" | "expense" | "savings",
+  feature: "accounts" | "bills" | "expenses" | "savings",
   type?: AccountType | BillType,
   options?: {
     isSummary?: boolean;
@@ -154,7 +154,7 @@ export const getDisplayInfo = (
   let accountInfo: DisplayInfo;
 
   switch (feature) {
-    case "account":
+    case "accounts":
       accountInfo =
         accountTypeInfo[type as AccountType] || accountTypeInfo.current;
       if (options?.isSummary) {
@@ -164,8 +164,8 @@ export const getDisplayInfo = (
         };
       }
       return accountInfo;
-    case "bill":
-    case "expense":
+    case "bills":
+    case "expenses":
       return billTypeInfo[type as BillType] || billTypeInfo.other;
     case "savings":
       return {
