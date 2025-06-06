@@ -5,7 +5,7 @@ import {
   HomeIcon,
   LogOutIcon,
   ReceiptPoundSterling,
-  SettingsIcon,
+  // SettingsIcon,
   WalletCards,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -54,7 +54,7 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
   ];
 
   const settingsNavItems = [
-    { href: "/settings", icon: <SettingsIcon />, label: "Settings" },
+    // { href: "/settings", icon: <SettingsIcon />, label: "Settings" },
     { href: "#", icon: <LogOutIcon />, label: "Logout", onClick: logout },
   ];
 

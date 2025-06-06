@@ -61,6 +61,10 @@ const AllocationSummary = () => {
     },
   ];
 
+  if (allocation.length === 0) {
+    return null;
+  }
+
   return (
     <section className="space-y-2 md:space-y-4">
       <div className="flex flex-col md:flex-row gap-2 md:gap-8 mb-4">
