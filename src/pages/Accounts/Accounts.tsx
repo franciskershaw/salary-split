@@ -4,16 +4,12 @@ import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDial
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
+import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
 
 import CreateAccountDialog from "./components/CreateAccountDialog/CreateAccountDialog";
-import {
-  TotalBalance,
-  type FilterConfig,
-  type TotalBalanceConfig,
-} from "./components/TotalBalance/TotalBalance";
 import useDeleteAccount from "./hooks/useDeleteAccount";
 import useGetAccounts from "./hooks/useGetAccounts";
 import useUpdateAccountFilters from "./hooks/useUpdateAccountFilters";
@@ -57,14 +53,6 @@ const Accounts = () => {
     },
   ];
 
-  const totalBalanceConfig: TotalBalanceConfig = {
-    title: "Total Balance",
-    dialogTitle: "Customise Total Balance",
-    dialogDescription:
-      "Select which account types to include in your total balance calculation",
-    allItemsLabel: "All Accounts",
-  };
-
   const handleFiltersUpdate = (filters: FilterConfig[]) => {
     const accountFilters = filters.map((filter) => ({
       type: filter.type as Account["type"],
@@ -72,6 +60,21 @@ const Accounts = () => {
     }));
 
     updateAccountFilters(accountFilters);
+  };
+
+  const totalBalanceConfig = {
+    items: accounts ?? [],
+    filterConfigs: accountFilterConfigs,
+    config: {
+      title: "Total Balance",
+      dialogTitle: "Customise Total Balance",
+      dialogDescription:
+        "Select which account types to include in your total balance calculation",
+      allItemsLabel: "All Accounts",
+      showFilters: true,
+    },
+    onFiltersUpdate: handleFiltersUpdate,
+    isUpdating: isPending,
   };
 
   return (
@@ -84,53 +87,32 @@ const Accounts = () => {
       openReorderDialog={
         accounts?.length ? () => setReorderDialogOpen(true) : undefined
       }
-      totalComponent={
-        accounts?.length ? (
-          <TotalBalance
-            items={accounts}
-            filterConfigs={accountFilterConfigs}
-            config={totalBalanceConfig}
-            onFiltersUpdate={handleFiltersUpdate}
-            isUpdating={isPending}
-          />
-        ) : null
-      }
+      totalBalanceConfig={totalBalanceConfig}
       isLoading={fetchingAccounts && !accounts?.length}
       loadingMessage="Loading accounts..."
     >
       {!accounts?.length ? (
         <EmptyState type="accounts" />
       ) : (
-        <>
-          <div className="lg:hidden">
-            <TotalBalance
-              items={accounts}
-              filterConfigs={accountFilterConfigs}
-              config={totalBalanceConfig}
-              onFiltersUpdate={handleFiltersUpdate}
-              isUpdating={isPending}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {accounts?.map((account) => (
+            <FeatureCard
+              key={account._id}
+              feature="accounts"
+              item={account}
+              secondaryInfo={account.institution}
+              renderEditDialog={({ open, onOpenChange }) => (
+                <CreateAccountDialog
+                  account={account}
+                  open={open}
+                  onOpenChange={onOpenChange}
+                />
+              )}
+              deleteAction={deleteAccount}
+              isDeleting={isDeleting}
             />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {accounts?.map((account) => (
-              <FeatureCard
-                key={account._id}
-                feature="accounts"
-                item={account}
-                secondaryInfo={account.institution}
-                renderEditDialog={({ open, onOpenChange }) => (
-                  <CreateAccountDialog
-                    account={account}
-                    open={open}
-                    onOpenChange={onOpenChange}
-                  />
-                )}
-                deleteAction={deleteAccount}
-                isDeleting={isDeleting}
-              />
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       )}
       <CreateAccountDialog
         open={newAccountDialogOpen}

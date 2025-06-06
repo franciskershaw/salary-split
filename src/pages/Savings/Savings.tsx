@@ -22,6 +22,15 @@ const Savings = () => {
     (fetchingSavings || fetchingAccounts) &&
     (!savings.length || !accounts.length);
 
+  const totalBalanceConfig = {
+    items: savings,
+    config: {
+      title: "Total Savings",
+      allItemsLabel: "All Savings",
+      showFilters: false,
+    },
+  };
+
   return (
     <PageWrapper
       title="Savings"
@@ -32,6 +41,7 @@ const Savings = () => {
       openReorderDialog={
         savings?.length ? () => setReorderDialogOpen(true) : undefined
       }
+      totalBalanceConfig={totalBalanceConfig}
       isLoading={isLoading}
       loadingMessage="Loading savings..."
     >
@@ -40,27 +50,25 @@ const Savings = () => {
       ) : !savings?.length ? (
         <EmptyState type="savings" />
       ) : (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {savings?.map((saving) => (
-              <FeatureCard
-                key={saving._id}
-                feature="savings"
-                item={saving}
-                secondaryInfo={saving.account?.name}
-                renderEditDialog={({ open, onOpenChange }) => (
-                  <CreateSavingsDialog
-                    savings={saving}
-                    open={open}
-                    onOpenChange={onOpenChange}
-                  />
-                )}
-                deleteAction={deleteSavings}
-                isDeleting={isDeleting}
-              />
-            ))}
-          </div>
-        </>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {savings?.map((saving) => (
+            <FeatureCard
+              key={saving._id}
+              feature="savings"
+              item={saving}
+              secondaryInfo={saving.account?.name}
+              renderEditDialog={({ open, onOpenChange }) => (
+                <CreateSavingsDialog
+                  savings={saving}
+                  open={open}
+                  onOpenChange={onOpenChange}
+                />
+              )}
+              deleteAction={deleteSavings}
+              isDeleting={isDeleting}
+            />
+          ))}
+        </div>
       )}
       <CreateSavingsDialog
         open={newSavingsDialogOpen}

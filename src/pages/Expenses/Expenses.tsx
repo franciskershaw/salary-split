@@ -4,15 +4,11 @@ import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDial
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
+import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
-import {
-  TotalBalance,
-  type FilterConfig,
-  type TotalBalanceConfig,
-} from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateExpenseDialog from "./components/CreateExpenseDialog/CreateExpenseDialog";
 import useDeleteExpense from "./hooks/useDeleteExpense";
@@ -38,14 +34,6 @@ const Expenses = () => {
       user?.expenseFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
 
-  const totalBalanceConfig: TotalBalanceConfig = {
-    title: "Total Amount of Expenses",
-    dialogTitle: "Customise Total Amount of Expenses",
-    dialogDescription:
-      "Select which expenses to include in your total amount of expenses calculation",
-    allItemsLabel: "All Expenses",
-  };
-
   const handleFiltersUpdate = (filters: FilterConfig[]) => {
     const expenseFilters = filters.map((filter) => ({
       type: filter.type as Bill["type"],
@@ -53,6 +41,21 @@ const Expenses = () => {
     }));
 
     updateExpenseFilters(expenseFilters);
+  };
+
+  const totalBalanceConfig = {
+    items: expenses ?? [],
+    filterConfigs: expenseFilterConfigs,
+    config: {
+      title: "Total Amount of Expenses",
+      dialogTitle: "Customise Total Amount of Expenses",
+      dialogDescription:
+        "Select which expenses to include in your total amount of expenses calculation",
+      allItemsLabel: "All Expenses",
+      showFilters: true,
+    },
+    onFiltersUpdate: handleFiltersUpdate,
+    isUpdating: isPending,
   };
 
   const isLoading =
@@ -69,17 +72,7 @@ const Expenses = () => {
       openReorderDialog={
         expenses?.length ? () => setReorderDialogOpen(true) : undefined
       }
-      totalComponent={
-        expenses?.length ? (
-          <TotalBalance
-            items={expenses}
-            filterConfigs={expenseFilterConfigs}
-            config={totalBalanceConfig}
-            onFiltersUpdate={handleFiltersUpdate}
-            isUpdating={isPending}
-          />
-        ) : null
-      }
+      totalBalanceConfig={totalBalanceConfig}
       isLoading={isLoading}
       loadingMessage="Loading expenses..."
     >
@@ -88,36 +81,25 @@ const Expenses = () => {
       ) : !expenses?.length ? (
         <EmptyState type="expenses" />
       ) : (
-        <>
-          <div className="lg:hidden">
-            <TotalBalance
-              items={expenses}
-              filterConfigs={expenseFilterConfigs}
-              config={totalBalanceConfig}
-              onFiltersUpdate={handleFiltersUpdate}
-              isUpdating={isPending}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {expenses?.map((expense) => (
+            <FeatureCard
+              key={expense._id}
+              feature="expenses"
+              item={expense}
+              secondaryInfo={expense.account?.name}
+              renderEditDialog={({ open, onOpenChange }) => (
+                <CreateExpenseDialog
+                  expense={expense}
+                  open={open}
+                  onOpenChange={onOpenChange}
+                />
+              )}
+              deleteAction={deleteExpense}
+              isDeleting={isDeleting}
             />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {expenses?.map((expense) => (
-              <FeatureCard
-                key={expense._id}
-                feature="expenses"
-                item={expense}
-                secondaryInfo={expense.account?.name}
-                renderEditDialog={({ open, onOpenChange }) => (
-                  <CreateExpenseDialog
-                    expense={expense}
-                    open={open}
-                    onOpenChange={onOpenChange}
-                  />
-                )}
-                deleteAction={deleteExpense}
-                isDeleting={isDeleting}
-              />
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       )}
       <CreateExpenseDialog
         open={newExpenseDialogOpen}

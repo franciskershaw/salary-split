@@ -42,22 +42,23 @@ export interface FilterConfig {
 
 export interface TotalBalanceConfig {
   title: string;
-  dialogTitle: string;
-  dialogDescription: string;
-  allItemsLabel: string;
+  dialogTitle?: string;
+  dialogDescription?: string;
+  allItemsLabel?: string;
+  showFilters?: boolean;
 }
 
 type TotalBalanceProps<T extends FilterableItem> = {
   items: T[];
-  filterConfigs: FilterConfig[];
+  filterConfigs?: FilterConfig[];
   config: TotalBalanceConfig;
-  onFiltersUpdate: (filters: FilterConfig[]) => void;
+  onFiltersUpdate?: (filters: FilterConfig[]) => void;
   isUpdating?: boolean;
 };
 
 export function TotalBalance<T extends FilterableItem>({
   items,
-  filterConfigs,
+  filterConfigs = [],
   config,
   onFiltersUpdate,
   isUpdating = false,
@@ -90,6 +91,7 @@ export function TotalBalance<T extends FilterableItem>({
   });
 
   const onSubmit = (values: FiltersForm) => {
+    if (!onFiltersUpdate) return;
     const updatedFilters = filterConfigs.map((filter) => ({
       ...filter,
       enabled: values[filter.type],
@@ -98,7 +100,9 @@ export function TotalBalance<T extends FilterableItem>({
     setOpen(false);
   };
 
-  const filteredItems = items.filter((item) => form.watch(item.type));
+  const filteredItems = config.showFilters
+    ? items.filter((item) => form.watch(item.type))
+    : items;
 
   const totalBalance = filteredItems.reduce(
     (sum, item) => sum + item.amount,
@@ -112,32 +116,41 @@ export function TotalBalance<T extends FilterableItem>({
       return filterConfig?.label.split(" ")[0] || type;
     });
 
-  const totalDescription =
-    selectedTypes.length === filterConfigs.length
+  const totalDescription = config.showFilters
+    ? selectedTypes.length === filterConfigs.length
       ? config.allItemsLabel
       : selectedTypes.length <= 2
         ? selectedTypes.join(", ")
-        : `${selectedTypes.length} filters selected`;
+        : `${selectedTypes.length} filters selected`
+    : config.allItemsLabel;
+
+  const content = (
+    <Card className="shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-1.5 md:px-3 lg:py-1 lg:px-2 min-w-0">
+      <CardContent className="p-4 md:p-0 lg:p-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <CardDescription className="text-sm lg:text-xs lg:leading-tight">
+              {config.title} ({totalDescription})
+            </CardDescription>
+            <CardTitle className="text-xl lg:text-lg font-semibold truncate">
+              {formatCurrency(totalBalance)}
+            </CardTitle>
+          </div>
+          {config.showFilters && (
+            <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-gray-400 flex-shrink-0" />
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  if (!config.showFilters) {
+    return content;
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Card className="shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-1.5 md:px-3 lg:py-1 lg:px-2 min-w-0">
-          <CardContent className="p-4 md:p-0 lg:p-0">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0 flex-1">
-                <CardDescription className="text-sm lg:text-xs lg:leading-tight">
-                  {config.title} ({totalDescription})
-                </CardDescription>
-                <CardTitle className="text-xl lg:text-lg font-semibold truncate">
-                  {formatCurrency(totalBalance)}
-                </CardTitle>
-              </div>
-              <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-gray-400 flex-shrink-0" />
-            </div>
-          </CardContent>
-        </Card>
-      </DialogTrigger>
+      <DialogTrigger asChild>{content}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{config.dialogTitle}</DialogTitle>

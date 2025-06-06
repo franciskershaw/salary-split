@@ -4,15 +4,11 @@ import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDial
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
+import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
 
-import {
-  TotalBalance,
-  type FilterConfig,
-  type TotalBalanceConfig,
-} from "../Accounts/components/TotalBalance/TotalBalance";
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateBillDialog from "./components/CreateBillDialog/CreateBillDialog";
 import useDeleteBill from "./hooks/useDeleteBill";
@@ -37,14 +33,6 @@ const Bills = () => {
     enabled: user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
 
-  const totalBalanceConfig: TotalBalanceConfig = {
-    title: "Total Amount of Bills",
-    dialogTitle: "Customise Total Amount of Bills",
-    dialogDescription:
-      "Select which bills to include in your total amount of bills calculation",
-    allItemsLabel: "All Bills",
-  };
-
   const handleFiltersUpdate = (filters: FilterConfig[]) => {
     const billFilters = filters.map((filter) => ({
       type: filter.type as Bill["type"],
@@ -52,6 +40,21 @@ const Bills = () => {
     }));
 
     updateBillFilters(billFilters);
+  };
+
+  const totalBalanceConfig = {
+    items: bills ?? [],
+    filterConfigs: billFilterConfigs,
+    config: {
+      title: "Total Amount of Bills",
+      dialogTitle: "Customise Total Amount of Bills",
+      dialogDescription:
+        "Select which bills to include in your total amount of bills calculation",
+      allItemsLabel: "All Bills",
+      showFilters: true,
+    },
+    onFiltersUpdate: handleFiltersUpdate,
+    isUpdating: isPending,
   };
 
   const isLoading =
@@ -68,17 +71,7 @@ const Bills = () => {
       openReorderDialog={
         bills?.length ? () => setReorderDialogOpen(true) : undefined
       }
-      totalComponent={
-        bills?.length ? (
-          <TotalBalance
-            items={bills}
-            filterConfigs={billFilterConfigs}
-            config={totalBalanceConfig}
-            onFiltersUpdate={handleFiltersUpdate}
-            isUpdating={isPending}
-          />
-        ) : null
-      }
+      totalBalanceConfig={totalBalanceConfig}
       isLoading={isLoading}
       loadingMessage="Loading bills..."
     >
@@ -87,36 +80,25 @@ const Bills = () => {
       ) : !bills?.length ? (
         <EmptyState type="bills" />
       ) : (
-        <>
-          <div className="lg:hidden">
-            <TotalBalance
-              items={bills}
-              filterConfigs={billFilterConfigs}
-              config={totalBalanceConfig}
-              onFiltersUpdate={handleFiltersUpdate}
-              isUpdating={isPending}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {bills?.map((bill) => (
+            <FeatureCard
+              key={bill._id}
+              feature="bills"
+              item={bill}
+              secondaryInfo={bill.account?.name}
+              renderEditDialog={({ open, onOpenChange }) => (
+                <CreateBillDialog
+                  bill={bill}
+                  open={open}
+                  onOpenChange={onOpenChange}
+                />
+              )}
+              deleteAction={deleteBill}
+              isDeleting={isDeleting}
             />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {bills?.map((bill) => (
-              <FeatureCard
-                key={bill._id}
-                feature="bills"
-                item={bill}
-                secondaryInfo={bill.account?.name}
-                renderEditDialog={({ open, onOpenChange }) => (
-                  <CreateBillDialog
-                    bill={bill}
-                    open={open}
-                    onOpenChange={onOpenChange}
-                  />
-                )}
-                deleteAction={deleteBill}
-                isDeleting={isDeleting}
-              />
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       )}
       <CreateBillDialog
         open={newBillDialogOpen}
