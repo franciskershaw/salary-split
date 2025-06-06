@@ -6,6 +6,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -80,14 +81,14 @@ export function FormDialog<T>({
           <FormComponent {...formProps} onSuccess={handleSuccess} />
         </div>
 
-        <div className="flex-shrink-0 border-t pt-3 mt-2 flex justify-end gap-2">
+        <DialogFooter className="flex-shrink-0 border-t pt-3 mt-2">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button onClick={onSubmit} disabled={isPending}>
             {isEditing ? "Save Changes" : "Create"}
           </Button>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
