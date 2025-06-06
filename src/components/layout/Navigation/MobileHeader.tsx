@@ -1,3 +1,5 @@
+import type { Ref } from "react";
+
 import { DollarSignIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -12,11 +14,20 @@ import {
 import useAuth from "@/pages/Auth/hooks/useAuth";
 import type { User } from "@/types/globalTypes";
 
-const MobileHeader = ({ user }: { user: User }) => {
+const MobileHeader = ({
+  user,
+  ref,
+}: {
+  user: User;
+  ref: Ref<HTMLHeadElement>;
+}) => {
   const { logout } = useAuth();
 
   return (
-    <header className="bg-surface text-surface-foreground p-4 md:p-6 border-b border-surface-border flex items-center justify-between sticky top-0 z-10 shadow-sm">
+    <header
+      ref={ref}
+      className="bg-surface text-surface-foreground p-4 md:p-6 border-b border-surface-border flex items-center justify-between sticky top-0 z-10 shadow-sm"
+    >
       <div className="md:hidden flex items-center">
         <DollarSignIcon className="mr-2 h-7 w-7" />
         <h1 className="text-xl font-semibold text-primary">SalarySplit</h1>

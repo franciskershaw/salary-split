@@ -72,6 +72,10 @@
   --color-feature-gray-foreground: var(--feature-gray-foreground);
   --color-feature-slate: var(--feature-slate);
   --color-feature-slate-foreground: var(--feature-slate-foreground);
+
+  /* Layout variables */
+  --mobile-header-height: 0px;
+  --mobile-header-offset: 0px;
 }
 
 :root {
@@ -335,5 +339,16 @@
   }
   .feature-badge-slate {
     @apply bg-[var(--color-feature-slate)]/10 text-[var(--color-feature-slate-foreground)];
+  }
+
+  /* Layout utilities */
+  .mobile-header-height {
+    height: var(--mobile-header-height);
+  }
+  .mobile-header-offset {
+    top: var(--mobile-header-offset);
+  }
+  .mobile-header-translate {
+    transform: translateY(var(--mobile-header-offset));
   }
 }
