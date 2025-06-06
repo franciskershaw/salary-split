@@ -70,9 +70,7 @@ const PageHeader = ({
             )}
           </div>
           {description && (
-            <p className="text-surface-foreground/70 mt-4">
-              {description}
-            </p>
+            <p className="text-surface-foreground/70 mt-4">{description}</p>
           )}
         </div>
         <div className="hidden lg:block lg:flex-shrink-0">

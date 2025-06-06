@@ -31,9 +31,9 @@ const SharedLayout = () => {
           </div>
 
           {/* Desktop Layout */}
-          <div className="hidden md:flex min-h-screen">
+          <div className="hidden md:flex h-screen overflow-hidden">
             <DesktopSidebar user={user} />
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col overflow-y-auto">
               <main className="flex-1">
                 <Outlet />
               </main>
