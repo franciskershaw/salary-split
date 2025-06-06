@@ -47,6 +47,7 @@ const Savings = () => {
                 key={saving._id}
                 feature="savings"
                 item={saving}
+                secondaryInfo={saving.account?.name}
                 renderEditDialog={({ open, onOpenChange }) => (
                   <CreateSavingsDialog
                     savings={saving}

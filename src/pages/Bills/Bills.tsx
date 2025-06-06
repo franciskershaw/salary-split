@@ -103,6 +103,7 @@ const Bills = () => {
                 key={bill._id}
                 feature="bill"
                 item={bill}
+                secondaryInfo={bill.account?.name}
                 renderEditDialog={({ open, onOpenChange }) => (
                   <CreateBillDialog
                     bill={bill}

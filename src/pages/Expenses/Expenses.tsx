@@ -104,6 +104,7 @@ const Expenses = () => {
                 key={expense._id}
                 feature="expense"
                 item={expense}
+                secondaryInfo={expense.account?.name}
                 renderEditDialog={({ open, onOpenChange }) => (
                   <CreateExpenseDialog
                     expense={expense}
