@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import useAxios from "@/hooks/axios/useAxios";
 import useUser from "@/hooks/user/useUser";
+import { capitaliseFirstLetter } from "@/lib/utils";
 import queryKeys from "@/tanstackQuery/queryKeys";
 
 const useReorderItems = (
@@ -25,7 +26,7 @@ const useReorderItems = (
   const { mutate: reorderItems, isPending } = useMutation({
     mutationFn: reorderItemsFn,
     onSuccess: () => {
-      toast.success(`${feature} reordered successfully`);
+      toast.success(`${capitaliseFirstLetter(feature)} reordered successfully`);
       queryClient.invalidateQueries({ queryKey: [queryKeys[feature]] });
     },
     onError: (error: AxiosError<{ message: string }>) => {

@@ -42,3 +42,7 @@ export const getNextPayday = (payDay: number) => {
     year: "numeric",
   });
 };
+
+export const capitaliseFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

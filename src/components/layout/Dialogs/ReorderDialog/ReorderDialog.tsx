@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import type { AccountType, BillType } from "@/constants/api";
 import { getDisplayInfo } from "@/lib/display-info";
+import { capitaliseFirstLetter } from "@/lib/utils";
 
 import useReorderItems from "./useReorderItems";
 
@@ -49,7 +50,7 @@ const ReorderDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] flex flex-col">
         <DialogHeader className="pb-2">
-          <DialogTitle>Reorder {feature}</DialogTitle>
+          <DialogTitle>Reorder {capitaliseFirstLetter(feature)}</DialogTitle>
           <DialogDescription>
             Drag and drop {feature} to change their order
           </DialogDescription>
