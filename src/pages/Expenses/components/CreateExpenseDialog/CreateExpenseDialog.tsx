@@ -1,6 +1,6 @@
 // src/pages/Bills/components/CreateBillDialog/CreateBillDialog.tsx
-import { FormDialog } from "@/components/layout/Dialogs/FormDialog";
-import FormDialogFooter from "@/components/layout/Dialogs/FormDialogFooter";
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
+import FormDialogFooter from "@/components/layout/Dialogs/FormDialog/FormDialogFooter";
 import type { Bill } from "@/types/globalTypes";
 
 import CreateExpenseForm from "../CreateExpenseForm/CreateExpenseForm";

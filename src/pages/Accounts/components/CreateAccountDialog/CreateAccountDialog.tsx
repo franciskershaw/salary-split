@@ -1,5 +1,5 @@
-import { FormDialog } from "@/components/layout/Dialogs/FormDialog";
-import FormDialogFooter from "@/components/layout/Dialogs/FormDialogFooter";
+import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
+import FormDialogFooter from "@/components/layout/Dialogs/FormDialog/FormDialogFooter";
 import type { Account } from "@/types/globalTypes";
 
 import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
