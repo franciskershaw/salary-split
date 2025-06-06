@@ -24,6 +24,13 @@ import {
 
 import { ACCOUNT_TYPES, BILL_TYPES } from "@/constants/api";
 import type { AccountType, BillType } from "@/constants/api";
+import {
+  FEATURE_ACCOUNTS,
+  FEATURE_BILLS,
+  FEATURE_EXPENSES,
+  FEATURE_SAVINGS,
+} from "@/constants/features";
+import type { Feature } from "@/types/globalTypes";
 
 type ColorSet = {
   bg: string;
@@ -145,7 +152,7 @@ const billTypeInfo: Record<BillType, DisplayInfo> = {
 };
 
 export const getDisplayInfo = (
-  feature: "accounts" | "bills" | "expenses" | "savings",
+  feature: Feature,
   type?: AccountType | BillType,
   options?: {
     isSummary?: boolean;
@@ -154,7 +161,7 @@ export const getDisplayInfo = (
   let accountInfo: DisplayInfo;
 
   switch (feature) {
-    case "accounts":
+    case FEATURE_ACCOUNTS:
       accountInfo =
         accountTypeInfo[type as AccountType] || accountTypeInfo.current;
       if (options?.isSummary) {
@@ -164,10 +171,10 @@ export const getDisplayInfo = (
         };
       }
       return accountInfo;
-    case "bills":
-    case "expenses":
+    case FEATURE_BILLS:
+    case FEATURE_EXPENSES:
       return billTypeInfo[type as BillType] || billTypeInfo.other;
-    case "savings":
+    case FEATURE_SAVINGS:
       return {
         label: "Savings",
         icon: PiggyBank,

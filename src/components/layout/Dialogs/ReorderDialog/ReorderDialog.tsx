@@ -16,6 +16,7 @@ import {
 import type { AccountType, BillType } from "@/constants/api";
 import { getDisplayInfo } from "@/lib/display-info";
 import { capitaliseFirstLetter } from "@/lib/utils";
+import type { Feature } from "@/types/globalTypes";
 
 import useReorderItems from "./useReorderItems";
 
@@ -29,7 +30,7 @@ interface ReorderDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   items: ReorderableItem[];
-  feature: "bills" | "accounts" | "savings" | "expenses";
+  feature: Feature;
 }
 
 const ReorderDialog = ({

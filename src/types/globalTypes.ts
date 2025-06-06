@@ -1,11 +1,21 @@
 import { type AccountType, type BillType } from "@/constants/api";
+import {
+  FEATURE_ACCOUNTS,
+  FEATURE_BILLS,
+  FEATURE_EXPENSES,
+  FEATURE_SAVINGS,
+} from "@/constants/features";
 
 export type Currency = "GBP" | "USD" | "EUR";
 export type Theme = "light" | "dark";
 export type UserRole = "user" | "admin";
 export type AuthProvider = "google" | "local";
 
-export type Feature = "accounts" | "bills" | "expenses" | "savings";
+export type Feature =
+  | typeof FEATURE_ACCOUNTS
+  | typeof FEATURE_BILLS
+  | typeof FEATURE_EXPENSES
+  | typeof FEATURE_SAVINGS;
 
 export interface User {
   _id: string;

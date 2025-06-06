@@ -6,6 +6,7 @@ import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
+import { FEATURE_ACCOUNTS, FEATURE_EXPENSES } from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
@@ -30,7 +31,7 @@ const Expenses = () => {
 
   const expenseFilterConfigs: FilterConfig[] = userExpenseTypes.map((type) => ({
     type,
-    label: getDisplayInfo("expenses", type).label,
+    label: getDisplayInfo(FEATURE_EXPENSES, type).label,
     enabled:
       user?.expenseFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
@@ -78,15 +79,15 @@ const Expenses = () => {
       loadingMessage="Loading expenses..."
     >
       {!accounts?.length ? (
-        <EmptyState type="accounts" />
+        <EmptyState type={FEATURE_ACCOUNTS} />
       ) : !expenses?.length ? (
-        <EmptyState type="expenses" />
+        <EmptyState type={FEATURE_EXPENSES} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {expenses?.map((expense) => (
             <FeatureCard
               key={expense._id}
-              feature="expenses"
+              feature={FEATURE_EXPENSES}
               item={expense}
               secondaryInfo={expense.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
@@ -129,7 +130,7 @@ const Expenses = () => {
       />
       {expenses && (
         <ReorderDialog
-          feature="expenses"
+          feature={FEATURE_EXPENSES}
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
           items={expenses}

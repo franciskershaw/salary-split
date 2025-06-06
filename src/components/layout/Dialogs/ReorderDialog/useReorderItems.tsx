@@ -6,10 +6,9 @@ import useAxios from "@/hooks/axios/useAxios";
 import useUser from "@/hooks/user/useUser";
 import { capitaliseFirstLetter } from "@/lib/utils";
 import queryKeys from "@/tanstackQuery/queryKeys";
+import type { Feature } from "@/types/globalTypes";
 
-const useReorderItems = (
-  feature: "bills" | "accounts" | "savings" | "expenses"
-) => {
+const useReorderItems = (feature: Feature) => {
   const api = useAxios();
   const queryClient = useQueryClient();
   const { user } = useUser();

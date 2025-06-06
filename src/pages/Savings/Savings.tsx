@@ -5,6 +5,7 @@ import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDial
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
+import { FEATURE_ACCOUNTS, FEATURE_SAVINGS } from "@/constants/features";
 
 import useGetAccounts from "../Accounts/hooks/useGetAccounts";
 import CreateSavingsForm from "./components/CreateSavingsForm/CreateSavingsForm";
@@ -47,15 +48,15 @@ const Savings = () => {
       loadingMessage="Loading savings..."
     >
       {!accounts?.length ? (
-        <EmptyState type="accounts" />
+        <EmptyState type={FEATURE_ACCOUNTS} />
       ) : !savings?.length ? (
-        <EmptyState type="savings" />
+        <EmptyState type={FEATURE_SAVINGS} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {savings?.map((saving) => (
             <FeatureCard
               key={saving._id}
-              feature="savings"
+              feature={FEATURE_SAVINGS}
               item={saving}
               secondaryInfo={saving.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
@@ -98,7 +99,7 @@ const Savings = () => {
       />
       {savings && (
         <ReorderDialog
-          feature="savings"
+          feature={FEATURE_SAVINGS}
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
           items={savings}

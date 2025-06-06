@@ -6,6 +6,7 @@ import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
+import { FEATURE_ACCOUNTS, FEATURE_BILLS } from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Bill } from "@/types/globalTypes";
@@ -30,7 +31,7 @@ const Bills = () => {
 
   const billFilterConfigs: FilterConfig[] = userBillTypes.map((type) => ({
     type,
-    label: getDisplayInfo("bills", type).label,
+    label: getDisplayInfo(FEATURE_BILLS, type).label,
     enabled: user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
   }));
 
@@ -77,15 +78,15 @@ const Bills = () => {
       loadingMessage="Loading bills..."
     >
       {!accounts?.length ? (
-        <EmptyState type="accounts" />
+        <EmptyState type={FEATURE_ACCOUNTS} />
       ) : !bills?.length ? (
-        <EmptyState type="bills" />
+        <EmptyState type={FEATURE_BILLS} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {bills?.map((bill) => (
             <FeatureCard
               key={bill._id}
-              feature="bills"
+              feature={FEATURE_BILLS}
               item={bill}
               secondaryInfo={bill.account?.name}
               renderEditDialog={({ open, onOpenChange }) => (
@@ -128,7 +129,7 @@ const Bills = () => {
       />
       {bills && (
         <ReorderDialog
-          feature="bills"
+          feature={FEATURE_BILLS}
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
           items={bills}

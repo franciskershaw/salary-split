@@ -6,6 +6,8 @@ import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
+import { ACCOUNT_TYPES } from "@/constants/api";
+import { FEATURE_ACCOUNTS } from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import type { Account } from "@/types/globalTypes";
@@ -26,31 +28,32 @@ const Accounts = () => {
 
   const accountFilterConfigs: FilterConfig[] = [
     {
-      type: "current",
-      label: getDisplayInfo("accounts", "current").label,
+      type: ACCOUNT_TYPES.CURRENT,
+      label: getDisplayInfo("accounts", ACCOUNT_TYPES.CURRENT).label,
       enabled:
-        user?.accountFilters?.find((f) => f.type === "current")?.enabled ??
-        true,
+        user?.accountFilters?.find((f) => f.type === ACCOUNT_TYPES.CURRENT)
+          ?.enabled ?? true,
     },
     {
-      type: "joint",
-      label: getDisplayInfo("accounts", "joint").label,
+      type: ACCOUNT_TYPES.JOINT,
+      label: getDisplayInfo("accounts", ACCOUNT_TYPES.JOINT).label,
       enabled:
-        user?.accountFilters?.find((f) => f.type === "joint")?.enabled ?? true,
+        user?.accountFilters?.find((f) => f.type === ACCOUNT_TYPES.JOINT)
+          ?.enabled ?? true,
     },
     {
-      type: "savings",
-      label: getDisplayInfo("accounts", "savings").label,
+      type: ACCOUNT_TYPES.SAVINGS,
+      label: getDisplayInfo("accounts", ACCOUNT_TYPES.SAVINGS).label,
       enabled:
-        user?.accountFilters?.find((f) => f.type === "savings")?.enabled ??
-        true,
+        user?.accountFilters?.find((f) => f.type === ACCOUNT_TYPES.SAVINGS)
+          ?.enabled ?? true,
     },
     {
-      type: "investment",
-      label: getDisplayInfo("accounts", "investment").label,
+      type: ACCOUNT_TYPES.INVESTMENT,
+      label: getDisplayInfo("accounts", ACCOUNT_TYPES.INVESTMENT).label,
       enabled:
-        user?.accountFilters?.find((f) => f.type === "investment")?.enabled ??
-        true,
+        user?.accountFilters?.find((f) => f.type === ACCOUNT_TYPES.INVESTMENT)
+          ?.enabled ?? true,
     },
   ];
 
@@ -99,7 +102,7 @@ const Accounts = () => {
           {accounts?.map((account) => (
             <FeatureCard
               key={account._id}
-              feature="accounts"
+              feature={FEATURE_ACCOUNTS}
               item={account}
               secondaryInfo={account.institution}
               renderEditDialog={({ open, onOpenChange }) => (
@@ -142,7 +145,7 @@ const Accounts = () => {
       />
       {accounts && (
         <ReorderDialog
-          feature="accounts"
+          feature={FEATURE_ACCOUNTS}
           open={reorderDialogOpen}
           onOpenChange={setReorderDialogOpen}
           items={accounts}

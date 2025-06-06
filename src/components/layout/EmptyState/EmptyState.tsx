@@ -5,17 +5,16 @@ import {
   WalletCards,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
+import { Button } from "@/components/ui/button";
 import CreateAccountForm from "@/pages/Accounts/components/CreateAccountForm/CreateAccountForm";
 import CreateBillForm from "@/pages/Bills/components/CreateBillForm/CreateBillForm";
 import CreateExpenseForm from "@/pages/Expenses/components/CreateExpenseForm/CreateExpenseForm";
 import CreateSavingsForm from "@/pages/Savings/components/CreateSavingsForm/CreateSavingsForm";
-
-type EmptyStateType = "accounts" | "bills" | "expenses" | "savings";
+import type { Feature } from "@/types/globalTypes";
 
 interface EmptyStateProps {
-  type: EmptyStateType;
+  type: Feature;
 }
 
 const EmptyState = ({ type }: EmptyStateProps) => {
@@ -31,7 +30,8 @@ const EmptyState = ({ type }: EmptyStateProps) => {
       form: CreateAccountForm,
       formProps: {},
       dialogTitle: "Create New Account",
-      dialogDescription: "Add a new account to track your finances. Fill in the details below.",
+      dialogDescription:
+        "Add a new account to track your finances. Fill in the details below.",
     },
     bills: {
       icon: ReceiptPoundSterling,
