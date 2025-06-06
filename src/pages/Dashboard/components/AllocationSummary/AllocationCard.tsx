@@ -135,7 +135,7 @@ function BreakdownSection({
   return (
     <div>
       <div className="font-semibold text-base mb-2">{title}</div>
-      <ul className="space-y-1">
+      <ul className="space-y-2">
         {items.map((item) => {
           const display = getDisplayInfo(feature, item.type);
           const Icon = display.icon;

@@ -37,7 +37,7 @@ const PageWrapper = ({
   customHeaderComponent,
 }: PageWrapperProps) => {
   return (
-    <div className="mb-16 md:mb-0">
+    <div className="mb-16 md:mb-4">
       <PageHeader
         title={title}
         description={description}
@@ -64,7 +64,7 @@ const PageWrapper = ({
             spinnerSize="md"
           />
         ) : (
-          <div className="space-y-4 md:space-y-6">
+          <div className="space-y-4 md:space-y-8">
             {customHeaderComponent ? (
               <div className="lg:hidden">{customHeaderComponent}</div>
             ) : (

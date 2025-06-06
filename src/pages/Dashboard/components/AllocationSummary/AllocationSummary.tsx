@@ -1,6 +1,6 @@
 import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
-import { formatCurrency, getNextPayday } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 
 import useAllocationSummary from "../../hooks/useAllocationSummary";
 import AllocationCard from "./AllocationCard";
@@ -16,21 +16,23 @@ const AllocationSummary = () => {
   );
   const overAllocated = (user?.takeHomePay ?? 0) < totalAllocated;
   const overAllocatedAmount = totalAllocated - (user?.takeHomePay ?? 0);
-  const nextPayday = user?.payDay ? getNextPayday(Number(user.payDay)) : null;
 
   return (
-    <section className="space-y-2">
-      <div className="p-4 space-y-4">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold">Payday Summary</h2>
-          {nextPayday && <h3>Next payday: {nextPayday}</h3>}
-        </div>
-        <div className="flex justify-between md:justify-start gap-6">
+    <section className="space-y-2 md:space-y-4">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-8 mb-4">
+        <h2 className="text-xl font-semibold py-2">Payday Summary</h2>
+        <div className="flex gap-4 md:gap-6">
           <div>
             <p className="text-sm font-medium text-muted-foreground">
               Total Allocated
             </p>
-            <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            <p
+              className={`text-xl font-bold ${
+                overAllocated
+                  ? "text-destructive"
+                  : "text-emerald-600 dark:text-emerald-400"
+              }`}
+            >
               {formatCurrency(totalAllocated)}
             </p>
           </div>
@@ -39,7 +41,7 @@ const AllocationSummary = () => {
               <p className="text-sm font-medium text-destructive">
                 Overallocated
               </p>
-              <p className="text-2xl font-bold text-destructive">
+              <p className="text-xl font-bold text-destructive">
                 {formatCurrency(overAllocatedAmount)}
               </p>
             </div>
