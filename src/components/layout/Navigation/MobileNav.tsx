@@ -1,5 +1,5 @@
 import {
-  // BarChartIcon,
+  BarChartIcon,
   BoxIcon,
   HomeIcon,
   ReceiptPoundSterling,
@@ -55,11 +55,11 @@ export default function MobileNav() {
       icon: <BoxIcon className="h-6 w-6" />,
       label: "Expenses",
     },
-    // {
-    //   href: "/savings",
-    //   icon: <BarChartIcon className="h-6 w-6" />,
-    //   label: "Savings",
-    // },
+    {
+      href: "/savings",
+      icon: <BarChartIcon className="h-6 w-6" />,
+      label: "Savings",
+    },
   ];
 
   return (

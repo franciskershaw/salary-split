@@ -17,6 +17,7 @@ import Bills from "./pages/Bills/Bills";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Expenses from "./pages/Expenses/Expenses";
 import Savings from "./pages/Savings/Savings";
+import Settings from "./pages/Settings/Settings";
 
 const PrivateRoute = () => {
   const { user } = useUser();
@@ -45,7 +46,7 @@ function App() {
             <Route index element={<Savings />} />
           </Route>
           <Route path="/settings" element={<PrivateRoute />}>
-            <Route index element={<div>Settings</div>} />
+            <Route index element={<Settings />} />
           </Route>
         </Route>
       </Routes>
