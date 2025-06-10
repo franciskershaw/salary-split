@@ -18,8 +18,10 @@ import { Label } from "@/components/ui/label";
 import { FormSelect } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { CURRENCIES } from "@/constants/api";
+import { useTheme } from "@/contexts/Theme/ThemeContext";
 import useUser from "@/hooks/user/useUser";
 
+import useUpdateTheme from "./hooks/useUpdateTheme";
 import useUpdateUser from "./hooks/useUpdateUser";
 
 export const userFormSchema = z.object({
@@ -32,8 +34,10 @@ export const userFormSchema = z.object({
 export type UserFormValues = z.infer<typeof userFormSchema>;
 
 const Settings = () => {
+  const { darkMode, toggleDarkMode } = useTheme();
   const { user } = useUser();
   const { updateUser, isPending } = useUpdateUser();
+  const { updateTheme, isPending: isUpdatingTheme } = useUpdateTheme();
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
@@ -43,6 +47,13 @@ const Settings = () => {
       defaultCurrency: user?.defaultCurrency ?? CURRENCIES.GBP,
     },
   });
+
+  const handleThemeToggle = () => {
+    const newTheme = darkMode ? "light" : "dark";
+    toggleDarkMode();
+    updateTheme(newTheme);
+  };
+
   return (
     <PageWrapper
       title="Settings"
@@ -115,10 +126,9 @@ const Settings = () => {
         <CardContent>
           <div className="flex items-center gap-2">
             <Switch
-              defaultChecked={user?.defaultTheme === "dark"}
-              onCheckedChange={(checked) => {
-                console.log(checked);
-              }}
+              defaultChecked={darkMode}
+              onCheckedChange={handleThemeToggle}
+              disabled={isUpdatingTheme}
             />
             <Label>Dark mode</Label>
           </div>

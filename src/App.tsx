@@ -11,6 +11,7 @@ import {
 import useUser from "@/hooks/user/useUser";
 
 import SharedLayout from "./components/layout/SharedLayout/SharedLayout";
+import ThemeInitializer from "./contexts/Theme/ThemeInitializer";
 import Accounts from "./pages/Accounts/Accounts";
 import Auth from "./pages/Auth/Auth";
 import Bills from "./pages/Bills/Bills";
@@ -50,6 +51,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      <ThemeInitializer />
     </Router>
   );
 }
