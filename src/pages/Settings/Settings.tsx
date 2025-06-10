@@ -20,17 +20,22 @@ import { Switch } from "@/components/ui/switch";
 import { CURRENCIES } from "@/constants/api";
 import useUser from "@/hooks/user/useUser";
 
-const formSchema = z.object({
+import useUpdateUser from "./hooks/useUpdateUser";
+
+export const userFormSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   takeHomePay: z.number().min(0),
   defaultCurrency: z.enum([CURRENCIES.GBP, CURRENCIES.USD, CURRENCIES.EUR]),
 });
 
+export type UserFormValues = z.infer<typeof userFormSchema>;
+
 const Settings = () => {
   const { user } = useUser();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { updateUser, isPending } = useUpdateUser();
+  const form = useForm<UserFormValues>({
+    resolver: zodResolver(userFormSchema),
     defaultValues: {
       firstName: user?.name.firstName ?? "",
       lastName: user?.name.lastName ?? "",
@@ -54,7 +59,20 @@ const Settings = () => {
           <CardDescription>Update your personal details.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form onSubmit={() => {}} form={form}>
+          <Form
+            onSubmit={() => {
+              const { firstName, lastName, ...rest } = form.getValues();
+              const values = {
+                name: {
+                  firstName,
+                  lastName,
+                },
+                ...rest,
+              };
+              updateUser(values);
+            }}
+            form={form}
+          >
             <FormInput name="firstName" label="First name">
               <Input type="text" />
             </FormInput>
@@ -74,10 +92,9 @@ const Settings = () => {
               ]}
             />
             <Button
-              throttleClicks
               className="w-full mt-2"
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || isPending}
             >
               Save
             </Button>
