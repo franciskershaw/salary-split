@@ -137,14 +137,12 @@ function BreakdownItem({
   label,
   amount,
   splitBetween,
-  splitAmount,
 }: {
   icon: React.ElementType;
   iconClassName: string;
   label: string;
   amount: number;
   splitBetween?: number;
-  splitAmount?: number;
 }) {
   const isSplit = splitBetween && splitBetween > 1;
 
@@ -180,10 +178,6 @@ function BreakdownSection({
       <ul className="space-y-2">
         {items.map((item) => {
           const display = getDisplayInfo(feature, item.type);
-          const splitAmount =
-            item.splitBetween && item.splitBetween > 1
-              ? item.amount / item.splitBetween
-              : undefined;
 
           return (
             <BreakdownItem
@@ -193,7 +187,6 @@ function BreakdownSection({
               label={item.name}
               amount={item.amount}
               splitBetween={item.splitBetween}
-              splitAmount={splitAmount}
             />
           );
         })}
