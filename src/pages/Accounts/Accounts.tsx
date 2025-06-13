@@ -100,29 +100,35 @@ const Accounts = () => {
         <EmptyState type="accounts" />
       ) : (
         <FeatureCardsGrid>
-          {accounts?.map((account) => (
-            <FeatureCard
-              key={account._id}
-              feature={FEATURE_ACCOUNTS}
-              item={account}
-              secondaryInfo={account.institution}
-              renderEditDialog={({ open, onOpenChange }) => (
-                <FormDialog
-                  item={{ account }}
-                  open={open}
-                  onOpenChange={onOpenChange}
-                  title="Create New Account"
-                  description="Add a new account to track your finances. Fill in the details below."
-                  editTitle="Edit Account"
-                  editDescription="Edit your account details below."
-                  form={CreateAccountForm}
-                  formId={ACCOUNT_FORM_ID}
-                />
-              )}
-              deleteAction={deleteAccount}
-              isDeleting={isDeleting}
-            />
-          ))}
+          {accounts?.map((account) => {
+            const isDefaultAccount = user?.defaultAccount === account._id;
+            
+            return (
+              <FeatureCard
+                key={account._id}
+                feature={FEATURE_ACCOUNTS}
+                item={account}
+                secondaryInfo={account.institution}
+                isDefault={isDefaultAccount}
+                preventDelete={isDefaultAccount}
+                renderEditDialog={({ open, onOpenChange }) => (
+                  <FormDialog
+                    item={{ account }}
+                    open={open}
+                    onOpenChange={onOpenChange}
+                    title="Create New Account"
+                    description="Add a new account to track your finances. Fill in the details below."
+                    editTitle="Edit Account"
+                    editDescription="Edit your account details below."
+                    form={CreateAccountForm}
+                    formId={ACCOUNT_FORM_ID}
+                  />
+                )}
+                deleteAction={deleteAccount}
+                isDeleting={isDeleting}
+              />
+            );
+          })}
         </FeatureCardsGrid>
       )}
       <FormDialog

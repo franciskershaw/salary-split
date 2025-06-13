@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 
-import { MoreHorizontal, type LucideIcon } from "lucide-react";
+import { MoreHorizontal, Star, type LucideIcon } from "lucide-react";
 
 import DeleteDialog from "@/components/layout/Dialogs/DeleteDialog/DeleteDialog";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,6 +30,8 @@ type FeatureCardProps = {
   icon?: LucideIcon;
   topRightContent?: ReactNode;
   iconContainerClassName?: string;
+  isDefault?: boolean;
+  preventDelete?: boolean;
 };
 
 export function FeatureCard({
@@ -45,6 +47,8 @@ export function FeatureCard({
   icon: iconOverride,
   topRightContent: topRightContentOverride,
   iconContainerClassName: iconContainerClassNameOverride,
+  isDefault = false,
+  preventDelete = false,
 }: FeatureCardProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -59,17 +63,43 @@ export function FeatureCard({
   const iconContainerClassName =
     iconContainerClassNameOverride ??
     cn(displayInfo.colors.bg, displayInfo.colors.text);
-  const topRightContent =
+
+  // Default account styling
+  const cardClassName = isDefault
+    ? "p-5 border-2 border-amber-200 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20 hover:shadow-md transition-all h-full flex flex-col"
+    : "p-5 border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all h-full flex flex-col";
+
+  // Override top right content for default accounts
+  const finalTopRightContent =
     topRightContentOverride ??
-    (displayInfo.label && (
-      <span
-        className={cn(
-          "text-xs px-2 py-1 rounded-full",
-          displayInfo.colors.badge
+    (isDefault ? (
+      <div className="flex items-center gap-2">
+        <span className="text-xs px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 flex items-center gap-1">
+          <Star className="h-3 w-3 fill-current" />
+          Default
+        </span>
+        {displayInfo.label && (
+          <span
+            className={cn(
+              "text-xs px-2 py-1 rounded-full",
+              displayInfo.colors.badge
+            )}
+          >
+            {displayInfo.label}
+          </span>
         )}
-      >
-        {displayInfo.label}
-      </span>
+      </div>
+    ) : (
+      displayInfo.label && (
+        <span
+          className={cn(
+            "text-xs px-2 py-1 rounded-full",
+            displayInfo.colors.badge
+          )}
+        >
+          {displayInfo.label}
+        </span>
+      )
     ));
 
   const deleteDialogDescription = `Are you sure you want to delete ${item.name}? This action cannot be undone.`;
@@ -82,7 +112,7 @@ export function FeatureCard({
 
   return (
     <>
-      <Card className="p-5 border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all h-full flex flex-col">
+      <Card className={cardClassName}>
         <CardContent className="p-0 flex-grow flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div
@@ -93,7 +123,7 @@ export function FeatureCard({
             >
               <Icon className="h-5 w-5" />
             </div>
-            {topRightContent}
+            {finalTopRightContent}
           </div>
           <div className="flex-grow">
             <h3 className="font-medium dark:text-white">{title}</h3>
@@ -127,12 +157,23 @@ export function FeatureCard({
                     <DropdownMenuItem onSelect={() => setEditDialogOpen(true)}>
                       Edit {feature}
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-destructive focus:text-destructive"
-                      onSelect={() => setDeleteDialogOpen(true)}
-                    >
-                      Delete {feature}
-                    </DropdownMenuItem>
+                    {!preventDelete && !isDefault && (
+                      <DropdownMenuItem
+                        className="text-destructive focus:text-destructive"
+                        onSelect={() => setDeleteDialogOpen(true)}
+                      >
+                        Delete {feature}
+                      </DropdownMenuItem>
+                    )}
+                    {(preventDelete || isDefault) && (
+                      <DropdownMenuItem
+                        disabled
+                        className="text-muted-foreground opacity-50"
+                      >
+                        Cannot delete{" "}
+                        {isDefault ? "default account" : "this item"}
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
