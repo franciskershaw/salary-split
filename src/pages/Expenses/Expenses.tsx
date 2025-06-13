@@ -4,6 +4,7 @@ import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
+import FeatureCardsGrid from "@/components/layout/FeatureCard/FeatureCardsGrid";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
 import {
@@ -87,7 +88,7 @@ const Expenses = () => {
       ) : !expenses?.length ? (
         <EmptyState type={FEATURE_EXPENSES} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <FeatureCardsGrid>
           {expenses?.map((expense) => (
             <FeatureCard
               key={expense._id}
@@ -111,7 +112,7 @@ const Expenses = () => {
               isDeleting={isDeleting}
             />
           ))}
-        </div>
+        </FeatureCardsGrid>
       )}
       <FormDialog
         open={newExpenseDialogOpen}
