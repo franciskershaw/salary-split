@@ -119,9 +119,11 @@ export function TotalBalance<T extends FilterableItem>({
   const totalDescription = config.showFilters
     ? selectedTypes.length === filterConfigs.length
       ? config.allItemsLabel
-      : selectedTypes.length <= 2
-        ? selectedTypes.join(", ")
-        : `${selectedTypes.length} filters selected`
+      : selectedTypes.length === 0
+        ? "None selected"
+        : selectedTypes.length <= 2
+          ? selectedTypes.join(", ")
+          : `${selectedTypes.length} filters selected`
     : config.allItemsLabel;
 
   const content = (
@@ -130,7 +132,11 @@ export function TotalBalance<T extends FilterableItem>({
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0 flex-1">
             <CardDescription className="text-sm lg:text-xs lg:leading-tight">
-              {config.title} ({totalDescription})
+              {config.showFilters && selectedTypes.length === 0
+                ? `${config.title} - ${totalDescription}`
+                : config.showFilters
+                  ? `${config.title} (${totalDescription})`
+                  : config.title}
             </CardDescription>
             <CardTitle className="text-xl lg:text-lg font-semibold truncate">
               {formatCurrency(totalBalance)}
