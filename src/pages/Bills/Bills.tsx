@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
@@ -32,37 +32,51 @@ const Bills = () => {
   const [newBillDialogOpen, setNewBillDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  const userBillTypes = [...new Set(bills?.map((bill) => bill.type) ?? [])];
+  const userBillTypes = useMemo(
+    () => [...new Set(bills?.map((bill) => bill.type) ?? [])],
+    [bills]
+  );
 
-  const billFilterConfigs: FilterConfig[] = userBillTypes.map((type) => ({
-    type,
-    label: getDisplayInfo(FEATURE_BILLS, type).label,
-    enabled: user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
-  }));
+  const billFilterConfigs = useMemo(
+    (): FilterConfig[] =>
+      userBillTypes.map((type) => ({
+        type,
+        label: getDisplayInfo(FEATURE_BILLS, type).label,
+        enabled:
+          user?.billFilters?.find((f) => f.type === type)?.enabled ?? true,
+      })),
+    [userBillTypes, user?.billFilters]
+  );
 
-  const handleFiltersUpdate = (filters: FilterConfig[]) => {
-    const billFilters = filters.map((filter) => ({
-      type: filter.type as Bill["type"],
-      enabled: filter.enabled,
-    }));
+  const handleFiltersUpdate = useCallback(
+    (filters: FilterConfig[]) => {
+      const billFilters = filters.map((filter) => ({
+        type: filter.type as Bill["type"],
+        enabled: filter.enabled,
+      }));
 
-    updateBillFilters(billFilters);
-  };
-
-  const totalBalanceConfig = {
-    items: bills ?? [],
-    filterConfigs: billFilterConfigs,
-    config: {
-      title: "Total Amount of Bills",
-      dialogTitle: "Customise Total Amount of Bills",
-      dialogDescription:
-        "Select which bills to include in your total amount of bills calculation",
-      allItemsLabel: "All Bills",
-      showFilters: true,
+      updateBillFilters(billFilters);
     },
-    onFiltersUpdate: handleFiltersUpdate,
-    isUpdating: isPending,
-  };
+    [updateBillFilters]
+  );
+
+  const totalBalanceConfig = useMemo(
+    () => ({
+      items: bills ?? [],
+      filterConfigs: billFilterConfigs,
+      config: {
+        title: "Total Amount of Bills",
+        dialogTitle: "Customise Total Amount of Bills",
+        dialogDescription:
+          "Select which bills to include in your total amount of bills calculation",
+        allItemsLabel: "All Bills",
+        showFilters: true,
+      },
+      onFiltersUpdate: handleFiltersUpdate,
+      isUpdating: isPending,
+    }),
+    [bills, billFilterConfigs, handleFiltersUpdate, isPending]
+  );
 
   const isLoading =
     (fetchingBills || fetchingAccounts) &&

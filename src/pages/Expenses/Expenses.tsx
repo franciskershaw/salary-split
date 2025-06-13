@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
@@ -32,38 +32,51 @@ const Expenses = () => {
   const [newExpenseDialogOpen, setNewExpenseDialogOpen] = useState(false);
   const [reorderDialogOpen, setReorderDialogOpen] = useState(false);
 
-  const userExpenseTypes = [...new Set(expenses?.map((exp) => exp.type) ?? [])];
+  const userExpenseTypes = useMemo(
+    () => [...new Set(expenses?.map((exp) => exp.type) ?? [])],
+    [expenses]
+  );
 
-  const expenseFilterConfigs: FilterConfig[] = userExpenseTypes.map((type) => ({
-    type,
-    label: getDisplayInfo(FEATURE_EXPENSES, type).label,
-    enabled:
-      user?.expenseFilters?.find((f) => f.type === type)?.enabled ?? true,
-  }));
+  const expenseFilterConfigs = useMemo(
+    (): FilterConfig[] =>
+      userExpenseTypes.map((type) => ({
+        type,
+        label: getDisplayInfo(FEATURE_EXPENSES, type).label,
+        enabled:
+          user?.expenseFilters?.find((f) => f.type === type)?.enabled ?? true,
+      })),
+    [userExpenseTypes, user?.expenseFilters]
+  );
 
-  const handleFiltersUpdate = (filters: FilterConfig[]) => {
-    const expenseFilters = filters.map((filter) => ({
-      type: filter.type as Bill["type"],
-      enabled: filter.enabled,
-    }));
+  const handleFiltersUpdate = useCallback(
+    (filters: FilterConfig[]) => {
+      const expenseFilters = filters.map((filter) => ({
+        type: filter.type as Bill["type"],
+        enabled: filter.enabled,
+      }));
 
-    updateExpenseFilters(expenseFilters);
-  };
-
-  const totalBalanceConfig = {
-    items: expenses ?? [],
-    filterConfigs: expenseFilterConfigs,
-    config: {
-      title: "Total Amount of Expenses",
-      dialogTitle: "Customise Total Amount of Expenses",
-      dialogDescription:
-        "Select which expenses to include in your total amount of expenses calculation",
-      allItemsLabel: "All Expenses",
-      showFilters: true,
+      updateExpenseFilters(expenseFilters);
     },
-    onFiltersUpdate: handleFiltersUpdate,
-    isUpdating: isPending,
-  };
+    [updateExpenseFilters]
+  );
+
+  const totalBalanceConfig = useMemo(
+    () => ({
+      items: expenses ?? [],
+      filterConfigs: expenseFilterConfigs,
+      config: {
+        title: "Total Amount of Expenses",
+        dialogTitle: "Customise Total Amount of Expenses",
+        dialogDescription:
+          "Select which expenses to include in your total amount of expenses calculation",
+        allItemsLabel: "All Expenses",
+        showFilters: true,
+      },
+      onFiltersUpdate: handleFiltersUpdate,
+      isUpdating: isPending,
+    }),
+    [expenses, expenseFilterConfigs, handleFiltersUpdate, isPending]
+  );
 
   const isLoading =
     (fetchingExpenses || fetchingAccounts) &&
