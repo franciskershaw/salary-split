@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
@@ -29,14 +29,17 @@ const Savings = () => {
     (fetchingSavings || fetchingAccounts) &&
     (!savings.length || !accounts.length);
 
-  const totalBalanceConfig = {
-    items: savings,
-    config: {
-      title: "Total Savings",
-      allItemsLabel: "All Savings",
-      showFilters: false,
-    },
-  };
+  const totalBalanceConfig = useMemo(
+    () => ({
+      items: savings,
+      config: {
+        title: "Total Savings",
+        allItemsLabel: "All Savings",
+        showFilters: false,
+      },
+    }),
+    [savings]
+  );
 
   return (
     <PageWrapper

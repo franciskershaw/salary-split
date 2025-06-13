@@ -30,7 +30,7 @@ const MobileHeader = ({
     >
       <div className="md:hidden flex items-center">
         <DollarSignIcon className="mr-2 h-7 w-7" />
-        <h1 className="text-xl font-semibold text-primary">SalarySplit</h1>
+        <h1 className="text-xl font-semibold text-primary font-logo">SalarySplit</h1>
       </div>
 
       <div className="flex items-center gap-4">

@@ -1,9 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-logo: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -350,5 +356,12 @@
   }
   .mobile-header-translate {
     transform: translateY(var(--mobile-header-offset));
+  }
+
+  /* Logo font utility */
+  .font-logo {
+    font-family: var(--font-logo);
+    font-weight: 500;
+    letter-spacing: 0.020em;
   }
 }

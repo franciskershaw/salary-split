@@ -17,6 +17,7 @@ import Auth from "./pages/Auth/Auth";
 import Bills from "./pages/Bills/Bills";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Expenses from "./pages/Expenses/Expenses";
+import NotFound from "./pages/NotFound/NotFound";
 import Savings from "./pages/Savings/Savings";
 import Settings from "./pages/Settings/Settings";
 
@@ -50,6 +51,7 @@ function App() {
             <Route index element={<Settings />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ThemeInitializer />
     </Router>

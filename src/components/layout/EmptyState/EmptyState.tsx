@@ -87,7 +87,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
   } = config[type];
 
   return (
-    <div className="flex flex-col items-center justify-center text-center">
+    <div className="flex flex-col items-center justify-center text-center lg:min-h-[50vh] lg:pr-28 lg:pt-28">
       <div className={`rounded-full ${iconBg} p-6 mb-4`}>
         <Icon className={`w-12 h-12 ${iconColor}`} />
       </div>
