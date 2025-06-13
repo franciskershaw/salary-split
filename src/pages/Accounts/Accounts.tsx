@@ -4,6 +4,7 @@ import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
+import FeatureCardsGrid from "@/components/layout/FeatureCard/FeatureCardsGrid";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import type { FilterConfig } from "@/components/layout/TotalBalance/TotalBalance";
 import { ACCOUNT_TYPES } from "@/constants/api";
@@ -98,7 +99,7 @@ const Accounts = () => {
       {!accounts?.length ? (
         <EmptyState type="accounts" />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <FeatureCardsGrid>
           {accounts?.map((account) => (
             <FeatureCard
               key={account._id}
@@ -122,7 +123,7 @@ const Accounts = () => {
               isDeleting={isDeleting}
             />
           ))}
-        </div>
+        </FeatureCardsGrid>
       )}
       <FormDialog
         open={newAccountDialogOpen}

@@ -4,6 +4,7 @@ import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
 import { FeatureCard } from "@/components/layout/FeatureCard/FeatureCard";
+import FeatureCardsGrid from "@/components/layout/FeatureCard/FeatureCardsGrid";
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 import {
   FEATURE_ACCOUNTS,
@@ -56,7 +57,7 @@ const Savings = () => {
       ) : !savings?.length ? (
         <EmptyState type={FEATURE_SAVINGS} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <FeatureCardsGrid>
           {savings?.map((saving) => (
             <FeatureCard
               key={saving._id}
@@ -80,7 +81,7 @@ const Savings = () => {
               isDeleting={isDeleting}
             />
           ))}
-        </div>
+        </FeatureCardsGrid>
       )}
       <FormDialog
         open={newSavingsDialogOpen}
