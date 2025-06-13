@@ -28,7 +28,7 @@ import useUpdateUser from "./hooks/useUpdateUser";
 export const userFormSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  takeHomePay: z.number().min(0),
+  takeHomePay: z.coerce.number().min(0, "Salary must be a positive number"),
   defaultCurrency: z.enum([CURRENCIES.GBP, CURRENCIES.USD, CURRENCIES.EUR]),
 });
 
