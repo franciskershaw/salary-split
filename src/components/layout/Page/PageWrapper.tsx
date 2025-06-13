@@ -1,4 +1,5 @@
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import usePageTitle from "@/hooks/utility/usePageTitle";
 
 import {
   TotalBalance,
@@ -36,6 +37,8 @@ const PageWrapper = ({
   loadingMessage = "Loading...",
   customHeaderComponent,
 }: PageWrapperProps) => {
+  usePageTitle(title);
+
   return (
     <div className="mb-16 md:mb-4">
       <PageHeader
