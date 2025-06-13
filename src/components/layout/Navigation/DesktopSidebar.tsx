@@ -61,7 +61,7 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-surface-border p-4">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-primary-600 flex items-center">
+        <h1 className="text-2xl font-semibold text-primary-600 flex items-center font-logo">
           <DollarSignIcon className="mr-2 h-7 w-7" />
           SalarySplit
         </h1>
