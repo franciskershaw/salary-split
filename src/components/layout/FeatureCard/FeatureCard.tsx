@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getDisplayInfo } from "@/lib/display-info";
+import { getBillSplitInfo, getDisplayInfo } from "@/lib/display-info";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Account, Bill, Feature } from "@/types/globalTypes";
 
@@ -74,6 +74,12 @@ export function FeatureCard({
 
   const deleteDialogDescription = `Are you sure you want to delete ${item.name}? This action cannot be undone.`;
 
+  // Check if this is a bill with split between multiple people
+  const isSplitBill =
+    "splitBetween" in item && item.splitBetween && item.splitBetween > 1;
+
+  const splitInfo = isSplitBill ? getBillSplitInfo(item.splitBetween) : null;
+
   return (
     <>
       <Card className="p-5 border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all h-full flex flex-col">
@@ -98,10 +104,16 @@ export function FeatureCard({
             )}
           </div>
           <div className="flex justify-between items-end">
-            <div>
+            <div className="flex items-center gap-2">
               <span className="text-2xl font-semibold dark:text-white">
                 {formatCurrency(item.amount)}
               </span>
+              {splitInfo && (
+                <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                  <splitInfo.icon className="h-4 w-4" />
+                  <span className="text-xs">{splitInfo.label}</span>
+                </div>
+              )}
             </div>
             <div className="flex flex-col items-end gap-2">
               {!hideDropdown && (
