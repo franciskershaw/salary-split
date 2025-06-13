@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { Toaster } from "@/components/ui/sonner";
@@ -15,8 +15,10 @@ import MobileNav from "../Navigation/MobileNav";
 const SharedLayout = () => {
   const { user, fetchingUser } = useUser();
   const { darkMode } = useTheme();
+  const location = useLocation();
   const scrollDirection = useScrollDirection();
   const mobileHeaderRef = useRef<HTMLHeadElement>(null);
+  const desktopScrollContainerRef = useRef<HTMLDivElement>(null);
   const [mobileHeaderHeight, setMobileHeaderHeight] = useState(0);
 
   const mobileHeaderVisible = scrollDirection !== "down";
@@ -26,6 +28,16 @@ const SharedLayout = () => {
       setMobileHeaderHeight(mobileHeaderRef.current.offsetHeight);
     }
   }, []);
+
+  // Scroll to top on route change
+  useEffect(() => {
+    // Desktop: scroll the main content container
+    if (desktopScrollContainerRef.current) {
+      desktopScrollContainerRef.current.scrollTo(0, 0);
+    }
+    // Mobile: scroll the window
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   if (fetchingUser && !user) {
     return <LoadingOverlay fullPage />;
@@ -49,7 +61,10 @@ const SharedLayout = () => {
           {/* Desktop Layout */}
           <div className="hidden md:flex h-screen overflow-hidden">
             <DesktopSidebar user={user} />
-            <div className="flex-1 flex flex-col overflow-y-auto">
+            <div
+              ref={desktopScrollContainerRef}
+              className="flex-1 flex flex-col overflow-y-auto"
+            >
               <main className="flex-1">
                 <Outlet />
               </main>
