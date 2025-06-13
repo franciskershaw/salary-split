@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ChevronDown, ChevronUp, ShoppingBasket } from "lucide-react";
+import { ChevronDown, ChevronUp, ShoppingBasket, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { getDisplayInfo } from "@/lib/display-info";
@@ -136,17 +136,29 @@ function BreakdownItem({
   iconClassName,
   label,
   amount,
+  splitBetween,
+  splitAmount,
 }: {
   icon: React.ElementType;
   iconClassName: string;
   label: string;
   amount: number;
+  splitBetween?: number;
+  splitAmount?: number;
 }) {
+  const isSplit = splitBetween && splitBetween > 1;
+
   return (
     <li className="flex items-center justify-between text-base">
-      <div className="flex items-center gap-3 truncate max-w-[70%]">
+      <div className="flex items-center gap-2 truncate max-w-[70%]">
         <Icon className={`h-5 w-5 ${iconClassName} flex-shrink-0`} />
         <span className="truncate">{label}</span>
+        {isSplit && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
+            <Users className="h-3 w-3" />
+            <span>{splitBetween}</span>
+          </div>
+        )}
       </div>
       <span className="font-medium">{formatCurrency(amount)}</span>
     </li>
@@ -168,6 +180,11 @@ function BreakdownSection({
       <ul className="space-y-2">
         {items.map((item) => {
           const display = getDisplayInfo(feature, item.type);
+          const splitAmount =
+            item.splitBetween && item.splitBetween > 1
+              ? item.amount / item.splitBetween
+              : undefined;
+
           return (
             <BreakdownItem
               key={item._id}
@@ -175,6 +192,8 @@ function BreakdownSection({
               iconClassName={display.colors.text}
               label={item.name}
               amount={item.amount}
+              splitBetween={item.splitBetween}
+              splitAmount={splitAmount}
             />
           );
         })}
