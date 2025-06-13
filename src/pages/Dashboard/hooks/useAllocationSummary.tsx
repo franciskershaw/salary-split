@@ -24,28 +24,34 @@ const useAllocationSummary = () => {
   const { user } = useUser();
 
   const summary = useMemo(() => {
-    const totalBills = bills.reduce(
-      (sum, bill) => sum + bill.amount / (bill.splitBetween || 1),
-      0
-    );
-    const totalExpenses = expenses.reduce(
-      (sum, expense) => sum + expense.amount,
-      0
-    );
-    const totalSavings = savings.reduce(
-      (sum, saving) => sum + saving.amount,
-      0
-    );
+    const totalBills = bills
+      .filter((bill) => bill.amount > 0)
+      .reduce(
+        (sum, bill) => sum + bill.amount / (bill.splitBetween || 1),
+        0
+      );
+    const totalExpenses = expenses
+      .filter((expense) => expense.amount > 0)
+      .reduce(
+        (sum, expense) => sum + expense.amount,
+        0
+      );
+    const totalSavings = savings
+      .filter((saving) => saving.amount > 0)
+      .reduce(
+        (sum, saving) => sum + saving.amount,
+        0
+      );
 
     const calculateAccountAllocation = (account: Account): Allocation => {
       const accountBills = bills.filter(
-        (bill) => bill.account._id === account._id
+        (bill) => bill.account._id === account._id && bill.amount > 0
       );
       const accountExpenses = expenses.filter(
-        (expense) => expense.account._id === account._id
+        (expense) => expense.account._id === account._id && expense.amount > 0
       );
       const accountSavings = savings.filter(
-        (saving) => saving.account._id === account._id
+        (saving) => saving.account._id === account._id && saving.amount > 0
       );
 
       const totalAllocated =
