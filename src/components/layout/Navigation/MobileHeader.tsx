@@ -1,6 +1,6 @@
 import type { Ref } from "react";
 
-import { DollarSignIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import { LogOutIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useAuth from "@/pages/Auth/hooks/useAuth";
 import type { User } from "@/types/globalTypes";
+
+import Logo from "../Logo/Logo";
 
 const MobileHeader = ({
   user,
@@ -29,8 +31,7 @@ const MobileHeader = ({
       className="bg-surface text-surface-foreground p-4 md:p-6 border-b border-surface-border flex items-center justify-between sticky top-0 z-10 shadow-sm"
     >
       <div className="md:hidden flex items-center">
-        <DollarSignIcon className="mr-2 h-7 w-7" />
-        <h1 className="text-xl font-semibold text-primary font-logo">SalarySplit</h1>
+        <Logo />
       </div>
 
       <div className="flex items-center gap-4">

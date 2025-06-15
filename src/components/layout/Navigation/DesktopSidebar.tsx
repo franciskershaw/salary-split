@@ -1,7 +1,6 @@
 import {
   BarChartIcon,
   BoxIcon,
-  DollarSignIcon,
   HomeIcon,
   LogOutIcon,
   ReceiptPoundSterling,
@@ -14,6 +13,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import useAuth from "@/pages/Auth/hooks/useAuth";
 import type { User } from "@/types/globalTypes";
+
+import Logo from "../Logo/Logo";
 
 type NavItemProps = {
   href: string;
@@ -60,12 +61,9 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
 
   return (
     <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-surface-border p-4">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-primary-600 flex items-center font-logo">
-          <DollarSignIcon className="mr-2 h-7 w-7" />
-          SalarySplit
-        </h1>
-        <p className="text-sm text-gray-500  mt-1">Financial Planner</p>
+      <div className="mb-6">
+        <Logo />
+        <p className="text-sm text-gray-500  mt-2">Financial Planner</p>
       </div>
       <nav className="space-y-4 flex-1">
         {mainNavItems.map((item) => (
