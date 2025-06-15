@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 
 type LogoProps = {
-
   size?: "small" | "medium" | "large";
 };
 
@@ -25,6 +24,7 @@ const Logo = ({ size = "medium" }: LogoProps) => {
           size === "medium" && "text-2xl",
           size === "large" && "text-3xl"
         )}
+        style={{ transform: "translateY(3px)" }}
       >
         SalarySplit
       </h1>
