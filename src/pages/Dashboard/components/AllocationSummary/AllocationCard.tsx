@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ChevronDown, ChevronUp, ShoppingBasket, Users } from "lucide-react";
+import { ChevronDown, ShoppingBasket, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { getDisplayInfo } from "@/lib/display-info";
@@ -59,11 +59,11 @@ export default function AllocationCard({
           </div>
           {hasBreakdown && (
             <div className="ml-2 md:hidden">
-              {open ? (
-                <ChevronUp className="h-5 w-5" />
-              ) : (
-                <ChevronDown className="h-5 w-5" />
-              )}
+              <ChevronDown
+                className={`h-5 w-5 transition-transform duration-300 ease-in-out ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              />
             </div>
           )}
         </div>
