@@ -1,14 +1,10 @@
 import { useEffect } from "react";
 
-import {
-  DollarSignIcon,
-  PieChart,
-  ReceiptPoundSterling,
-  WalletCards,
-} from "lucide-react";
+import { PieChart, ReceiptPoundSterling, WalletCards } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+import Logo from "@/components/layout/Logo/Logo";
 import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/user/useUser";
 import usePageTitle from "@/hooks/utility/usePageTitle";
@@ -57,8 +53,7 @@ const Auth = () => {
         <div className="w-1/2 bg-surface p-8 md:p-12 flex flex-col justify-center">
           <div className="max-w-md mx-auto">
             <div className="flex items-center mb-8">
-              <DollarSignIcon className="h-10 w-10 text-primary mr-3" />
-              <h1 className="text-3xl font-bold font-logo">SalarySplit</h1>
+              <Logo size="large" />
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
               Know where your money goes, every month.
@@ -120,8 +115,7 @@ const Auth = () => {
       <div className="md:hidden flex flex-col items-center justify-center min-h-screen p-6">
         <div className="w-full max-w-sm text-center">
           <div className="flex items-center justify-center mb-4">
-            <DollarSignIcon className="h-8 w-8 text-primary mr-2" />
-            <h1 className="text-3xl font-bold font-logo">SalarySplit</h1>
+            <Logo />
           </div>
           <p className="text-muted-foreground mb-10">
             Take control of your monthly finances with clear bill tracking and
