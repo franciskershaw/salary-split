@@ -53,7 +53,7 @@ const PageHeader = ({
   }, [openCreateDialog, openReorderDialog]);
 
   return (
-    <header className="bg-surface border-b border-surface-border p-4 lg:p-6 sticky z-10 transition-all duration-300 ease-in-out mobile-header-offset">
+    <header className="bg-surface border-b border-surface-border p-4 sticky z-10 transition-all duration-300 ease-in-out mobile-header-offset">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">

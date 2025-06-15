@@ -67,7 +67,7 @@ const PageWrapper = ({
             spinnerSize="md"
           />
         ) : (
-          <div className="space-y-4 md:space-y-8">
+          <div className="space-y-4">
             {customHeaderComponent ? (
               <div className="lg:hidden">{customHeaderComponent}</div>
             ) : (
