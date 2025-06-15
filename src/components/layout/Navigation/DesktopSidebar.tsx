@@ -63,7 +63,7 @@ export default function DesktopSidebar({ user }: DesktopSidebarProps) {
     <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-surface-border p-4">
       <div className="mb-6">
         <Logo />
-        <p className="text-sm text-gray-500  mt-2">Financial Planner</p>
+        <p className="text-sm text-muted-foreground mt-2">Financial Planner</p>
       </div>
       <nav className="space-y-4 flex-1">
         {mainNavItems.map((item) => (

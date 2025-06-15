@@ -143,7 +143,7 @@ export function TotalBalance<T extends FilterableItem>({
             </CardTitle>
           </div>
           {config.showFilters && (
-            <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-gray-400 flex-shrink-0" />
+            <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-muted-foreground flex-shrink-0" />
           )}
         </div>
       </CardContent>

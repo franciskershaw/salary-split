@@ -364,4 +364,37 @@
     font-weight: 500;
     letter-spacing: 0.020em;
   }
+
+  /* Additional semantic color utilities */
+  .text-success {
+    @apply text-[var(--color-feature-emerald-foreground)];
+  }
+  
+  .text-bills {
+    @apply text-[var(--color-feature-red-foreground)];
+  }
+  
+  .text-expenses {
+    @apply text-[var(--color-feature-red-foreground)];
+  }
+  
+  .text-savings {
+    @apply text-[var(--color-feature-blue-foreground)];
+  }
+
+  .border-default {
+    @apply border-[var(--color-feature-amber)];
+  }
+  
+  .bg-default {
+    @apply bg-[var(--color-feature-amber)];
+  }
+  
+  .bg-default-subtle {
+    @apply bg-[var(--color-feature-amber)]/30;
+  }
+
+  .text-default {
+    @apply text-[var(--color-feature-amber-foreground)];
+  }
 }
