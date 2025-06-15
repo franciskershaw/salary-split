@@ -192,31 +192,59 @@
 
   /* Feature colors - Dark theme */
   --feature-blue: oklch(0.2 0.1 240);
-  --feature-blue-foreground: oklch(0.8 0.2 240);
+  --feature-blue-foreground: oklch(0.81 0.12 240);
   --feature-green: oklch(0.2 0.1 140);
-  --feature-green-foreground: oklch(0.8 0.2 140);
+  --feature-green-foreground: oklch(0.81 0.12 140);
   --feature-purple: oklch(0.2 0.1 280);
-  --feature-purple-foreground: oklch(0.8 0.2 280);
+  --feature-purple-foreground: oklch(0.81 0.12 280);
   --feature-amber: oklch(0.2 0.1 80);
-  --feature-amber-foreground: oklch(0.8 0.2 80);
+  --feature-amber-foreground: oklch(0.81 0.12 80);
   --feature-pink: oklch(0.2 0.1 350);
-  --feature-pink-foreground: oklch(0.8 0.2 350);
+  --feature-pink-foreground: oklch(0.81 0.12 350);
   --feature-orange: oklch(0.2 0.1 60);
-  --feature-orange-foreground: oklch(0.8 0.2 60);
+  --feature-orange-foreground: oklch(0.81 0.12 60);
   --feature-emerald: oklch(0.2 0.1 160);
-  --feature-emerald-foreground: oklch(0.8 0.2 160);
+  --feature-emerald-foreground: oklch(0.81 0.12 160);
   --feature-red: oklch(0.2 0.1 20);
-  --feature-red-foreground: oklch(0.8 0.2 20);
+  --feature-red-foreground: oklch(0.81 0.12 20);
   --feature-indigo: oklch(0.2 0.1 260);
-  --feature-indigo-foreground: oklch(0.8 0.2 260);
+  --feature-indigo-foreground: oklch(0.81 0.12 260);
   --feature-cyan: oklch(0.2 0.1 200);
-  --feature-cyan-foreground: oklch(0.8 0.2 200);
+  --feature-cyan-foreground: oklch(0.81 0.12 200);
   --feature-violet: oklch(0.2 0.1 300);
-  --feature-violet-foreground: oklch(0.8 0.2 300);
+  --feature-violet-foreground: oklch(0.81 0.12 300);
   --feature-gray: oklch(0.2 0.05 0);
-  --feature-gray-foreground: oklch(0.8 0.1 0);
+  --feature-gray-foreground: oklch(0.81 0.08 0);
   --feature-slate: oklch(0.2 0.05 220);
-  --feature-slate-foreground: oklch(0.8 0.1 220);
+  --feature-slate-foreground: oklch(0.81 0.08 220);
+
+  /* Force override for dark mode */
+  --color-feature-blue: var(--feature-blue);
+  --color-feature-blue-foreground: var(--feature-blue-foreground);
+  --color-feature-green: var(--feature-green);
+  --color-feature-green-foreground: var(--feature-green-foreground);
+  --color-feature-purple: var(--feature-purple);
+  --color-feature-purple-foreground: var(--feature-purple-foreground);
+  --color-feature-amber: var(--feature-amber);
+  --color-feature-amber-foreground: var(--feature-amber-foreground);
+  --color-feature-pink: var(--feature-pink);
+  --color-feature-pink-foreground: var(--feature-pink-foreground);
+  --color-feature-orange: var(--feature-orange);
+  --color-feature-orange-foreground: var(--feature-orange-foreground);
+  --color-feature-emerald: var(--feature-emerald);
+  --color-feature-emerald-foreground: var(--feature-emerald-foreground);
+  --color-feature-red: var(--feature-red);
+  --color-feature-red-foreground: var(--feature-red-foreground);
+  --color-feature-indigo: var(--feature-indigo);
+  --color-feature-indigo-foreground: var(--feature-indigo-foreground);
+  --color-feature-cyan: var(--feature-cyan);
+  --color-feature-cyan-foreground: var(--feature-cyan-foreground);
+  --color-feature-violet: var(--feature-violet);
+  --color-feature-violet-foreground: var(--feature-violet-foreground);
+  --color-feature-gray: var(--feature-gray);
+  --color-feature-gray-foreground: var(--feature-gray-foreground);
+  --color-feature-slate: var(--feature-slate);
+  --color-feature-slate-foreground: var(--feature-slate-foreground);
 }
 
 @layer base {
@@ -362,22 +390,22 @@
   .font-logo {
     font-family: var(--font-logo);
     font-weight: 500;
-    letter-spacing: 0.020em;
+    letter-spacing: 0.02em;
   }
 
   /* Additional semantic color utilities */
   .text-success {
     @apply text-[var(--color-feature-emerald-foreground)];
   }
-  
+
   .text-bills {
     @apply text-[var(--color-feature-red-foreground)];
   }
-  
+
   .text-expenses {
     @apply text-[var(--color-feature-red-foreground)];
   }
-  
+
   .text-savings {
     @apply text-[var(--color-feature-blue-foreground)];
   }
@@ -385,11 +413,11 @@
   .border-default {
     @apply border-[var(--color-feature-amber)];
   }
-  
+
   .bg-default {
     @apply bg-[var(--color-feature-amber)];
   }
-  
+
   .bg-default-subtle {
     @apply bg-[var(--color-feature-amber)]/30;
   }
