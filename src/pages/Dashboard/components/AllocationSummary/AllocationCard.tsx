@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ChevronDown, ChevronUp, ShoppingBasket, Users } from "lucide-react";
+import { ChevronDown, ShoppingBasket, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { getDisplayInfo } from "@/lib/display-info";
@@ -59,16 +59,16 @@ export default function AllocationCard({
           </div>
           {hasBreakdown && (
             <div className="ml-2 md:hidden">
-              {open ? (
-                <ChevronUp className="h-5 w-5" />
-              ) : (
-                <ChevronDown className="h-5 w-5" />
-              )}
+              <ChevronDown
+                className={`h-5 w-5 transition-transform duration-300 ease-in-out ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              />
             </div>
           )}
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-primary">
+          <span className="text-2xl font-bold">
             {formatCurrency(totalAllocated)}
           </span>
           <span className="text-xs text-muted-foreground">allocated</span>
@@ -115,7 +115,7 @@ export default function AllocationCard({
                     <ul className="space-y-2">
                       <BreakdownItem
                         icon={ShoppingBasket}
-                        iconClassName="text-emerald-700 dark:text-emerald-300"
+                        iconClassName="text-success"
                         label="Available to Spend"
                         amount={funneledBalance}
                       />

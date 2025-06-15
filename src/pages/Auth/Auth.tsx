@@ -50,7 +50,7 @@ const Auth = () => {
       {/* --- Desktop View --- */}
       <div className="hidden md:flex md:flex-row h-screen">
         {/* Marketing Content */}
-        <div className="w-1/2 bg-surface p-8 md:p-12 flex flex-col justify-center">
+        <div className="w-1/2 bg-muted p-8 md:p-12 flex flex-col justify-center">
           <div className="max-w-md mx-auto">
             <div className="flex items-center mb-8">
               <Logo size="large" />

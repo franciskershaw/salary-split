@@ -23,8 +23,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
   const config = {
     accounts: {
       icon: WalletCards,
-      iconBg: "bg-blue-100 dark:bg-blue-900/30",
-      iconColor: "text-blue-500 dark:text-blue-400",
+      iconBg: "feature-bg-blue",
+      iconColor: "feature-text-blue",
       title: "No Accounts Yet",
       description:
         "You haven't created any accounts yet. Create your first account to start managing your finances.",
@@ -37,8 +37,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
     },
     bills: {
       icon: ReceiptPoundSterling,
-      iconBg: "bg-red-100 dark:bg-red-900/30",
-      iconColor: "text-red-500 dark:text-red-400",
+      iconBg: "feature-bg-red",
+      iconColor: "feature-text-red",
       title: "No Bills Yet",
       description: "You haven't created any bills yet.",
       buttonText: "Create Bill",
@@ -49,8 +49,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
     },
     expenses: {
       icon: CreditCard,
-      iconBg: "bg-purple-100 dark:bg-purple-900/30",
-      iconColor: "text-purple-500 dark:text-purple-400",
+      iconBg: "feature-bg-purple",
+      iconColor: "feature-text-purple",
       title: "No Expenses Yet",
       description: "You haven't created any expenses yet.",
       buttonText: "Create Expense",
@@ -61,8 +61,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
     },
     savings: {
       icon: PiggyBank,
-      iconBg: "bg-green-100 dark:bg-green-900/30",
-      iconColor: "text-green-500 dark:text-green-400",
+      iconBg: "feature-bg-green",
+      iconColor: "feature-text-green",
       title: "No Savings Yet",
       description: "You haven't created any savings goals yet.",
       buttonText: "Create Savings Goal",
@@ -92,7 +92,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
         <Icon className={`w-12 h-12 ${iconColor}`} />
       </div>
       <h2 className="text-xl font-semibold mb-2">{title}</h2>
-      <p className="text-gray-600 mb-6 max-w-sm">{description}</p>
+      <p className="text-muted-foreground mb-6 max-w-sm">{description}</p>
       <FormDialog
         trigger={
           <Button className="bg-primary hover:bg-primary/90">

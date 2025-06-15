@@ -144,7 +144,7 @@ const CreateSavingsForm = ({ onSuccess, savings }: CreateSavingsFormProps) => {
           )}
 
           {dueDateType && dueDateType !== "custom" && (
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-muted-foreground">
               {dueDateType === "31" &&
                 "We'll automatically use the last day of next month"}
               {dueDateType === "1" &&

@@ -127,7 +127,22 @@ export function TotalBalance<T extends FilterableItem>({
     : config.allItemsLabel;
 
   const content = (
-    <Card className="shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-1.5 md:px-3 lg:py-1 lg:px-2 min-w-0">
+    <Card
+      className="shadow-sm cursor-pointer hover:shadow-md transition-shadow py-0 md:py-1.5 md:px-3 lg:py-1 lg:px-2 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      tabIndex={config.showFilters ? 0 : -1}
+      onKeyDown={(e) => {
+        if (config.showFilters && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          setOpen(true);
+        }
+      }}
+      role={config.showFilters ? "button" : undefined}
+      aria-label={
+        config.showFilters
+          ? `Open ${config.dialogTitle || config.title} dialog`
+          : undefined
+      }
+    >
       <CardContent className="p-4 md:p-0 lg:p-0">
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0 flex-1">
@@ -143,7 +158,7 @@ export function TotalBalance<T extends FilterableItem>({
             </CardTitle>
           </div>
           {config.showFilters && (
-            <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-gray-400 flex-shrink-0" />
+            <Filter className="h-4 w-4 lg:h-3 lg:w-3 text-muted-foreground flex-shrink-0" />
           )}
         </div>
       </CardContent>

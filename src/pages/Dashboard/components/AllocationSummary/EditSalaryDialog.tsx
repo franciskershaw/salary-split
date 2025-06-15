@@ -61,7 +61,7 @@ const EditSalaryDialog = ({
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6  hover:bg-primary-500/30"
+            className="h-6 w-6 hover:bg-primary/30"
           >
             <Edit2 className="h-3 w-3" />
           </Button>

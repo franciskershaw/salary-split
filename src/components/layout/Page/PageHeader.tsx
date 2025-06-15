@@ -29,7 +29,10 @@ const PageHeader = ({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" className="bg-primary hover:bg-primary/90">
+          <Button 
+            size="sm" 
+            className="bg-primary hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:bg-primary/80"
+          >
             <Settings className="w-4 h-4" />
             Actions
           </Button>
@@ -53,7 +56,7 @@ const PageHeader = ({
   }, [openCreateDialog, openReorderDialog]);
 
   return (
-    <header className="bg-surface border-b border-surface-border p-4 lg:p-6 sticky z-10 transition-all duration-300 ease-in-out mobile-header-offset">
+    <header className="bg-surface border-b border-surface-border p-4 sticky z-10 transition-all duration-300 ease-in-out mobile-header-offset">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">
