@@ -264,7 +264,7 @@
     @apply text-[var(--color-feature-blue-foreground)];
   }
   .feature-badge-blue {
-    @apply bg-[var(--color-feature-blue)]/10 text-[var(--color-feature-blue-foreground)];
+    @apply bg-[var(--color-feature-blue)]/25 text-[var(--color-feature-blue-foreground)];
   }
   .feature-bg-green {
     @apply bg-[var(--color-feature-green)];
@@ -273,7 +273,7 @@
     @apply text-[var(--color-feature-green-foreground)];
   }
   .feature-badge-green {
-    @apply bg-[var(--color-feature-green)]/10 text-[var(--color-feature-green-foreground)];
+    @apply bg-[var(--color-feature-green)]/35 text-[var(--color-feature-green-foreground)];
   }
   .feature-bg-purple {
     @apply bg-[var(--color-feature-purple)];
@@ -282,7 +282,7 @@
     @apply text-[var(--color-feature-purple-foreground)];
   }
   .feature-badge-purple {
-    @apply bg-[var(--color-feature-purple)]/10 text-[var(--color-feature-purple-foreground)];
+    @apply bg-[var(--color-feature-purple)]/50 text-[var(--color-feature-purple-foreground)];
   }
   .feature-bg-amber {
     @apply bg-[var(--color-feature-amber)];
@@ -291,7 +291,7 @@
     @apply text-[var(--color-feature-amber-foreground)];
   }
   .feature-badge-amber {
-    @apply bg-[var(--color-feature-amber)]/10 text-[var(--color-feature-amber-foreground)];
+    @apply bg-[var(--color-feature-amber)]/40 text-[var(--color-feature-amber-foreground)];
   }
   .feature-bg-pink {
     @apply bg-[var(--color-feature-pink)];
@@ -300,7 +300,7 @@
     @apply text-[var(--color-feature-pink-foreground)];
   }
   .feature-badge-pink {
-    @apply bg-[var(--color-feature-pink)]/10 text-[var(--color-feature-pink-foreground)];
+    @apply bg-[var(--color-feature-pink)] text-[var(--color-feature-pink-foreground)];
   }
   .feature-bg-orange {
     @apply bg-[var(--color-feature-orange)];
@@ -309,7 +309,7 @@
     @apply text-[var(--color-feature-orange-foreground)];
   }
   .feature-badge-orange {
-    @apply bg-[var(--color-feature-orange)]/10 text-[var(--color-feature-orange-foreground)];
+    @apply bg-[var(--color-feature-orange)]/25 text-[var(--color-feature-orange-foreground)];
   }
   .feature-bg-emerald {
     @apply bg-[var(--color-feature-emerald)];
@@ -318,7 +318,7 @@
     @apply text-[var(--color-feature-emerald-foreground)];
   }
   .feature-badge-emerald {
-    @apply bg-[var(--color-feature-emerald)]/10 text-[var(--color-feature-emerald-foreground)];
+    @apply bg-[var(--color-feature-emerald)]/25 text-[var(--color-feature-emerald-foreground)];
   }
   .feature-bg-red {
     @apply bg-[var(--color-feature-red)];
@@ -327,7 +327,7 @@
     @apply text-[var(--color-feature-red-foreground)];
   }
   .feature-badge-red {
-    @apply bg-[var(--color-feature-red)]/10 text-[var(--color-feature-red-foreground)];
+    @apply bg-[var(--color-feature-red)]/25 text-[var(--color-feature-red-foreground)];
   }
   .feature-bg-indigo {
     @apply bg-[var(--color-feature-indigo)];
@@ -336,7 +336,7 @@
     @apply text-[var(--color-feature-indigo-foreground)];
   }
   .feature-badge-indigo {
-    @apply bg-[var(--color-feature-indigo)]/10 text-[var(--color-feature-indigo-foreground)];
+    @apply bg-[var(--color-feature-indigo)]/25 text-[var(--color-feature-indigo-foreground)];
   }
   .feature-bg-cyan {
     @apply bg-[var(--color-feature-cyan)];
@@ -345,7 +345,7 @@
     @apply text-[var(--color-feature-cyan-foreground)];
   }
   .feature-badge-cyan {
-    @apply bg-[var(--color-feature-cyan)]/10 text-[var(--color-feature-cyan-foreground)];
+    @apply bg-[var(--color-feature-cyan)]/25 text-[var(--color-feature-cyan-foreground)];
   }
   .feature-bg-violet {
     @apply bg-[var(--color-feature-violet)];
@@ -354,7 +354,7 @@
     @apply text-[var(--color-feature-violet-foreground)];
   }
   .feature-badge-violet {
-    @apply bg-[var(--color-feature-violet)]/10 text-[var(--color-feature-violet-foreground)];
+    @apply bg-[var(--color-feature-violet)]/50 text-[var(--color-feature-violet-foreground)];
   }
   .feature-bg-gray {
     @apply bg-[var(--color-feature-gray)];
@@ -363,7 +363,7 @@
     @apply text-[var(--color-feature-gray-foreground)];
   }
   .feature-badge-gray {
-    @apply bg-[var(--color-feature-gray)]/10 text-[var(--color-feature-gray-foreground)];
+    @apply bg-[var(--color-feature-gray)]/25 text-[var(--color-feature-gray-foreground)];
   }
   .feature-bg-slate {
     @apply bg-[var(--color-feature-slate)];
@@ -372,7 +372,7 @@
     @apply text-[var(--color-feature-slate-foreground)];
   }
   .feature-badge-slate {
-    @apply bg-[var(--color-feature-slate)]/10 text-[var(--color-feature-slate-foreground)];
+    @apply bg-[var(--color-feature-slate)]/25 text-[var(--color-feature-slate-foreground)];
   }
 
   /* Layout utilities */
@@ -411,7 +411,7 @@
   }
 
   .border-default {
-    @apply border-[var(--color-feature-amber)];
+    @apply border-[var(--color-feature-amber-foreground)];
   }
 
   .bg-default {
