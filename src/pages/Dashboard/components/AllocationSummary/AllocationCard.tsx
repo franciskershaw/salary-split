@@ -68,7 +68,7 @@ export default function AllocationCard({
           )}
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-primary">
+          <span className="text-2xl font-bold">
             {formatCurrency(totalAllocated)}
           </span>
           <span className="text-xs text-muted-foreground">allocated</span>

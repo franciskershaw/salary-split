@@ -19,7 +19,7 @@ const Logo = ({ size = "medium" }: LogoProps) => {
       />
       <h1
         className={cn(
-          "font-semibold text-primary font-logo",
+          "font-semibold font-logo",
           size === "small" && "text-xl",
           size === "medium" && "text-2xl",
           size === "large" && "text-3xl"
