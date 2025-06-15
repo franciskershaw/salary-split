@@ -23,8 +23,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
   const config = {
     accounts: {
       icon: WalletCards,
-      iconBg: "bg-blue-100 dark:bg-blue-900/30",
-      iconColor: "text-blue-500 dark:text-blue-400",
+      iconBg: "bg-blue-100",
+      iconColor: "text-blue-500",
       title: "No Accounts Yet",
       description:
         "You haven't created any accounts yet. Create your first account to start managing your finances.",
@@ -37,8 +37,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
     },
     bills: {
       icon: ReceiptPoundSterling,
-      iconBg: "bg-red-100 dark:bg-red-900/30",
-      iconColor: "text-red-500 dark:text-red-400",
+      iconBg: "bg-red-100",
+      iconColor: "text-red-500",
       title: "No Bills Yet",
       description: "You haven't created any bills yet.",
       buttonText: "Create Bill",
@@ -49,8 +49,8 @@ const EmptyState = ({ type }: { type: Feature }) => {
     },
     expenses: {
       icon: CreditCard,
-      iconBg: "bg-purple-100 dark:bg-purple-900/30",
-      iconColor: "text-purple-500 dark:text-purple-400",
+      iconBg: "bg-purple-100",
+      iconColor: "text-purple-500",
       title: "No Expenses Yet",
       description: "You haven't created any expenses yet.",
       buttonText: "Create Expense",

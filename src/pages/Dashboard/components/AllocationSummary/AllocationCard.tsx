@@ -115,7 +115,7 @@ export default function AllocationCard({
                     <ul className="space-y-2">
                       <BreakdownItem
                         icon={ShoppingBasket}
-                        iconClassName="text-emerald-700 dark:text-emerald-300"
+                        iconClassName="text-emerald-700"
                         label="Available to Spend"
                         amount={funneledBalance}
                       />
