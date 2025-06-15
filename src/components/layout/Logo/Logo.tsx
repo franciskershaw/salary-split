@@ -1,10 +1,12 @@
+import { memo } from "react";
+
 import { cn } from "@/lib/utils";
 
 type LogoProps = {
   size?: "small" | "medium" | "large";
 };
 
-const Logo = ({ size = "medium" }: LogoProps) => {
+const Logo = memo(({ size = "medium" }: LogoProps) => {
   return (
     <div className="flex items-end gap-1">
       <img
@@ -30,6 +32,8 @@ const Logo = ({ size = "medium" }: LogoProps) => {
       </h1>
     </div>
   );
-};
+});
+
+Logo.displayName = "Logo";
 
 export default Logo;
