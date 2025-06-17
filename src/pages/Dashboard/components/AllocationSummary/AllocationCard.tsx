@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ShoppingBasket, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import useUser from "@/hooks/user/useUser";
 import { getDisplayInfo } from "@/lib/display-info";
 import { formatCurrency } from "@/lib/utils";
 import type { Bill, Feature } from "@/types/globalTypes";
@@ -35,6 +36,7 @@ export default function AllocationCard({
   funneledBalance = 0,
 }: AllocationCardProps) {
   const [open, setOpen] = useState(false);
+  const { user } = useUser();
   const hasBreakdown = bills.length || expenses.length || savings.length;
 
   return (
@@ -69,7 +71,7 @@ export default function AllocationCard({
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-2xl font-bold">
-            {formatCurrency(totalAllocated)}
+            {formatCurrency(totalAllocated, user?.defaultCurrency)}
           </span>
           <span className="text-xs text-muted-foreground">allocated</span>
         </div>
@@ -145,6 +147,7 @@ function BreakdownItem({
   splitBetween?: number;
 }) {
   const isSplit = splitBetween && splitBetween > 1;
+  const { user } = useUser();
 
   return (
     <li className="flex items-center justify-between text-base">
@@ -158,7 +161,9 @@ function BreakdownItem({
           </div>
         )}
       </div>
-      <span className="font-medium">{formatCurrency(amount)}</span>
+      <span className="font-medium">
+        {formatCurrency(amount, user?.defaultCurrency)}
+      </span>
     </li>
   );
 }

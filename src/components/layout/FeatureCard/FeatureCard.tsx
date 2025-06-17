@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useUser from "@/hooks/user/useUser";
 import { getBillSplitInfo, getDisplayInfo } from "@/lib/display-info";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Account, Bill, Feature } from "@/types/globalTypes";
@@ -52,6 +53,7 @@ export function FeatureCard({
 }: FeatureCardProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { user } = useUser();
 
   const displayInfo = getDisplayInfo(
     feature,
@@ -134,7 +136,7 @@ export function FeatureCard({
           <div className="flex justify-between items-end">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-semibold">
-                {formatCurrency(item.amount)}
+                {formatCurrency(item.amount, user?.defaultCurrency)}
               </span>
               {splitInfo && (
                 <div className="flex items-center gap-1 text-muted-foreground">

@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form, FormInput } from "@/components/ui/form";
+import useUser from "@/hooks/user/useUser";
 import { formatCurrency } from "@/lib/utils";
 
 // Generic types for reusability
@@ -64,6 +65,7 @@ export function TotalBalance<T extends FilterableItem>({
   isUpdating = false,
 }: TotalBalanceProps<T>) {
   const [open, setOpen] = useState(false);
+  const { user } = useUser();
 
   // Create dynamic schema based on filter configs
   const createSchema = () => {
@@ -154,7 +156,7 @@ export function TotalBalance<T extends FilterableItem>({
                   : config.title}
             </CardDescription>
             <CardTitle className="text-xl lg:text-lg font-semibold truncate">
-              {formatCurrency(totalBalance)}
+              {formatCurrency(totalBalance, user?.defaultCurrency)}
             </CardTitle>
           </div>
           {config.showFilters && (

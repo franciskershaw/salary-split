@@ -25,7 +25,7 @@ const SalaryDisplay = () => {
       >
         <p className="text-sm text-muted-foreground">Take-Home Salary</p>
         <p className="font-semibold text-lg">
-          {formatCurrency(user?.takeHomePay ?? 0)}
+          {formatCurrency(user?.takeHomePay ?? 0, user?.defaultCurrency)}
         </p>
       </div>
     </EditSalaryDialog>
