@@ -36,7 +36,8 @@ export const accountFormSchema = z.object({
         .min(1, "Split between must be at least 1 person")
         .max(10, "Split between cannot exceed 10 people"),
     })
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 export type AccountFormValues = z.infer<typeof accountFormSchema>;

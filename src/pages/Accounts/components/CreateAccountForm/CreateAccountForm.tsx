@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -53,11 +53,26 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
     },
   });
 
+  // Actively manage targetMonthlyAmount based on toggle state
+  useEffect(() => {
+    if (!showTargetAmount) {
+      // Set to null to explicitly remove the field in the API
+      form.setValue("targetMonthlyAmount", null);
+    } else if (showTargetAmount && !form.getValues("targetMonthlyAmount")) {
+      // Set default values when toggle is on but no values exist
+      form.setValue("targetMonthlyAmount", {
+        amount: 0,
+        splitBetween: 1,
+      });
+    }
+  }, [showTargetAmount, form]);
+
   const { addAccount } = useAddAccount();
   const { editAccount } = useEditAccount();
 
   const onSubmit = useCallback(
     (values: AccountFormValues) => {
+      console.log("values", values);
       if (isEditing) {
         editAccount(values, {
           onSuccess: () => {
@@ -88,14 +103,6 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   // Handle target amount toggle
   const handleTargetAmountToggle = (show: boolean) => {
     setShowTargetAmount(show);
-    if (!show) {
-      form.setValue("targetMonthlyAmount", undefined);
-    } else {
-      form.setValue("targetMonthlyAmount", {
-        amount: 0,
-        splitBetween: 1,
-      });
-    }
   };
 
   return (

@@ -61,7 +61,7 @@ export interface Account {
   targetMonthlyAmount?: {
     amount: number;
     splitBetween: number;
-  };
+  } | null;
   createdBy: string;
   createdAt: string;
 }
