@@ -86,10 +86,30 @@ const useAllocationSummary = () => {
 
     const allocations = accounts.map(calculateAccountAllocation);
 
+    // Calculate total target amount differences (user portions only)
+    const totalTargetDifferences = allocations
+      .filter((allocation) => allocation.targetAmountDifference !== undefined)
+      .reduce((sum, allocation) => {
+        if (
+          allocation.targetAmountDifference &&
+          allocation.targetAmountDifference > 0
+        ) {
+          const userPortion =
+            allocation.targetAmountDifference /
+            (allocation.targetSplitBetween || 1);
+          return sum + userPortion;
+        }
+        return sum;
+      }, 0);
+
     const pureTotalAllocated = totalBills + totalExpenses + totalSavings;
-    const remainingBalance = (user?.takeHomePay ?? 0) - pureTotalAllocated;
-    const overAllocated = (user?.takeHomePay ?? 0) < pureTotalAllocated;
-    const overAllocatedAmount = pureTotalAllocated - (user?.takeHomePay ?? 0);
+    const totalAllocatedWithTargets =
+      pureTotalAllocated + totalTargetDifferences;
+    const remainingBalance =
+      (user?.takeHomePay ?? 0) - totalAllocatedWithTargets;
+    const overAllocated = (user?.takeHomePay ?? 0) < totalAllocatedWithTargets;
+    const overAllocatedAmount =
+      totalAllocatedWithTargets - (user?.takeHomePay ?? 0);
     const spendingMoney =
       remainingBalance > 0 && !overAllocated ? remainingBalance : 0;
 
@@ -126,7 +146,7 @@ const useAllocationSummary = () => {
       totalBills,
       totalExpenses,
       totalSavings,
-      totalAllocated: pureTotalAllocated,
+      totalAllocated: totalAllocatedWithTargets,
       overAllocated,
       overAllocatedAmount,
       spendingMoney,
