@@ -15,6 +15,8 @@ import { getBillSplitInfo, getDisplayInfo } from "@/lib/display-info";
 import { cn, formatCurrency } from "@/lib/utils";
 import type { Account, Bill, Feature } from "@/types/globalTypes";
 
+import EditableAmount from "./EditableAmount";
+
 type FeatureCardProps = {
   feature: Feature;
   item: Account | Bill;
@@ -130,14 +132,24 @@ export function FeatureCard({
           <div className="flex-grow">
             <h3 className="font-medium">{title}</h3>
             {secondaryInfo && (
-              <p className="text-muted-foreground text-sm mb-3">{secondaryInfo}</p>
+              <p className="text-muted-foreground text-sm mb-3">
+                {secondaryInfo}
+              </p>
             )}
           </div>
           <div className="flex justify-between items-end">
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-semibold">
-                {formatCurrency(item.amount, user?.defaultCurrency)}
-              </span>
+              {item._id ? (
+                <EditableAmount
+                  amount={item.amount}
+                  itemId={item._id}
+                  feature={feature}
+                />
+              ) : (
+                <span className="text-2xl font-semibold">
+                  {formatCurrency(item.amount, user?.defaultCurrency)}
+                </span>
+              )}
               {splitInfo && (
                 <div className="flex items-center gap-1 text-muted-foreground">
                   <splitInfo.icon className="h-4 w-4" />
