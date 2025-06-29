@@ -14,6 +14,7 @@ type Allocation = {
   expenses: Bill[];
   savings: Bill[];
   totalAllocated: number;
+  targetAmountDifference?: number;
 };
 
 const useAllocationSummary = () => {
@@ -26,22 +27,13 @@ const useAllocationSummary = () => {
   const summary = useMemo(() => {
     const totalBills = bills
       .filter((bill) => bill.amount > 0)
-      .reduce(
-        (sum, bill) => sum + bill.amount / (bill.splitBetween || 1),
-        0
-      );
+      .reduce((sum, bill) => sum + bill.amount / (bill.splitBetween || 1), 0);
     const totalExpenses = expenses
       .filter((expense) => expense.amount > 0)
-      .reduce(
-        (sum, expense) => sum + expense.amount,
-        0
-      );
+      .reduce((sum, expense) => sum + expense.amount, 0);
     const totalSavings = savings
       .filter((saving) => saving.amount > 0)
-      .reduce(
-        (sum, saving) => sum + saving.amount,
-        0
-      );
+      .reduce((sum, saving) => sum + saving.amount, 0);
 
     const calculateAccountAllocation = (account: Account): Allocation => {
       const accountBills = bills.filter(
@@ -54,7 +46,7 @@ const useAllocationSummary = () => {
         (saving) => saving.account._id === account._id && saving.amount > 0
       );
 
-      const totalAllocated =
+      const actualAllocated =
         accountBills.reduce(
           (sum, bill) => sum + bill.amount / (bill.splitBetween || 1),
           0
@@ -62,12 +54,25 @@ const useAllocationSummary = () => {
         accountExpenses.reduce((sum, expense) => sum + expense.amount, 0) +
         accountSavings.reduce((sum, saving) => sum + saving.amount, 0);
 
+      let targetAmountDifference: number | undefined;
+      let totalAllocated = actualAllocated;
+
+      // Calculate target amount difference if account has a target
+      if (account.targetMonthlyAmount) {
+        const targetAmount =
+          account.targetMonthlyAmount.amount /
+          (account.targetMonthlyAmount.splitBetween || 1);
+        targetAmountDifference = targetAmount - actualAllocated; // Raw difference (can be negative)
+        totalAllocated = actualAllocated + Math.max(0, targetAmountDifference); // Only add positive difference to total
+      }
+
       return {
         account,
         bills: accountBills,
         expenses: accountExpenses,
         savings: accountSavings,
         totalAllocated,
+        targetAmountDifference,
       };
     };
 

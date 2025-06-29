@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,6 +34,9 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   const { user } = useUser();
   const isFirstAccount = accounts?.length === 0;
   const isEditing = !!account;
+  const [showTargetAmount, setShowTargetAmount] = useState(
+    !!account?.targetMonthlyAmount
+  );
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
@@ -46,6 +49,7 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
       acceptsFunds: account?.acceptsFunds ?? (isFirstAccount ? true : false),
       receivesSalary: account?.receivesSalary ?? false,
       isDefault: isFirstAccount || user?.defaultAccount === account?._id,
+      targetMonthlyAmount: account?.targetMonthlyAmount || undefined,
     },
   });
 
@@ -78,6 +82,19 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
     form.setValue("isDefault", checked);
     if (checked) {
       form.setValue("acceptsFunds", true);
+    }
+  };
+
+  // Handle target amount toggle
+  const handleTargetAmountToggle = (show: boolean) => {
+    setShowTargetAmount(show);
+    if (!show) {
+      form.setValue("targetMonthlyAmount", undefined);
+    } else {
+      form.setValue("targetMonthlyAmount", {
+        amount: 0,
+        splitBetween: 1,
+      });
     }
   };
 
@@ -147,6 +164,50 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
               }
             />
           </FormInput>
+        </div>
+
+        <div className="rounded-lg border p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium">Target Monthly Amount</h3>
+            <Switch
+              checked={showTargetAmount}
+              onCheckedChange={handleTargetAmountToggle}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Set a target amount you want to allocate to this account each month,
+            beyond your actual bills and expenses.
+          </p>
+
+          {showTargetAmount && (
+            <div className="space-y-4 pt-2">
+              <FormInput
+                name="targetMonthlyAmount.amount"
+                label="Target Amount"
+              >
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="Enter target monthly amount"
+                  min={0}
+                  step="0.01"
+                />
+              </FormInput>
+
+              <FormInput
+                name="targetMonthlyAmount.splitBetween"
+                label="Split Between"
+              >
+                <Input
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="Number of people"
+                  min={1}
+                  max={10}
+                />
+              </FormInput>
+            </div>
+          )}
         </div>
       </div>
     </Form>

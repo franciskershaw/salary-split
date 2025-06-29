@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ChevronDown, ShoppingBasket, Users } from "lucide-react";
+import { ChevronDown, ShoppingBasket, TrendingUp, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import useUser from "@/hooks/user/useUser";
@@ -22,6 +22,7 @@ interface AllocationCardProps {
   expenses: Bill[];
   savings: Bill[];
   funneledBalance?: number;
+  targetAmountDifference?: number;
 }
 
 export default function AllocationCard({
@@ -34,10 +35,15 @@ export default function AllocationCard({
   expenses,
   savings,
   funneledBalance = 0,
+  targetAmountDifference,
 }: AllocationCardProps) {
   const [open, setOpen] = useState(false);
   const { user } = useUser();
-  const hasBreakdown = bills.length || expenses.length || savings.length;
+  const hasBreakdown =
+    bills.length ||
+    expenses.length ||
+    savings.length ||
+    (targetAmountDifference !== undefined && targetAmountDifference !== 0);
 
   return (
     <Card
@@ -108,6 +114,21 @@ export default function AllocationCard({
                     items={savings}
                     feature="savings"
                   />
+                )}
+                {targetAmountDifference !== undefined && targetAmountDifference !== 0 && (
+                  <div>
+                    <div className="font-semibold text-base mb-2">
+                      {targetAmountDifference > 0 ? "Target Top-up" : "Over Budget"}
+                    </div>
+                    <ul className="space-y-2">
+                      <BreakdownItem
+                        icon={TrendingUp}
+                        iconClassName={targetAmountDifference > 0 ? "text-primary" : "text-destructive"}
+                        label={targetAmountDifference > 0 ? "Additional Amount" : "Amount Over Target"}
+                        amount={Math.abs(targetAmountDifference)}
+                      />
+                    </ul>
+                  </div>
                 )}
                 {funneledBalance > 0 && (
                   <div>

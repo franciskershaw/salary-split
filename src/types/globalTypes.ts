@@ -58,6 +58,10 @@ export interface Account {
   acceptsFunds: boolean;
   receivesSalary?: boolean;
   type: AccountType;
+  targetMonthlyAmount?: {
+    amount: number;
+    splitBetween: number;
+  };
   createdBy: string;
   createdAt: string;
 }

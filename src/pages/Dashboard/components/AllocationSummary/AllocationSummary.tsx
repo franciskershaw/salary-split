@@ -99,6 +99,7 @@ const AllocationSummary = () => {
               expenses={a.expenses}
               savings={a.savings}
               funneledBalance={funneledBalance}
+              targetAmountDifference={a.targetAmountDifference}
             />
           );
         })}
