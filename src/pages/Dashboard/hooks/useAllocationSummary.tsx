@@ -103,6 +103,8 @@ const useAllocationSummary = () => {
       }, 0);
 
     const pureTotalAllocated = totalBills + totalExpenses + totalSavings;
+    // Include target differences in savings for summary stats
+    const totalSavingsWithTargets = totalSavings + totalTargetDifferences;
     const totalAllocatedWithTargets =
       pureTotalAllocated + totalTargetDifferences;
     const remainingBalance =
@@ -145,7 +147,7 @@ const useAllocationSummary = () => {
       remainingBalance,
       totalBills,
       totalExpenses,
-      totalSavings,
+      totalSavings: totalSavingsWithTargets,
       totalAllocated: totalAllocatedWithTargets,
       overAllocated,
       overAllocatedAmount,

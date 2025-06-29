@@ -14,7 +14,7 @@ import MobileNav from "../Navigation/MobileNav";
 
 const SharedLayout = () => {
   const { user, fetchingUser } = useUser();
-  const { darkMode } = useTheme();
+  const { darkMode, setDarkMode } = useTheme();
   const location = useLocation();
   const scrollDirection = useScrollDirection();
   const mobileHeaderRef = useRef<HTMLHeadElement>(null);
@@ -38,6 +38,12 @@ const SharedLayout = () => {
     // Mobile: scroll the window
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!user) {
+      setDarkMode(false);
+    }
+  }, [user, setDarkMode]);
 
   if (fetchingUser && !user) {
     return <LoadingOverlay fullPage />;
