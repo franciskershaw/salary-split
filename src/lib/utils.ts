@@ -51,3 +51,17 @@ export const getNextPayday = (payDay: number) => {
 export const capitaliseFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+/**
+ * Converts plural feature names to singular for UI display
+ */
+export function getSingularFeatureName(feature: string): string {
+  const singularMap: Record<string, string> = {
+    accounts: "account",
+    bills: "bill",
+    expenses: "expense",
+    savings: "savings", // 'savings' works as both singular and plural
+  };
+
+  return singularMap[feature] || feature;
+}

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useUser from "@/hooks/user/useUser";
 import { getBillSplitInfo, getDisplayInfo } from "@/lib/display-info";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency, getSingularFeatureName } from "@/lib/utils";
 import type { Account, Bill, Feature } from "@/types/globalTypes";
 
 import EditableAmount from "./EditableAmount";
@@ -167,14 +167,14 @@ export function FeatureCard({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={() => setEditDialogOpen(true)}>
-                      Edit {feature}
+                      Edit {getSingularFeatureName(feature)}
                     </DropdownMenuItem>
                     {!preventDelete && !isDefault && (
                       <DropdownMenuItem
                         className="text-destructive focus:text-destructive"
                         onSelect={() => setDeleteDialogOpen(true)}
                       >
-                        Delete {feature}
+                        Delete {getSingularFeatureName(feature)}
                       </DropdownMenuItem>
                     )}
                     {(preventDelete || isDefault) && (
