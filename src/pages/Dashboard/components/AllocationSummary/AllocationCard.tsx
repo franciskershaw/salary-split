@@ -23,6 +23,7 @@ interface AllocationCardProps {
   savings: Bill[];
   funneledBalance?: number;
   targetAmountDifference?: number;
+  targetSplitBetween?: number;
 }
 
 export default function AllocationCard({
@@ -36,6 +37,7 @@ export default function AllocationCard({
   savings,
   funneledBalance = 0,
   targetAmountDifference,
+  targetSplitBetween,
 }: AllocationCardProps) {
   const [open, setOpen] = useState(false);
   const { user } = useUser();
@@ -126,6 +128,7 @@ export default function AllocationCard({
                         iconClassName={targetAmountDifference > 0 ? "text-primary" : "text-destructive"}
                         label={targetAmountDifference > 0 ? "Additional Amount" : "Amount Over Target"}
                         amount={Math.abs(targetAmountDifference)}
+                        splitBetween={targetSplitBetween}
                       />
                     </ul>
                   </div>

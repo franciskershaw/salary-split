@@ -15,6 +15,7 @@ type Allocation = {
   savings: Bill[];
   totalAllocated: number;
   targetAmountDifference?: number;
+  targetSplitBetween?: number;
 };
 
 const useAllocationSummary = () => {
@@ -59,11 +60,17 @@ const useAllocationSummary = () => {
 
       // Calculate target amount difference if account has a target
       if (account.targetMonthlyAmount) {
-        const targetAmount =
-          account.targetMonthlyAmount.amount /
+        const fullTargetAmount = account.targetMonthlyAmount.amount;
+        const fullActualAllocated =
+          accountBills.reduce((sum, bill) => sum + bill.amount, 0) +
+          accountExpenses.reduce((sum, expense) => sum + expense.amount, 0) +
+          accountSavings.reduce((sum, saving) => sum + saving.amount, 0);
+
+        targetAmountDifference = fullTargetAmount - fullActualAllocated; // Full difference (can be negative)
+        const userPortionDifference =
+          targetAmountDifference /
           (account.targetMonthlyAmount.splitBetween || 1);
-        targetAmountDifference = targetAmount - actualAllocated; // Raw difference (can be negative)
-        totalAllocated = actualAllocated + Math.max(0, targetAmountDifference); // Only add positive difference to total
+        totalAllocated = actualAllocated + Math.max(0, userPortionDifference); // Only add positive user portion to total
       }
 
       return {
@@ -73,6 +80,7 @@ const useAllocationSummary = () => {
         savings: accountSavings,
         totalAllocated,
         targetAmountDifference,
+        targetSplitBetween: account.targetMonthlyAmount?.splitBetween,
       };
     };
 
