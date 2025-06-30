@@ -74,7 +74,7 @@ Using the account categories that I've included in the project (current, savings
 
 ### Accounts page
 
-This page is where you can add and manage bank accounts. Optionally store the amount that is on the account. This is a manual process and doesn't factor into the core salary splitting functionality, but it's useful in terms of tracking totals across the categories I've inculded in the project (current, savings, joint, investment).
+This page is where you can add and manage bank accounts. Optionally store the amount that is on the account. This is a manual process and doesn't factor into the core salary splitting functionality, but it's useful in terms of tracking totals across the categories I've included in the project (current, savings, joint, investment).
 
 There must always be one 'default' account, which will automatically be attributed to the first account you create, although you can change this later on to another account if you like. This default account is where any leftover balance on your takehome salary is automatically allocated to as spending money on the summary page. Each account has a toggle for whether it can directly receive funds, which essentially means it can be transferred to directly via the account that has your salary in it - as opposed to through another account. This mostly for when you have savings accounts that don't have bank details you can send to through online banking.
 
@@ -92,7 +92,7 @@ These three pages all follow almost exactly the same pattern an structure as eac
 - Local authentication with email/password - no confirmation of email is required
 - JWT token-based session management and protected routes for authenticated users
 
-## Data and statte management
+## Data and state management
 
 - RESTful API integration
 - Optimistic updates for better UX
