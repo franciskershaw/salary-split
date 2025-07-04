@@ -13,17 +13,21 @@ import {
 import useUser from "@/hooks/user/useUser";
 import { getBillSplitInfo, getDisplayInfo } from "@/lib/display-info";
 import { cn, formatCurrency, getSingularFeatureName } from "@/lib/utils";
+import {
+  hasMongoId,
+  type SummaryAccount,
+} from "@/pages/Accounts/helper/helper";
 import type { Account, Bill, Feature } from "@/types/globalTypes";
 
 import EditableAmount from "./EditableAmount";
 
 type FeatureCardProps = {
   feature: Feature;
-  item: Account | Bill;
+  item: Account | Bill | SummaryAccount;
   secondaryInfo?: ReactNode;
   bottomRightContent?: ReactNode;
   hideDropdown?: boolean;
-  renderEditDialog: (props: {
+  renderEditDialog?: (props: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
   }) => ReactNode;
@@ -139,7 +143,7 @@ export function FeatureCard({
           </div>
           <div className="flex justify-between items-end">
             <div className="flex items-center gap-2">
-              {item._id ? (
+              {hasMongoId(item) ? (
                 <EditableAmount
                   amount={item.amount}
                   itemId={item._id}
@@ -194,24 +198,27 @@ export function FeatureCard({
           </div>
         </CardContent>
       </Card>
-      {renderEditDialog({
-        open: editDialogOpen,
-        onOpenChange: setEditDialogOpen,
-      })}
-      <DeleteDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        title={`Delete ${feature}`}
-        description={deleteDialogDescription}
-        onDelete={() => {
-          deleteAction(item._id, {
-            onSuccess: () => {
-              setDeleteDialogOpen(false);
-            },
-          });
-        }}
-        isPending={isDeleting}
-      />
+      {renderEditDialog &&
+        renderEditDialog({
+          open: editDialogOpen,
+          onOpenChange: setEditDialogOpen,
+        })}
+      {hasMongoId(item) && (
+        <DeleteDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          title={`Delete ${feature}`}
+          description={deleteDialogDescription}
+          onDelete={() => {
+            deleteAction(item._id, {
+              onSuccess: () => {
+                setDeleteDialogOpen(false);
+              },
+            });
+          }}
+          isPending={isDeleting}
+        />
+      )}
     </>
   );
 }

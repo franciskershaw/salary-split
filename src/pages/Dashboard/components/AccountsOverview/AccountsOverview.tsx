@@ -43,7 +43,7 @@ const AccountsOverview = () => {
             renderEditDialog={() => null}
             deleteAction={() => null}
             isDeleting={false}
-            key={account._id}
+            key={account.id}
             hideDropdown
           />
         ))}

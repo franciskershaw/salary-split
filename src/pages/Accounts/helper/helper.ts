@@ -19,18 +19,20 @@ export const groupAccountsByType = (accounts: Account[]): AccountTypeGroup => {
 /**
  * Creates a summary account for a group of accounts of the same type
  */
+export type SummaryAccount = Omit<Account, "_id"> & { id: string };
+
 export const createSummaryAccount = (
   type: Account["type"],
   accounts: Account[],
   label: string
-): Account => {
+): SummaryAccount => {
   const total = accounts.reduce((sum, acc) => sum + acc.amount, 0);
   const institutions = [
     ...new Set(accounts.map((acc) => acc.institution).filter(Boolean)),
   ];
 
   return {
-    _id: `summary-${type}`,
+    id: `summary-${type}`,
     name: label,
     type,
     institution:
@@ -49,7 +51,7 @@ export const createSummaryAccount = (
 export const createSummaryAccounts = (
   accountsByType: AccountTypeGroup,
   getLabel: (type: Account["type"]) => string
-): Account[] => {
+): SummaryAccount[] => {
   return Object.entries(accountsByType).map(([type, accounts]) =>
     createSummaryAccount(
       type as Account["type"],
@@ -58,3 +60,13 @@ export const createSummaryAccounts = (
     )
   );
 };
+
+// Check if the item has a mongo id
+export function hasMongoId(item: unknown): item is { _id: string } {
+  return (
+    typeof item === "object" &&
+    item !== null &&
+    "_id" in item &&
+    typeof (item as Record<string, unknown>)._id === "string"
+  );
+}
