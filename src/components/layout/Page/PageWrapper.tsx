@@ -50,7 +50,7 @@ const PageWrapper = ({
         openReorderDialog={openReorderDialog}
         totalComponent={
           customHeaderComponent ??
-          (!isLoading && totalBalanceConfig && (itemsCount ?? 0) > 1 ? (
+          (!isLoading && totalBalanceConfig && (itemsCount ?? 0) > 0 ? (
             <TotalBalance
               items={totalBalanceConfig.items}
               filterConfigs={totalBalanceConfig.filterConfigs}
@@ -75,7 +75,7 @@ const PageWrapper = ({
               <div className="lg:hidden">{customHeaderComponent}</div>
             ) : (
               totalBalanceConfig &&
-              (itemsCount ?? 0) > 1 && (
+              (itemsCount ?? 0) > 0 && (
                 <div className="lg:hidden">
                   <TotalBalance
                     items={totalBalanceConfig.items}

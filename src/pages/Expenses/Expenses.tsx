@@ -70,7 +70,7 @@ const Expenses = () => {
         dialogDescription:
           "Select which expenses to include in your total amount of expenses calculation",
         allItemsLabel: "All Expenses",
-        showFilters: true,
+        showFilters: expenses?.length > 1,
       },
       onFiltersUpdate: handleFiltersUpdate,
       isUpdating: isPending,

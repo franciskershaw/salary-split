@@ -82,7 +82,7 @@ const Accounts = () => {
         dialogDescription:
           "Select which account types to include in your total balance calculation",
         allItemsLabel: "All Accounts",
-        showFilters: true,
+        showFilters: accounts?.length > 1,
       },
       onFiltersUpdate: handleFiltersUpdate,
       isUpdating: isPending,

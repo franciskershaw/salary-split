@@ -70,7 +70,7 @@ const Bills = () => {
         dialogDescription:
           "Select which bills to include in your total amount of bills calculation",
         allItemsLabel: "All Bills",
-        showFilters: true,
+        showFilters: bills?.length > 1,
       },
       onFiltersUpdate: handleFiltersUpdate,
       isUpdating: isPending,
