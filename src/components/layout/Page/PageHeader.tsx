@@ -16,12 +16,14 @@ const PageHeader = ({
   totalComponent,
   openCreateDialog,
   openReorderDialog,
+  itemsCount,
 }: {
   title: string;
   description?: string;
   totalComponent?: React.ReactNode;
   openCreateDialog?: () => void;
   openReorderDialog?: () => void;
+  itemsCount?: number;
 }) => {
   const actionsContent = useMemo(() => {
     if (!openCreateDialog && !openReorderDialog) return null;
@@ -29,8 +31,8 @@ const PageHeader = ({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             className="bg-primary hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:bg-primary/80"
           >
             <Settings className="w-4 h-4" />
@@ -44,7 +46,7 @@ const PageHeader = ({
               New
             </DropdownMenuItem>
           )}
-          {openReorderDialog && (
+          {openReorderDialog && itemsCount && itemsCount > 1 && (
             <DropdownMenuItem onSelect={() => openReorderDialog()}>
               <ListOrdered className="w-4 h-4" />
               Reorder
@@ -53,7 +55,7 @@ const PageHeader = ({
         </DropdownMenuContent>
       </DropdownMenu>
     );
-  }, [openCreateDialog, openReorderDialog]);
+  }, [openCreateDialog, openReorderDialog, itemsCount]);
 
   return (
     <header className="bg-surface border-b border-surface-border p-4 sticky z-10 transition-all duration-300 ease-in-out mobile-header-offset">

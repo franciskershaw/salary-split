@@ -54,6 +54,7 @@ const Savings = () => {
       totalBalanceConfig={totalBalanceConfig}
       isLoading={isLoading}
       loadingMessage="Loading savings..."
+      itemsCount={savings?.length ?? 0}
     >
       {!accounts?.length ? (
         <EmptyState type={FEATURE_ACCOUNTS} />

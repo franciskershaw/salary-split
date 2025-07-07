@@ -95,6 +95,7 @@ const Bills = () => {
       totalBalanceConfig={totalBalanceConfig}
       isLoading={isLoading}
       loadingMessage="Loading bills..."
+      itemsCount={bills?.length ?? 0}
     >
       {!accounts?.length ? (
         <EmptyState type={FEATURE_ACCOUNTS} />

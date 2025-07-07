@@ -103,6 +103,7 @@ const Accounts = () => {
       totalBalanceConfig={totalBalanceConfig}
       isLoading={fetchingAccounts && !accounts?.length}
       loadingMessage="Loading accounts..."
+      itemsCount={accounts?.length ?? 0}
     >
       {!accounts?.length ? (
         <EmptyState type="accounts" />

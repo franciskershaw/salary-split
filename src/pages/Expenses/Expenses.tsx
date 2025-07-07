@@ -95,6 +95,7 @@ const Expenses = () => {
       totalBalanceConfig={totalBalanceConfig}
       isLoading={isLoading}
       loadingMessage="Loading expenses..."
+      itemsCount={expenses?.length ?? 0}
     >
       {!accounts?.length ? (
         <EmptyState type={FEATURE_ACCOUNTS} />

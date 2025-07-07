@@ -24,6 +24,7 @@ interface PageWrapperProps {
     onFiltersUpdate?: (filters: FilterConfig[]) => void;
     isUpdating?: boolean;
   };
+  itemsCount?: number;
 }
 
 const PageWrapper = ({
@@ -36,6 +37,7 @@ const PageWrapper = ({
   isLoading,
   loadingMessage = "Loading...",
   customHeaderComponent,
+  itemsCount,
 }: PageWrapperProps) => {
   usePageTitle(title);
 
@@ -48,7 +50,7 @@ const PageWrapper = ({
         openReorderDialog={openReorderDialog}
         totalComponent={
           customHeaderComponent ??
-          (!isLoading && totalBalanceConfig ? (
+          (!isLoading && totalBalanceConfig && (itemsCount ?? 0) > 1 ? (
             <TotalBalance
               items={totalBalanceConfig.items}
               filterConfigs={totalBalanceConfig.filterConfigs}
@@ -58,6 +60,7 @@ const PageWrapper = ({
             />
           ) : undefined)
         }
+        itemsCount={itemsCount}
       />
       <div className="p-4">
         {isLoading ? (
@@ -71,7 +74,7 @@ const PageWrapper = ({
             {customHeaderComponent ? (
               <div className="lg:hidden">{customHeaderComponent}</div>
             ) : (
-              totalBalanceConfig && (
+              totalBalanceConfig && (itemsCount ?? 0) > 1 && (
                 <div className="lg:hidden">
                   <TotalBalance
                     items={totalBalanceConfig.items}
