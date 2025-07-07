@@ -35,7 +35,7 @@ const Savings = () => {
       config: {
         title: "Total Savings",
         allItemsLabel: "All Savings",
-        showFilters: savings?.length > 1,
+        showFilters: false,
       },
     }),
     [savings]
