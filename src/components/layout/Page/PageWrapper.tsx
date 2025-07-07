@@ -74,7 +74,8 @@ const PageWrapper = ({
             {customHeaderComponent ? (
               <div className="lg:hidden">{customHeaderComponent}</div>
             ) : (
-              totalBalanceConfig && (itemsCount ?? 0) > 1 && (
+              totalBalanceConfig &&
+              (itemsCount ?? 0) > 1 && (
                 <div className="lg:hidden">
                   <TotalBalance
                     items={totalBalanceConfig.items}
