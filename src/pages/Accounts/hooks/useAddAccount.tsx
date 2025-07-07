@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import useAxios from "@/hooks/axios/useAxios";
 import useUser from "@/hooks/user/useUser";
 import queryKeys from "@/tanstackQuery/queryKeys";
+import type { Account, User } from "@/types/globalTypes";
 
 import type { AccountFormValues } from "../components/CreateAccountForm/types";
 
@@ -24,9 +25,17 @@ const useAddAccount = () => {
 
   const { mutate: addAccount, isPending } = useMutation({
     mutationFn: addAccountFn,
-    onSuccess: () => {
+    onSuccess: (data: Account, variables: AccountFormValues) => {
       toast.success("Account added successfully");
       queryClient.invalidateQueries({ queryKey: [queryKeys.accounts] });
+      if (variables.isDefault) {
+        queryClient.setQueryData([queryKeys.user], (oldData: User) => {
+          return {
+            ...oldData,
+            defaultAccount: data._id,
+          };
+        });
+      }
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data?.message || error.message);

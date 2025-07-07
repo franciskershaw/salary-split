@@ -27,7 +27,6 @@ const useDeleteBill = () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.bills] });
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      console.log(error);
       toast.error(error.response?.data?.message || error.message);
     },
     onSettled: () => {

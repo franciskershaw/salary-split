@@ -40,7 +40,6 @@ const useEditAccount = () => {
       });
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      console.log(error);
       toast.error(error.response?.data?.message || error.message);
     },
     onSettled: () => {

@@ -27,7 +27,6 @@ const useDeleteSavings = () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.savings] });
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      console.log(error);
       toast.error(error.response?.data?.message || error.message);
     },
     onSettled: () => {

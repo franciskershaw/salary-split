@@ -29,7 +29,6 @@ const useReorderItems = (feature: Feature) => {
       queryClient.invalidateQueries({ queryKey: [queryKeys[feature]] });
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      console.log(error);
       toast.error(error.response?.data?.message || error.message);
     },
     onSettled: () => {

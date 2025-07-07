@@ -72,7 +72,6 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
 
   const onSubmit = useCallback(
     (values: AccountFormValues) => {
-      console.log("values", values);
       if (isEditing) {
         editAccount(values, {
           onSuccess: () => {
