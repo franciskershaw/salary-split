@@ -32,7 +32,7 @@ const AccountsOverview = () => {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-8 md:mt-0">
       <h2 className="text-xl font-semibold">Accounts Overview</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryAccounts.map((account) => (
