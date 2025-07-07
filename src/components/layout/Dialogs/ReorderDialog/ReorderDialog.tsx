@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { Reorder, useDragControls } from "framer-motion";
 import { GripVertical } from "lucide-react";
 
@@ -33,10 +34,16 @@ interface ReorderDialogProps {
 }
 
 // Extract ReorderItem as a separate component
-const ReorderItem = ({ item, feature }: { item: ReorderableItem; feature: Feature }) => {
+const ReorderItem = ({
+  item,
+  feature,
+}: {
+  item: ReorderableItem;
+  feature: Feature;
+}) => {
   const { icon: Icon, colors } = getDisplayInfo(feature, item.type);
   const dragControls = useDragControls();
-  
+
   return (
     <Reorder.Item
       key={item._id}
@@ -66,6 +73,11 @@ const ReorderDialog = ({
 }: ReorderDialogProps) => {
   const [items, setItems] = useState(initialItems);
   const { reorderItems, isPending } = useReorderItems(feature);
+
+  // Update state when initialItems change
+  useEffect(() => {
+    setItems(initialItems);
+  }, [initialItems]);
 
   const handleReorder = () => {
     reorderItems(items.map((item) => item._id));
