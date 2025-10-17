@@ -82,15 +82,6 @@ const EditableAmount = ({ amount, itemId, feature }: EditableAmountProps) => {
     }
   };
 
-  const handleBlur = () => {
-    // Small delay to allow button clicks to register
-    setTimeout(() => {
-      if (isEditing) {
-        handleSave();
-      }
-    }, 100);
-  };
-
   if (isEditing) {
     return (
       <div className="flex items-center gap-2">
@@ -101,7 +92,8 @@ const EditableAmount = ({ amount, itemId, feature }: EditableAmountProps) => {
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
+            // blur event also works for manual clicks on the save button
+            onBlur={handleSave}
             className="font-semibold w-32 h-10 pr-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [-moz-appearance:textfield]"
             step="0.01"
             min="0"
@@ -118,7 +110,8 @@ const EditableAmount = ({ amount, itemId, feature }: EditableAmountProps) => {
             size="sm"
             variant="ghost"
             className="h-8 w-8 p-0"
-            onClick={handleSave}
+            // triggers handleSave through blur event
+            onClick={() => setIsEditing(false)}
             disabled={isPending}
           >
             {isPending ? (
