@@ -71,7 +71,17 @@ export default function AllocationCard({
             {icon}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-medium truncate text-lg">{account.name}</p>
+            <p
+              className={`font-medium truncate text-lg ${
+                hasInsufficientBalance
+                  ? "text-destructive"
+                  : isOverBudget
+                    ? "text-orange-600 dark:text-orange-400"
+                    : ""
+              }`}
+            >
+              {account.name}
+            </p>
             {account.institution && (
               <p className="text-xs text-muted-foreground truncate">
                 {account.institution}
@@ -89,7 +99,15 @@ export default function AllocationCard({
           )}
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold">
+          <span
+            className={`text-2xl font-bold ${
+              hasInsufficientBalance
+                ? "text-destructive"
+                : isOverBudget
+                  ? "text-orange-600 dark:text-orange-400"
+                  : ""
+            }`}
+          >
             {formatCurrency(totalAllocated, user?.defaultCurrency)}
           </span>
           <span className="text-xs text-muted-foreground">allocated</span>
@@ -132,40 +150,51 @@ export default function AllocationCard({
                   targetAmountDifference !== 0 && (
                     <div>
                       <div
-                        className={`font-semibold text-base mb-2 ${targetAmountDifference > 0 ? "text-primary" : "text-destructive"}`}
+                        className={`font-semibold text-base mb-2 ${
+                          targetAmountDifference > 0
+                            ? "text-primary"
+                            : hasInsufficientBalance
+                              ? "text-destructive"
+                              : "text-orange-600 dark:text-orange-400"
+                        }`}
                       >
                         {targetAmountDifference > 0
                           ? "Target Top-up"
                           : "Over Budget"}
                       </div>
                       <ul className="space-y-2">
-                        <BreakdownItem
-                          icon={
-                            hasInsufficientBalance ? AlertCircle : TrendingUp
-                          }
-                          iconClassName={
-                            targetAmountDifference > 0
-                              ? "text-primary"
-                              : "text-destructive"
-                          }
-                          label={
-                            targetAmountDifference > 0
-                              ? "Additional Amount"
-                              : hasInsufficientBalance
-                                ? `Shortfall (balance: ${formatCurrency(account.amount, user?.defaultCurrency)})`
-                                : "From Account Balance"
-                          }
-                          amount={
-                            targetAmountDifference > 0
-                              ? targetAmountDifference
-                              : shortfall
-                          }
-                          splitBetween={
-                            targetAmountDifference > 0
-                              ? targetSplitBetween
-                              : undefined
-                          }
-                        />
+                        {targetAmountDifference > 0 ? (
+                          <BreakdownItem
+                            icon={TrendingUp}
+                            iconClassName="text-primary"
+                            label="Additional Amount"
+                            amount={targetAmountDifference}
+                            splitBetween={targetSplitBetween}
+                          />
+                        ) : (
+                          <>
+                            <BreakdownItem
+                              icon={AlertCircle}
+                              iconClassName={
+                                hasInsufficientBalance
+                                  ? "text-destructive"
+                                  : "text-orange-600 dark:text-orange-400"
+                              }
+                              label="Account Balance"
+                              amount={account.amount}
+                            />
+                            <BreakdownItem
+                              icon={TrendingUp}
+                              iconClassName={
+                                hasInsufficientBalance
+                                  ? "text-destructive"
+                                  : "text-orange-600 dark:text-orange-400"
+                              }
+                              label="Amount Coming Out"
+                              amount={shortfall}
+                            />
+                          </>
+                        )}
                       </ul>
                     </div>
                   )}
