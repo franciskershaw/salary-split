@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-import { ChevronDown, ShoppingBasket, TrendingUp, Users } from "lucide-react";
+import {
+  AlertCircle,
+  ChevronDown,
+  ShoppingBasket,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import useUser from "@/hooks/user/useUser";
@@ -13,6 +19,7 @@ interface AllocationCardProps {
     name: string;
     institution?: string;
     type: string;
+    amount: number;
   };
   totalAllocated: number;
   icon: React.ReactNode;
@@ -41,11 +48,15 @@ export default function AllocationCard({
 }: AllocationCardProps) {
   const [open, setOpen] = useState(false);
   const { user } = useUser();
+
+  // Check if account has a target and is over budget
+  const isOverBudget =
+    targetAmountDifference !== undefined && targetAmountDifference < 0;
+  const shortfall = isOverBudget ? Math.abs(targetAmountDifference) : 0;
+  const hasInsufficientBalance = isOverBudget && account.amount < shortfall;
+
   const hasBreakdown =
-    bills.length ||
-    expenses.length ||
-    savings.length ||
-    (targetAmountDifference !== undefined && targetAmountDifference !== 0);
+    bills.length || expenses.length || savings.length || isOverBudget;
 
   return (
     <Card
@@ -117,22 +128,47 @@ export default function AllocationCard({
                     feature="savings"
                   />
                 )}
-                {targetAmountDifference !== undefined && targetAmountDifference !== 0 && (
-                  <div>
-                    <div className="font-semibold text-base mb-2">
-                      {targetAmountDifference > 0 ? "Target Top-up" : "Over Budget"}
+                {targetAmountDifference !== undefined &&
+                  targetAmountDifference !== 0 && (
+                    <div>
+                      <div
+                        className={`font-semibold text-base mb-2 ${targetAmountDifference > 0 ? "text-primary" : "text-destructive"}`}
+                      >
+                        {targetAmountDifference > 0
+                          ? "Target Top-up"
+                          : "Over Budget"}
+                      </div>
+                      <ul className="space-y-2">
+                        <BreakdownItem
+                          icon={
+                            hasInsufficientBalance ? AlertCircle : TrendingUp
+                          }
+                          iconClassName={
+                            targetAmountDifference > 0
+                              ? "text-primary"
+                              : "text-destructive"
+                          }
+                          label={
+                            targetAmountDifference > 0
+                              ? "Additional Amount"
+                              : hasInsufficientBalance
+                                ? `Shortfall (balance: ${formatCurrency(account.amount, user?.defaultCurrency)})`
+                                : "From Account Balance"
+                          }
+                          amount={
+                            targetAmountDifference > 0
+                              ? targetAmountDifference
+                              : shortfall
+                          }
+                          splitBetween={
+                            targetAmountDifference > 0
+                              ? targetSplitBetween
+                              : undefined
+                          }
+                        />
+                      </ul>
                     </div>
-                    <ul className="space-y-2">
-                      <BreakdownItem
-                        icon={TrendingUp}
-                        iconClassName={targetAmountDifference > 0 ? "text-primary" : "text-destructive"}
-                        label={targetAmountDifference > 0 ? "Additional Amount" : "Amount Over Target"}
-                        amount={Math.abs(targetAmountDifference)}
-                        splitBetween={targetSplitBetween}
-                      />
-                    </ul>
-                  </div>
-                )}
+                  )}
                 {funneledBalance > 0 && (
                   <div>
                     <div className="font-semibold text-base mb-2">

@@ -67,10 +67,10 @@ const useAllocationSummary = () => {
           accountSavings.reduce((sum, saving) => sum + saving.amount, 0);
 
         targetAmountDifference = fullTargetAmount - fullActualAllocated; // Full difference (can be negative)
-        const userPortionDifference =
-          targetAmountDifference /
-          (account.targetMonthlyAmount.splitBetween || 1);
-        totalAllocated = actualAllocated + Math.max(0, userPortionDifference); // Only add positive user portion to total
+
+        // Always use the target amount as the allocation (user's portion)
+        totalAllocated =
+          fullTargetAmount / (account.targetMonthlyAmount.splitBetween || 1);
       }
 
       return {
@@ -86,27 +86,14 @@ const useAllocationSummary = () => {
 
     const allocations = accounts.map(calculateAccountAllocation);
 
-    // Calculate total target amount differences (user portions only)
-    const totalTargetDifferences = allocations
-      .filter((allocation) => allocation.targetAmountDifference !== undefined)
-      .reduce((sum, allocation) => {
-        if (
-          allocation.targetAmountDifference &&
-          allocation.targetAmountDifference > 0
-        ) {
-          const userPortion =
-            allocation.targetAmountDifference /
-            (allocation.targetSplitBetween || 1);
-          return sum + userPortion;
-        }
-        return sum;
-      }, 0);
+    // Calculate the actual total that will be allocated (sum of all totalAllocated)
+    const totalAllocatedWithTargets = allocations.reduce(
+      (sum, allocation) => sum + allocation.totalAllocated,
+      0
+    );
 
-    const pureTotalAllocated = totalBills + totalExpenses + totalSavings;
-    // Include target differences in savings for summary stats
-    const totalSavingsWithTargets = totalSavings + totalTargetDifferences;
-    const totalAllocatedWithTargets =
-      pureTotalAllocated + totalTargetDifferences;
+    // For summary stats, calculate savings component
+    const totalSavingsWithTargets = totalSavings;
     const remainingBalance =
       (user?.takeHomePay ?? 0) - totalAllocatedWithTargets;
     const overAllocated = (user?.takeHomePay ?? 0) < totalAllocatedWithTargets;
