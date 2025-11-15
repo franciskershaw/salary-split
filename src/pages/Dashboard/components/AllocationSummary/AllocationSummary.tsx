@@ -1,3 +1,5 @@
+import Masonry from "react-masonry-css";
+
 import { getDisplayInfo } from "@/lib/display-info";
 
 import useAllocationSummary from "../../hooks/useAllocationSummary";
@@ -81,30 +83,40 @@ const AllocationSummary = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <Masonry
+        breakpointCols={{
+          default: 3, // 1300px and above: 3 columns
+          1300: 2, // 1024px-1299px: 2 columns
+          1024: 1, // Below 1024px: 1 column
+        }}
+        className="flex -ml-4 w-auto"
+        columnClassName="pl-4 bg-clip-padding"
+      >
         {allocation.map((a) => {
           const display = getDisplayInfo("accounts", a.account.type);
           const isDefault = a.account._id === defaultAccountId;
           const funneledBalance =
             isDefault && remainingBalance > 0 ? remainingBalance : 0;
           return (
-            <AllocationCard
-              key={a.account._id}
-              account={a.account}
-              totalAllocated={a.totalAllocated}
-              icon={<display.icon className={`h-7 w-7`} />}
-              iconBg={display.colors.bg}
-              iconText={display.colors.text}
-              bills={a.bills}
-              expenses={a.expenses}
-              savings={a.savings}
-              funneledBalance={funneledBalance}
-              targetAmountDifference={a.targetAmountDifference}
-              targetSplitBetween={a.targetSplitBetween}
-            />
+            <div key={a.account._id} className="mb-4">
+              <AllocationCard
+                key={a.account._id}
+                account={a.account}
+                totalAllocated={a.totalAllocated}
+                icon={<display.icon className={`h-7 w-7`} />}
+                iconBg={display.colors.bg}
+                iconText={display.colors.text}
+                bills={a.bills}
+                expenses={a.expenses}
+                savings={a.savings}
+                funneledBalance={funneledBalance}
+                targetAmountDifference={a.targetAmountDifference}
+                targetSplitBetween={a.targetSplitBetween}
+              />
+            </div>
           );
         })}
-      </div>
+      </Masonry>
     </section>
   );
 };

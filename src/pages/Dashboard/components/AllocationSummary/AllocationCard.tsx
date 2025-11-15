@@ -49,10 +49,10 @@ export default function AllocationCard({
 
   return (
     <Card
-      className="flex flex-col shadow-sm hover:shadow-md transition-shadow border cursor-pointer md:cursor-default p-2"
+      className="flex flex-col shadow-sm hover:shadow-md transition-shadow border cursor-pointer lg:cursor-default p-2"
       onClick={hasBreakdown ? () => setOpen((v) => !v) : undefined}
     >
-      <CardContent className="flex flex-col gap-3 md:gap-4 p-3 md:p-4">
+      <CardContent className="flex flex-col gap-3 lg:gap-4 p-3 lg:p-4">
         <div className="flex items-center gap-3">
           <div
             className={`w-12 h-12 rounded-full flex items-center justify-center ${iconBg} ${iconText}`}
@@ -68,7 +68,7 @@ export default function AllocationCard({
             )}
           </div>
           {hasBreakdown && (
-            <div className="ml-2 md:hidden">
+            <div className="ml-2 lg:hidden">
               <ChevronDown
                 className={`h-5 w-5 transition-transform duration-300 ease-in-out ${
                   open ? "rotate-180" : "rotate-0"
@@ -89,9 +89,9 @@ export default function AllocationCard({
           <div
             className={`
               transition-all duration-500 ease-in-out
-              grid md:block
+              grid lg:block
               ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}
-              md:grid-rows-none md:opacity-100
+              lg:grid-rows-none lg:opacity-100
             `}
           >
             <div className="overflow-hidden">
