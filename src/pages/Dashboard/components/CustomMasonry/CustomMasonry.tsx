@@ -22,6 +22,7 @@ export default function CustomMasonry({
     []
   );
   const [containerHeight, setContainerHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(true);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const getColumnCount = useCallback(() => {
@@ -32,8 +33,17 @@ export default function CustomMasonry({
     return columns.mobile;
   }, [columns.desktop, columns.mobile, columns.tablet]);
 
+  const checkIsMobile = useCallback(() => {
+    if (typeof window === "undefined") return true;
+    return window.innerWidth < 1024;
+  }, []);
+
   const calculateLayout = useCallback(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isMobile) {
+      setPositions([]);
+      setContainerHeight(0);
+      return;
+    }
 
     const columnCount = getColumnCount();
     const containerWidth = containerRef.current.offsetWidth;
@@ -63,7 +73,12 @@ export default function CustomMasonry({
 
     setPositions(newPositions);
     setContainerHeight(Math.max(...heights) - gap); // Remove last gap
-  }, [gap, getColumnCount]);
+  }, [gap, getColumnCount, isMobile]);
+
+  useEffect(() => {
+    // Check if mobile on mount
+    setIsMobile(checkIsMobile());
+  }, [checkIsMobile]);
 
   useEffect(() => {
     // Calculate on mount and when children change
@@ -75,6 +90,7 @@ export default function CustomMasonry({
     // Recalculate on window resize
     let resizeTimer: NodeJS.Timeout;
     const handleResize = () => {
+      setIsMobile(checkIsMobile());
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(calculateLayout, 100);
     };
@@ -84,8 +100,36 @@ export default function CustomMasonry({
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);
     };
-  }, [calculateLayout]);
+  }, [calculateLayout, checkIsMobile]);
 
+  // On mobile, use normal flow layout (no masonry)
+  if (isMobile) {
+    return (
+      <div
+        ref={containerRef}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: `${gap}px`,
+          width: "100%",
+        }}
+      >
+        {children.map((child, index) => (
+          <div
+            key={index}
+            ref={(el) => {
+              itemRefs.current[index] = el;
+            }}
+            style={{ width: "100%" }}
+          >
+            {child}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // On tablet/desktop, use masonry layout
   const columnCount = getColumnCount();
   const containerWidth = containerRef.current?.offsetWidth || 0;
   const columnWidth = containerWidth

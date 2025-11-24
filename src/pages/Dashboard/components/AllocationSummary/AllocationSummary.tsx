@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { getDisplayInfo } from "@/lib/display-info";
 
 import useAllocationSummary from "../../hooks/useAllocationSummary";
@@ -6,6 +8,7 @@ import AllocationCard from "./AllocationCard";
 import SummaryStat from "./SummaryStat";
 
 const AllocationSummary = () => {
+  const [openCards, setOpenCards] = useState<Set<string>>(new Set());
   const {
     allocation,
     remainingBalance,
@@ -69,6 +72,9 @@ const AllocationSummary = () => {
     const isDefault = a.account._id === defaultAccountId;
     const funneledBalance =
       isDefault && remainingBalance > 0 ? remainingBalance : 0;
+    const isOpen = openCards.has(a.account._id);
+    const hasBreakdown =
+      a.bills.length || a.expenses.length || a.savings.length;
 
     return (
       <AllocationCard
@@ -84,6 +90,22 @@ const AllocationSummary = () => {
         funneledBalance={funneledBalance}
         targetAmountDifference={a.targetAmountDifference}
         targetSplitBetween={a.targetSplitBetween}
+        open={isOpen}
+        onToggle={
+          hasBreakdown
+            ? () => {
+                setOpenCards((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(a.account._id)) {
+                    next.delete(a.account._id);
+                  } else {
+                    next.add(a.account._id);
+                  }
+                  return next;
+                });
+              }
+            : undefined
+        }
       />
     );
   });

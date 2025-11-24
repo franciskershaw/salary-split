@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import {
   AlertCircle,
   ChevronDown,
@@ -31,6 +29,8 @@ interface AllocationCardProps {
   funneledBalance?: number;
   targetAmountDifference?: number;
   targetSplitBetween?: number;
+  open?: boolean;
+  onToggle?: () => void;
 }
 
 export default function AllocationCard({
@@ -45,8 +45,9 @@ export default function AllocationCard({
   funneledBalance = 0,
   targetAmountDifference,
   targetSplitBetween,
+  open = false,
+  onToggle,
 }: AllocationCardProps) {
-  const [open, setOpen] = useState(false);
   const { user } = useUser();
 
   // Check if account has a target and is over budget
@@ -61,7 +62,7 @@ export default function AllocationCard({
   return (
     <Card
       className="flex flex-col shadow-sm hover:shadow-md transition-shadow border cursor-pointer lg:cursor-default p-2"
-      onClick={hasBreakdown ? () => setOpen((v) => !v) : undefined}
+      onClick={hasBreakdown && onToggle ? onToggle : undefined}
     >
       <CardContent className="flex flex-col gap-3 lg:gap-4 p-3 lg:p-4">
         <div className="flex items-center gap-3">
