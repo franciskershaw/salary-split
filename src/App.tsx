@@ -13,6 +13,7 @@ import useUser from "@/hooks/user/useUser";
 import SharedLayout from "./components/layout/SharedLayout/SharedLayout";
 import ThemeInitializer from "./contexts/Theme/ThemeInitializer";
 import Accounts from "./pages/Accounts/Accounts";
+import AccountTransactions from "./pages/AccountTransactions/AccountTransactions";
 import Auth from "./pages/Auth/Auth";
 import Bills from "./pages/Bills/Bills";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -37,6 +38,7 @@ function App() {
           </Route>
           <Route path="/accounts" element={<PrivateRoute />}>
             <Route index element={<Accounts />} />
+            <Route path=":accountId" element={<AccountTransactions />} />
           </Route>
           <Route path="/bills" element={<PrivateRoute />}>
             <Route index element={<Bills />} />

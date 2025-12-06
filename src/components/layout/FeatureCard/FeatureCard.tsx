@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 
-import { MoreHorizontal, Star, type LucideIcon } from "lucide-react";
+import { Activity, MoreHorizontal, Star, type LucideIcon } from "lucide-react";
 
 import DeleteDialog from "@/components/layout/Dialogs/DeleteDialog/DeleteDialog";
 import { Card, CardContent } from "@/components/ui/card";
@@ -39,6 +39,8 @@ type FeatureCardProps = {
   iconContainerClassName?: string;
   isDefault?: boolean;
   preventDelete?: boolean;
+  hasTransactionTracking?: boolean;
+  onViewTransactions?: () => void;
 };
 
 export function FeatureCard({
@@ -56,6 +58,8 @@ export function FeatureCard({
   iconContainerClassName: iconContainerClassNameOverride,
   isDefault = false,
   preventDelete = false,
+  hasTransactionTracking = false,
+  onViewTransactions,
 }: FeatureCardProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -72,20 +76,33 @@ export function FeatureCard({
     iconContainerClassNameOverride ??
     cn(displayInfo.colors.bg, displayInfo.colors.text);
 
-  // Default account styling
-  const cardClassName = isDefault
-    ? "p-5 border-2 border-default bg-default-subtle hover:shadow-md transition-all h-full flex flex-col"
-    : "p-5 border border-border hover:shadow-md transition-all h-full flex flex-col";
+  // Default account styling with transaction tracking indicator
+  const cardClassName = cn(
+    "p-5 hover:shadow-md transition-all h-full flex flex-col",
+    isDefault
+      ? "border-2 border-default bg-default-subtle"
+      : hasTransactionTracking
+        ? "border-2 border-blue-300 dark:border-blue-700 bg-blue-50/50 dark:bg-blue-950/20"
+        : "border border-border"
+  );
 
-  // Override top right content for default accounts
+  // Override top right content for default accounts and transaction tracking
   const finalTopRightContent =
     topRightContentOverride ??
-    (isDefault ? (
+    (isDefault || hasTransactionTracking ? (
       <div className="flex items-center gap-2">
-        <span className="text-xs px-2 py-1 rounded-full feature-badge-amber flex items-center gap-1">
-          <Star className="h-3 w-3 fill-current" />
-          Default
-        </span>
+        {isDefault && (
+          <span className="text-xs px-2 py-1 rounded-full feature-badge-amber flex items-center gap-1">
+            <Star className="h-3 w-3 fill-current" />
+            Default
+          </span>
+        )}
+        {hasTransactionTracking && (
+          <span className="text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 flex items-center gap-1">
+            <Activity className="h-3 w-3" />
+            Trackable
+          </span>
+        )}
         {displayInfo.label && (
           <span
             className={cn(
@@ -143,7 +160,7 @@ export function FeatureCard({
           </div>
           <div className="flex justify-between items-end">
             <div className="flex items-center gap-2">
-              {hasMongoId(item) ? (
+              {hasMongoId(item) && !hasTransactionTracking ? (
                 <EditableAmount
                   amount={item.amount}
                   itemId={item._id}
@@ -170,6 +187,11 @@ export function FeatureCard({
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    {hasTransactionTracking && onViewTransactions && (
+                      <DropdownMenuItem onSelect={onViewTransactions}>
+                        View Account Transactions
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem onSelect={() => setEditDialogOpen(true)}>
                       Edit {getSingularFeatureName(feature)}
                     </DropdownMenuItem>

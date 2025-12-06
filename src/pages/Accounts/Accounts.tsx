@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
 import ReorderDialog from "@/components/layout/Dialogs/ReorderDialog/ReorderDialog";
 import EmptyState from "@/components/layout/EmptyState/EmptyState";
@@ -21,6 +23,7 @@ import useUpdateAccountFilters from "./hooks/useUpdateAccountFilters";
 const Accounts = () => {
   const { accounts, fetchingAccounts } = useGetAccounts();
   const { user } = useUser();
+  const navigate = useNavigate();
   const { updateAccountFilters, isPending } = useUpdateAccountFilters();
   const { deleteAccount, isPending: isDeleting } = useDeleteAccount();
 
@@ -111,6 +114,7 @@ const Accounts = () => {
         <FeatureCardsGrid>
           {accounts?.map((account) => {
             const isDefaultAccount = user?.defaultAccount === account._id;
+            const hasTransactionTracking = !!account.trackTransactions;
 
             return (
               <FeatureCard
@@ -120,6 +124,14 @@ const Accounts = () => {
                 secondaryInfo={account.institution}
                 isDefault={isDefaultAccount}
                 preventDelete={isDefaultAccount}
+                hasTransactionTracking={hasTransactionTracking}
+                onViewTransactions={
+                  hasTransactionTracking
+                    ? () => {
+                        navigate(`/accounts/${account._id}`);
+                      }
+                    : undefined
+                }
                 renderEditDialog={({ open, onOpenChange }) => (
                   <FormDialog
                     item={{ account }}
