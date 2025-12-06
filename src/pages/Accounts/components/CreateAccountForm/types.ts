@@ -20,6 +20,29 @@ export const accountFormSchema = z.object({
     ACCOUNT_TYPES.JOINT,
   ]),
   acceptsFunds: z.boolean(),
+  trackTransactions: z
+    .object({
+      balance: z.coerce
+        .number({
+          required_error:
+            "Starting balance is required when enabling transaction tracking.",
+        })
+        .refine(
+          (val) => /^\d*\.?\d{0,2}$/.test(val.toString()),
+          "Starting balance can have at most 2 decimal places"
+        ),
+      timestamp: z.coerce
+        .date({
+          required_error:
+            "Timestamp is required when enabling transaction tracking.",
+        })
+        .refine(
+          (date) => date <= new Date(),
+          "Timestamp cannot be in the future"
+        ),
+    })
+    .optional()
+    .nullable(),
   receivesSalary: z.boolean(),
   isDefault: z.boolean(),
   targetMonthlyAmount: z

@@ -62,6 +62,10 @@ export interface Account {
     amount: number;
     splitBetween: number;
   } | null;
+  trackTransactions?: {
+    balance: number;
+    timestamp: string;
+  } | null;
   createdBy: string;
   createdAt: string;
 }

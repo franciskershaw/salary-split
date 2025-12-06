@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -37,6 +37,9 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   const [showTargetAmount, setShowTargetAmount] = useState(
     !!account?.targetMonthlyAmount
   );
+  const [showTrackTransactions, setShowTrackTransactions] = useState(
+    !!account?.trackTransactions
+  );
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
@@ -48,6 +51,12 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
       type: account?.type ?? ACCOUNT_TYPES.CURRENT,
       acceptsFunds: account?.acceptsFunds ?? (isFirstAccount ? true : false),
       receivesSalary: account?.receivesSalary ?? false,
+      trackTransactions: account?.trackTransactions
+        ? {
+            balance: account.trackTransactions.balance,
+            timestamp: new Date(account.trackTransactions.timestamp),
+          }
+        : null,
       isDefault: isFirstAccount || user?.defaultAccount === account?._id,
       targetMonthlyAmount: account?.targetMonthlyAmount || undefined,
     },
@@ -57,7 +66,7 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   useEffect(() => {
     if (!showTargetAmount) {
       // Set to null to explicitly remove the field in the API
-      form.setValue("targetMonthlyAmount", null);
+      form.setValue("targetMonthlyAmount", undefined);
     } else if (showTargetAmount && !form.getValues("targetMonthlyAmount")) {
       // Set default values when toggle is on but no values exist
       form.setValue("targetMonthlyAmount", {
@@ -67,19 +76,59 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
     }
   }, [showTargetAmount, form]);
 
+  // Watch the amount field to sync with trackTransactions.balance
+  const amount = form.watch("amount");
+
+  // Actively manage trackTransactions based on toggle state
+  // Use useLayoutEffect to set value before render to prevent controlled/uncontrolled warning
+  useLayoutEffect(() => {
+    if (!showTrackTransactions) {
+      // Set to null to explicitly remove the field in the API
+      form.setValue("trackTransactions", null, { shouldValidate: false });
+    } else {
+      // Use the current amount value as the balance
+      const currentAmount = amount ?? 0;
+
+      // Set timestamp to slightly in the past to ensure it passes validation
+      // (subtract 1 second to account for any timing issues)
+      const timestamp = new Date(Date.now() - 1000);
+
+      form.setValue(
+        "trackTransactions",
+        {
+          balance: currentAmount,
+          timestamp,
+        },
+        { shouldValidate: false }
+      );
+    }
+  }, [showTrackTransactions, amount, form]);
+
   const { addAccount } = useAddAccount();
   const { editAccount } = useEditAccount();
 
   const onSubmit = useCallback(
     (values: AccountFormValues) => {
+      // Always set timestamp to current date and sync balance with amount
+      // Use slightly in the past to ensure validation passes
+      const submitValues = {
+        ...values,
+        trackTransactions: values.trackTransactions
+          ? {
+              balance: values.amount, // Use the form's amount as the balance
+              timestamp: new Date(Date.now() - 1000),
+            }
+          : null,
+      };
+
       if (isEditing) {
-        editAccount(values, {
+        editAccount(submitValues, {
           onSuccess: () => {
             onSuccess?.();
           },
         });
       } else {
-        addAccount(values, {
+        addAccount(submitValues, {
           onSuccess: () => {
             onSuccess?.();
           },
@@ -102,6 +151,11 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   // Handle target amount toggle
   const handleTargetAmountToggle = (show: boolean) => {
     setShowTargetAmount(show);
+  };
+
+  // Handle track transactions toggle
+  const handleTrackTransactionsToggle = (show: boolean) => {
+    setShowTrackTransactions(show);
   };
 
   return (
@@ -170,6 +224,29 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
               }
             />
           </FormInput>
+        </div>
+
+        <div className="rounded-lg border p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium">Transaction Tracking</h3>
+            <Switch
+              checked={showTrackTransactions}
+              onCheckedChange={handleTrackTransactionsToggle}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Enable transaction tracking to monitor balance changes over time.
+          </p>
+
+          {showTrackTransactions && (
+            <div className="pt-2">
+              <p className="text-sm text-muted-foreground">
+                Transaction tracking will use the current account balance (
+                {typeof amount === "number" ? amount.toFixed(2) : amount ?? "0.00"}) as the
+                starting point for tracking future transactions.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="rounded-lg border p-4 space-y-4">
