@@ -70,6 +70,49 @@ export interface Account {
   createdAt: string;
 }
 
+export interface AccountWithTransactions {
+  account: Account;
+  transactions: Transaction[] | null;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
+export interface Transaction {
+  _id: string;
+  account: {
+    _id: string;
+    name: string;
+    institution?: string;
+  };
+  type: "income" | "expense" | "transfer";
+  splits: {
+    category: {
+      _id: string;
+      name: string;
+      icon: string;
+      color: string;
+    };
+    amount: number;
+    description?: string;
+  }[];
+
+  description: string;
+  date: Date;
+  transferToAccount?: {
+    _id: string;
+    name: string;
+  };
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Bill {
   _id: string;
   name: string;
