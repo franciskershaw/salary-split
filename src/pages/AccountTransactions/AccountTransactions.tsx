@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 
 import PageWrapper from "@/components/layout/Page/PageWrapper";
 
+import { TransactionList } from "./components/TransactionList";
 import useGetAccount from "./hooks/useGeAccount";
 
 const AccountTransactions = () => {
@@ -14,7 +15,7 @@ const AccountTransactions = () => {
       isLoading={fetchingAccount}
       loadingMessage="Fetching account..."
     >
-      <div>AccountTransactions</div>
+      <TransactionList account={account} fetchingAccount={fetchingAccount} />
     </PageWrapper>
   );
 };

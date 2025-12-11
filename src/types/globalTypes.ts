@@ -4,6 +4,7 @@ import {
   FEATURE_BILLS,
   FEATURE_EXPENSES,
   FEATURE_SAVINGS,
+  FEATURE_TRANSACTIONS,
 } from "@/constants/features";
 
 export type Currency = "GBP" | "USD" | "EUR";
@@ -15,7 +16,8 @@ export type Feature =
   | typeof FEATURE_ACCOUNTS
   | typeof FEATURE_BILLS
   | typeof FEATURE_EXPENSES
-  | typeof FEATURE_SAVINGS;
+  | typeof FEATURE_SAVINGS
+  | typeof FEATURE_TRANSACTIONS;
 
 export interface User {
   _id: string;

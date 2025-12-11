@@ -2,7 +2,9 @@ import {
   CreditCard,
   PiggyBank,
   ReceiptPoundSterling,
+  ReceiptText,
   WalletCards,
+  type LucideIcon,
 } from "lucide-react";
 
 import { FormDialog } from "@/components/layout/Dialogs/FormDialog/FormDialog";
@@ -19,7 +21,44 @@ import CreateExpenseForm from "@/pages/Expenses/components/CreateExpenseForm/Cre
 import CreateSavingsForm from "@/pages/Savings/components/CreateSavingsForm/CreateSavingsForm";
 import type { Feature } from "@/types/globalTypes";
 
-const EmptyState = ({ type }: { type: Feature }) => {
+interface BaseEmptyStateConfig {
+  icon: LucideIcon;
+  iconBg: string;
+  iconColor: string;
+  title: string;
+  description: string;
+  buttonText: string;
+}
+
+interface EmptyStateWithDialog extends BaseEmptyStateConfig {
+  form: React.ComponentType;
+  formId: string;
+  dialogTitle: string;
+  dialogDescription: string;
+}
+
+interface EmptyStateWithoutDialog extends BaseEmptyStateConfig {
+  form?: never;
+  formId?: never;
+  dialogTitle?: never;
+  dialogDescription?: never;
+}
+
+type EmptyStateConfig = EmptyStateWithDialog | EmptyStateWithoutDialog;
+
+function isDialogConfig(
+  config: EmptyStateConfig
+): config is EmptyStateWithDialog {
+  return "form" in config && config.form !== undefined;
+}
+
+const EmptyState = ({
+  type,
+  onButtonClick,
+}: {
+  type: Feature;
+  onButtonClick?: () => void;
+}) => {
   const config = {
     accounts: {
       icon: WalletCards,
@@ -71,8 +110,17 @@ const EmptyState = ({ type }: { type: Feature }) => {
       dialogTitle: "Create New Savings Goal",
       dialogDescription: "Add a new savings goal to track your progress.",
     },
-  } as const;
+    transactions: {
+      icon: ReceiptText,
+      iconBg: "feature-bg-indigo",
+      iconColor: "feature-text-indigo",
+      title: "No Transactions Yet",
+      description: "You haven't created any transactions yet.",
+      buttonText: "Add Transaction",
+    },
+  } satisfies Record<Feature, EmptyStateConfig>;
 
+  const configItem = config[type];
   const {
     icon: Icon,
     iconBg,
@@ -80,11 +128,7 @@ const EmptyState = ({ type }: { type: Feature }) => {
     title,
     description,
     buttonText,
-    form,
-    formId,
-    dialogTitle,
-    dialogDescription,
-  } = config[type];
+  } = configItem;
 
   return (
     <div className="flex flex-col items-center justify-center text-center lg:min-h-[50vh] lg:pr-28 lg:pt-28">
@@ -93,17 +137,26 @@ const EmptyState = ({ type }: { type: Feature }) => {
       </div>
       <h2 className="text-xl font-semibold mb-2">{title}</h2>
       <p className="text-muted-foreground mb-6 max-w-sm">{description}</p>
-      <FormDialog
-        trigger={
-          <Button className="bg-primary hover:bg-primary/90">
-            {buttonText}
-          </Button>
-        }
-        title={dialogTitle}
-        description={dialogDescription}
-        form={form}
-        formId={formId}
-      />
+      {isDialogConfig(configItem) ? (
+        <FormDialog
+          trigger={
+            <Button className="bg-primary hover:bg-primary/90">
+              {buttonText}
+            </Button>
+          }
+          title={configItem.dialogTitle}
+          description={configItem.dialogDescription}
+          form={configItem.form}
+          formId={configItem.formId}
+        />
+      ) : (
+        <Button
+          className="bg-primary hover:bg-primary/90"
+          onClick={onButtonClick}
+        >
+          {buttonText}
+        </Button>
+      )}
     </div>
   );
 };
