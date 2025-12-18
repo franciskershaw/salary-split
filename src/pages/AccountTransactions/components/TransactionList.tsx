@@ -15,9 +15,6 @@ export const TransactionList = ({
 }: TransactionListProps) => {
   const { user } = useUser();
 
-  console.log(account);
-  console.log(fetchingAccount);
-
   const currentBalance = account?.account.amount;
   const balanceColor =
     currentBalance >= 0
@@ -43,17 +40,8 @@ export const TransactionList = ({
         </div>
       </div>
       <div>
-        {!fetchingAccount && !account?.transactions?.length ? (
-          <EmptyState
-            type="transactions"
-            onButtonClick={() => console.log("add transaction")}
-          />
-        ) : (
-          <div>
-            {account?.transactions?.map((transaction) => (
-              <div key={transaction._id}>{transaction.description}</div>
-            ))}
-          </div>
+        {!fetchingAccount && !account?.transactions?.length && (
+          <EmptyState type="transactions" />
         )}
       </div>
     </Card>

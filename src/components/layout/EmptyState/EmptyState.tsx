@@ -14,8 +14,10 @@ import {
   BILL_FORM_ID,
   EXPENSE_FORM_ID,
   SAVINGS_FORM_ID,
+  TRANSACTION_FORM_ID,
 } from "@/constants/features";
 import CreateAccountForm from "@/pages/Accounts/components/CreateAccountForm/CreateAccountForm";
+import NewTransactionForm from "@/pages/AccountTransactions/components/NewTransactionForm/NewTransactionForm";
 import CreateBillForm from "@/pages/Bills/components/CreateBillForm/CreateBillForm";
 import CreateExpenseForm from "@/pages/Expenses/components/CreateExpenseForm/CreateExpenseForm";
 import CreateSavingsForm from "@/pages/Savings/components/CreateSavingsForm/CreateSavingsForm";
@@ -117,6 +119,10 @@ const EmptyState = ({
       title: "No Transactions Yet",
       description: "You haven't created any transactions yet.",
       buttonText: "Add Transaction",
+      form: NewTransactionForm,
+      formId: TRANSACTION_FORM_ID,
+      dialogTitle: "Create New Transaction",
+      dialogDescription: "Add a new transaction to track your finances.",
     },
   } satisfies Record<Feature, EmptyStateConfig>;
 
@@ -131,7 +137,7 @@ const EmptyState = ({
   } = configItem;
 
   return (
-    <div className="flex flex-col items-center justify-center text-center lg:min-h-[50vh] lg:pr-28 lg:pt-28">
+    <div className="flex flex-col items-center justify-center text-center lg:min-h-[50vh] lg:pr-28">
       <div className={`rounded-full ${iconBg} p-6 mb-4`}>
         <Icon className={`w-12 h-12 ${iconColor}`} />
       </div>
