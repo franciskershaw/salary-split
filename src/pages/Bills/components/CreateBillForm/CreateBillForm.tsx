@@ -13,7 +13,7 @@ import type { Bill } from "@/types/globalTypes";
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
 import useAddBill from "../../hooks/useAddBill";
 import useEditBill from "../../hooks/useEditBill";
-import { billFormSchema, type BillFormValues } from "./types";
+import { billFormSchema, type BillFormInput, type BillFormValues } from "./types";
 
 interface CreateBillFormProps {
   onSuccess?: () => void;
@@ -51,7 +51,7 @@ const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
     { value: "custom", label: "Custom day..." },
   ];
 
-  const form = useForm<BillFormValues>({
+  const form = useForm<BillFormInput>({
     resolver: zodResolver(billFormSchema),
     defaultValues: {
       _id: bill?._id,
@@ -59,17 +59,7 @@ const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
       amount: bill?.amount ?? 0,
       account: bill?.account?._id ?? "",
       type: bill?.type ?? BILL_TYPES.OTHER,
-      splitBetween: (bill?.splitBetween?.toString() ?? "1") as
-        | "1"
-        | "2"
-        | "3"
-        | "4"
-        | "5"
-        | "6"
-        | "7"
-        | "8"
-        | "9"
-        | "10",
+      splitBetween: (bill?.splitBetween ?? 1).toString(),
       dueDate: typeof bill?.dueDate === "number" ? bill.dueDate : 1,
       dueDateType:
         typeof bill?.dueDate === "number"
@@ -86,9 +76,10 @@ const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
   const { editBill } = useEditBill();
 
   const onSubmit = useCallback(
-    (values: BillFormValues) => {
+    (values: BillFormInput) => {
+      // After zod validation, values are transformed to BillFormValues
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { dueDateType, ...submitValues } = values;
+      const { dueDateType, ...submitValues } = values as BillFormValues;
       if (isEditing) {
         editBill(submitValues, {
           onSuccess: () => {
@@ -118,7 +109,7 @@ const CreateBillForm = ({ onSuccess, bill }: CreateBillFormProps) => {
   }, [dueDateType, form]);
 
   return (
-    <Form form={form} onSubmit={onSubmit} id={BILL_FORM_ID}>
+    <Form<BillFormInput> form={form} onSubmit={onSubmit} id={BILL_FORM_ID}>
       <div className="space-y-6">
         <div className="space-y-4">
           <FormInput name="name" label="Bill Name">
