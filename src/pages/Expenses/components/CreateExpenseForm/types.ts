@@ -7,7 +7,7 @@ export const expenseFormSchema = z.object({
   name: z.string().min(1, "Please provide a bill name."),
   amount: z.coerce
     .number()
-    .min(0.01, "Amount must be greater than 0")
+    .min(0, "Amount cannot be negative")
     .refine(
       (val) => /^\d*\.?\d{0,2}$/.test(val.toString()),
       "Amount can have at most 2 decimal places"
@@ -16,7 +16,7 @@ export const expenseFormSchema = z.object({
   type: z.enum(Object.values(BILL_TYPES) as [BillType, ...BillType[]]),
   dueDate: z.coerce.number().min(1).max(31),
   dueDateType: z.enum(["1", "31", "custom"]).optional(), // Helper field to track UI state
-  splitBetween: z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]),
+  // splitBetween: z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]),
 });
 
 export type ExpenseFormValues = z.infer<typeof expenseFormSchema>;

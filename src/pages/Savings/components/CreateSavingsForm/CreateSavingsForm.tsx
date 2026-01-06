@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
-import { BILL_TYPES } from "@/constants/api";
+// import { BILL_TYPES } from "@/constants/api";
 import { SAVINGS_FORM_ID } from "@/constants/features";
 import type { Bill } from "@/types/globalTypes";
 
@@ -38,18 +38,18 @@ const CreateSavingsForm = ({ onSuccess, savings }: CreateSavingsFormProps) => {
       name: savings?.name ?? "",
       amount: savings?.amount ?? 0,
       account: savings?.account?._id ?? "",
-      type: savings?.type ?? BILL_TYPES.OTHER,
-      splitBetween: (savings?.splitBetween?.toString() ?? "1") as
-        | "1"
-        | "2"
-        | "3"
-        | "4"
-        | "5"
-        | "6"
-        | "7"
-        | "8"
-        | "9"
-        | "10",
+      // type: savings?.type ?? BILL_TYPES.OTHER,
+      // splitBetween: (savings?.splitBetween?.toString() ?? "1") as
+      //   | "1"
+      //   | "2"
+      //   | "3"
+      //   | "4"
+      //   | "5"
+      //   | "6"
+      //   | "7"
+      //   | "8"
+      //   | "9"
+      //   | "10",
       dueDate: typeof savings?.dueDate === "number" ? savings.dueDate : 1,
       dueDateType:
         typeof savings?.dueDate === "number"

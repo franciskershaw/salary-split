@@ -53,17 +53,17 @@ const CreateExpenseForm = ({ onSuccess, expense }: CreateExpenseFormProps) => {
       amount: expense?.amount ?? 0,
       account: expense?.account?._id ?? "",
       type: expense?.type ?? BILL_TYPES.OTHER,
-      splitBetween: (expense?.splitBetween?.toString() ?? "1") as
-        | "1"
-        | "2"
-        | "3"
-        | "4"
-        | "5"
-        | "6"
-        | "7"
-        | "8"
-        | "9"
-        | "10",
+      // splitBetween: (expense?.splitBetween?.toString() ?? "1") as
+      //   | "1"
+      //   | "2"
+      //   | "3"
+      //   | "4"
+      //   | "5"
+      //   | "6"
+      //   | "7"
+      //   | "8"
+      //   | "9"
+      //   | "10",
       dueDate: typeof expense?.dueDate === "number" ? expense.dueDate : 1,
       dueDateType:
         typeof expense?.dueDate === "number"
@@ -134,7 +134,7 @@ const CreateExpenseForm = ({ onSuccess, expense }: CreateExpenseFormProps) => {
               type="number"
               inputMode="decimal"
               placeholder="Enter expense amount"
-              min={0.01}
+              min={0}
               step="0.01"
             />
           </FormInput>
