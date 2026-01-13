@@ -5,7 +5,7 @@ import { serve } from "@hono/node-server";
 import { createApp } from "./app";
 import connectDb from "./core/config/database";
 
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 5300;
 
 const start = async () => {
   try {
