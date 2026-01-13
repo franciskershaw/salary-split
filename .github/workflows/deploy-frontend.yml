@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: production-frontend
+      name: Production
       url: ${{ steps.deploy.outputs.url }}
 
     steps:

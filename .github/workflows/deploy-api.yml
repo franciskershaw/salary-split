@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: production-api
+      name: Production
       url: https://${{ env.DOMAIN }}
 
     steps:
@@ -74,7 +74,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: production-api
+      name: Production
       url: https://${{ env.DOMAIN }}
     concurrency:
       group: production-api
