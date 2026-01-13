@@ -1,0 +1,26 @@
+import { z } from "zod";
+
+import { BILL_TYPES, type BillType } from "../constants";
+
+const billTypeValues = Object.values(BILL_TYPES) as [BillType, ...BillType[]];
+
+export const expenseSchema = z.object({
+  _id: z.string().optional(),
+  name: z.string().min(1, "Please provide an expense name."),
+  amount: z.coerce
+    .number()
+    .min(0, "Amount cannot be negative")
+    .refine(
+      (val) => /^\d*\.?\d{0,2}$/.test(val.toString()),
+      "Amount can have at most 2 decimal places"
+    ),
+  account: z.string().min(1, "Please provide an account ID."),
+  type: z.enum(billTypeValues),
+  dueDate: z.coerce.number().int().min(1).max(31),
+  dueDateType: z.enum(["1", "31", "custom"]).optional(),
+});
+
+// Output type (after transformation/coercion)
+export type ExpenseInput = z.infer<typeof expenseSchema>;
+// Input type (before transformation - what forms send)
+export type ExpenseFormInput = z.input<typeof expenseSchema>;
