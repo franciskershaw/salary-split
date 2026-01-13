@@ -1,0 +1,84 @@
+// Response types - what the API returns (with _id, populated refs, timestamps)
+import type { AccountType, BillType, Currency } from "../constants";
+
+export interface AccountResponse {
+  _id: string;
+  name: string;
+  institution?: string;
+  amount: number;
+  acceptsFunds: boolean;
+  receivesSalary?: boolean;
+  type: AccountType;
+  targetMonthlyAmount?: {
+    amount: number;
+    splitBetween: number;
+  } | null;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface BillResponse {
+  _id: string;
+  name: string;
+  amount: number;
+  dueDate: string;
+  account: AccountResponse; // Populated reference
+  type: BillType;
+  splitBetween?: number;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface ExpenseResponse {
+  _id: string;
+  name: string;
+  amount: number;
+  dueDate: string;
+  account: AccountResponse; // Populated reference
+  type: BillType;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface SavingsResponse {
+  _id: string;
+  name: string;
+  amount: number;
+  dueDate: string;
+  account: AccountResponse; // Populated reference
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface AccountFilter {
+  type: AccountType;
+  enabled: boolean;
+}
+
+export interface BillFilter {
+  type: BillType;
+  enabled: boolean;
+}
+
+export interface UserResponse {
+  _id: string;
+  email: string;
+  name: {
+    firstName: string;
+    lastName: string;
+  };
+  role: "user" | "admin";
+  provider: "google" | "local";
+  googleId?: string;
+  takeHomePay: number;
+  payDay: string;
+  defaultCurrency: Currency;
+  defaultAccount?: string;
+  defaultTheme: "light" | "dark";
+  accountFilters: AccountFilter[];
+  billFilters: BillFilter[];
+  expenseFilters: BillFilter[];
+  createdAt: string;
+  updatedAt: string;
+  accessToken: string;
+}
