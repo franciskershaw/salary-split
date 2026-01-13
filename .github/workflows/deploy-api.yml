@@ -101,7 +101,6 @@ jobs:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_SSH_KEY }}
-          script_stop: true
           timeout: 2m
           script: |
             echo "🔧 Starting nginx configuration..."
@@ -141,23 +140,19 @@ jobs:
             echo "♻️ Reloading nginx..."
             sudo systemctl reload nginx
 
-      - name: Deploy Docker Container (Blue-Green)
-        id: deploy
+      - name: Deploy Docker Container
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_SSH_KEY }}
-          script_stop: true
           timeout: 5m
           script: |
-            echo "🚀 Starting deployment..."
+            echo "🚀 Deploying Docker container..."
 
-            # Keep old container as backup
-            if docker ps -a | grep -q "${{ env.CONTAINER_NAME }}$"; then
-              echo "📦 Renaming old container to backup..."
-              docker rename ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}-backup || true
-            fi
+            echo "🧹 Cleaning up existing containers..."
+            docker stop ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}-new || true
+            docker rm ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}-new || true
 
             echo "⬇️ Pulling latest image..."
             docker pull ${{ env.DOCKER_IMAGE }}:latest
@@ -192,19 +187,14 @@ jobs:
             fi
 
       - name: Health Check
-        id: health_check
         uses: appleboy/ssh-action@master
-        continue-on-error: true
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_SSH_KEY }}
-          script_stop: true
-          timeout: 2m
           script: |
-            echo "🏥 Running health checks..."
             HEALTH_CHECK_ATTEMPTS=0
-            MAX_ATTEMPTS=20
+            MAX_ATTEMPTS=10
 
             until [ $HEALTH_CHECK_ATTEMPTS -eq $MAX_ATTEMPTS ] || curl -sf http://localhost:${{ env.PORT }} > /dev/null; do
               echo "Attempt $((HEALTH_CHECK_ATTEMPTS + 1))/$MAX_ATTEMPTS"
@@ -213,78 +203,26 @@ jobs:
             done
 
             if [ $HEALTH_CHECK_ATTEMPTS -eq $MAX_ATTEMPTS ]; then
-              echo "❌ Health check failed after $MAX_ATTEMPTS attempts"
+              echo "Health check failed"
               docker logs ${{ env.CONTAINER_NAME }}-new
               exit 1
             fi
 
-            echo "✅ Container is healthy!"
-
-      - name: Finalize Deployment
-        if: steps.health_check.outcome == 'success'
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USERNAME }}
-          key: ${{ secrets.DO_SSH_KEY }}
-          script: |
-            echo "✅ Finalizing deployment..."
-            
-            # Stop and remove backup container
-            if docker ps -a | grep -q "${{ env.CONTAINER_NAME }}-backup"; then
-              docker stop ${{ env.CONTAINER_NAME }}-backup || true
-              docker rm ${{ env.CONTAINER_NAME }}-backup || true
-            fi
-
-            # Promote new container to production
+            echo "Container healthy, finalizing deployment..."
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
             docker rename ${{ env.CONTAINER_NAME }}-new ${{ env.CONTAINER_NAME }}
-            
-            echo "🎉 Deployment complete!"
 
-      - name: Rollback on Failure
-        if: steps.health_check.outcome == 'failure'
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USERNAME }}
-          key: ${{ secrets.DO_SSH_KEY }}
-          script: |
-            echo "⚠️ INITIATING ROLLBACK..."
-            
-            # Stop and remove failed container
-            docker stop ${{ env.CONTAINER_NAME }}-new || true
-            docker rm ${{ env.CONTAINER_NAME }}-new || true
-            
-            # Restore backup if it exists
-            if docker ps -a | grep -q "${{ env.CONTAINER_NAME }}-backup"; then
-              echo "♻️ Restoring previous version..."
-              docker rename ${{ env.CONTAINER_NAME }}-backup ${{ env.CONTAINER_NAME }}
-              
-              # Start the backup container if it's not running
-              if ! docker ps | grep -q "${{ env.CONTAINER_NAME }}$"; then
-                docker start ${{ env.CONTAINER_NAME }}
-              fi
-              
-              echo "✅ Rollback complete - previous version restored"
-            else
-              echo "⚠️ No backup container found"
-            fi
-
-      - name: Deployment Summary
-        if: always()
+      - name: Update Job Summary
+        if: success()
         run: |
-          if [ "${{ steps.health_check.outcome }}" == "success" ]; then
-            echo "### ✅ API Deployment Successful" >> $GITHUB_STEP_SUMMARY
-            echo "- **Environment**: Production" >> $GITHUB_STEP_SUMMARY
-            echo "- **URL**: https://${{ env.DOMAIN }}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Container**: \`${{ env.CONTAINER_NAME }}\`" >> $GITHUB_STEP_SUMMARY
-            echo "- **Image**: \`${{ env.DOCKER_IMAGE }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "### ❌ API Deployment Failed" >> $GITHUB_STEP_SUMMARY
-            echo "- **Status**: Rolled back to previous version" >> $GITHUB_STEP_SUMMARY
-            echo "- **Action**: Check logs and retry deployment" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "### Deployment Complete :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment: Production" >> $GITHUB_STEP_SUMMARY
+          echo "- URL: https://${{ env.DOMAIN }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Container: ${{ env.CONTAINER_NAME }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: Fail workflow if health check failed
-        if: steps.health_check.outcome == 'failure'
-        run: exit 1
+      - name: Update Job Summary on Failure
+        if: failure()
+        run: |
+          echo "### Deployment Failed :x:" >> $GITHUB_STEP_SUMMARY
+          echo "Please check the logs for more details." >> $GITHUB_STEP_SUMMARY
