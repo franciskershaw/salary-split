@@ -47,8 +47,9 @@ RUN apk --no-cache add curl
 # Copy built files from builder
 COPY --from=builder /usr/src/app/apps/api/dist ./apps/api/dist
 
-# Copy shared package source (needed at runtime since it's TypeScript, not compiled)
-COPY --from=builder /usr/src/app/packages/shared ./packages/shared
+# Copy compiled shared package (JavaScript, not TypeScript source)
+COPY --from=builder /usr/src/app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /usr/src/app/packages/shared/package.json ./packages/shared/
 
 # Expose API port
 EXPOSE 5300
