@@ -1,6 +1,6 @@
 {
-  "buildCommand": "cd ../.. && npm run build:frontend",
-  "installCommand": "cd ../.. && rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm install",
+  "buildCommand": "cd ../.. && pnpm install && pnpm run build:frontend",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": null,
   "rewrites": [
     {
