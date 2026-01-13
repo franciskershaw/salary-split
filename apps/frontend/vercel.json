@@ -1,4 +1,7 @@
 {
+  "buildCommand": "cd ../.. && npm run build:frontend",
+  "installCommand": "cd ../.. && npm install",
+  "framework": null,
   "rewrites": [
     {
       "source": "/(.*)",
