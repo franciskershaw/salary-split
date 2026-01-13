@@ -33,17 +33,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Tag current production as previous (rollback point)
+      - name: Tag current production as previous
         id: backup
         continue-on-error: true
         run: |
           if docker pull ${{ env.DOCKER_IMAGE }}:latest; then
-            echo "✅ Previous version exists, creating backup tag"
+            echo "Previous version exists, creating backup tag"
             docker tag ${{ env.DOCKER_IMAGE }}:latest ${{ env.DOCKER_IMAGE }}:previous
             docker push ${{ env.DOCKER_IMAGE }}:previous
             echo "available=true" >> $GITHUB_OUTPUT
           else
-            echo "⚠️ No previous version found, skipping backup"
+            echo "No previous version found, skipping backup"
             echo "available=false" >> $GITHUB_OUTPUT
           fi
 
@@ -65,10 +65,10 @@ jobs:
 
       - name: Build Summary
         run: |
-          echo "### 🐳 Build Complete" >> $GITHUB_STEP_SUMMARY
-          echo "- **Image**: \`${{ env.DOCKER_IMAGE }}:latest\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **SHA**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Rollback Available**: ${{ steps.backup.outputs.available }}" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Complete :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: ${{ env.DOCKER_IMAGE }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "- SHA: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Rollback Available: ${{ steps.backup.outputs.available }}" >> $GITHUB_STEP_SUMMARY
 
   deploy:
     needs: build
@@ -77,8 +77,8 @@ jobs:
       name: Production
       url: https://${{ env.DOMAIN }}
     concurrency:
-      group: production-api
-      cancel-in-progress: false
+      group: production_environment
+      cancel-in-progress: true
 
     steps:
       - name: Checkout code
@@ -103,41 +103,44 @@ jobs:
           key: ${{ secrets.DO_SSH_KEY }}
           timeout: 2m
           script: |
-            echo "🔧 Starting nginx configuration..."
+            echo "Starting nginx configuration..."
             SITE_CONFIG="${{ env.NGINX_PATH }}/${{ env.DOMAIN }}"
 
+            # Check existing configuration
             if [ -f "$SITE_CONFIG" ]; then
+              echo "Checking existing nginx configuration..."
               if grep -q "ssl_certificate" "$SITE_CONFIG"; then
-                echo "✅ SSL configuration exists, preserving current nginx config"
+                echo "SSL configuration exists, preserving current nginx config"
                 exit 0
               fi
             fi
 
-            echo "📝 Setting up new nginx config..."
+            echo "Setting up new nginx config..."
             NGINX_SOURCE="/home/${{ secrets.DO_USERNAME }}/nginx/salary-split-api.conf"
-            
             if [ ! -f "$NGINX_SOURCE" ]; then
-              echo "❌ Error: nginx configuration file not found"
+              echo "Error: nginx configuration file not found"
               exit 1
             fi
 
+            # Move configuration file
             sudo mv "$NGINX_SOURCE" "$SITE_CONFIG"
             sudo ln -sf "$SITE_CONFIG" "/etc/nginx/sites-enabled/"
 
-            echo "🧪 Testing nginx configuration..."
+            # Verify nginx configuration
+            echo "Testing nginx configuration..."
             sudo nginx -t
 
+            # Setup SSL if needed
             if [ ! -f "/etc/letsencrypt/live/${{ env.DOMAIN }}/fullchain.pem" ]; then
-              echo "🔒 Setting up SSL certificate..."
+              echo "Setting up SSL certificate..."
               sudo certbot --nginx -d ${{ env.DOMAIN }} \
-                --nginx-server-root /etc/nginx/ \
-                --non-interactive \
-                --agree-tos \
-                --email ${{ secrets.CERTBOT_EMAIL }} \
-                --redirect
+              --nginx-server-root /etc/nginx/ \
+              --non-interactive \
+              --agree-tos \
+              --email ${{ secrets.CERTBOT_EMAIL }} \
+              --redirect
             fi
-            
-            echo "♻️ Reloading nginx..."
+            echo "Reloading nginx..."
             sudo systemctl reload nginx
 
       - name: Deploy Docker Container
@@ -148,16 +151,16 @@ jobs:
           key: ${{ secrets.DO_SSH_KEY }}
           timeout: 5m
           script: |
-            echo "🚀 Deploying Docker container..."
+            echo "Deploying Docker container..."
 
-            echo "🧹 Cleaning up existing containers..."
+            echo "Cleaning up existing containers..."
             docker stop ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}-new || true
             docker rm ${{ env.CONTAINER_NAME }} ${{ env.CONTAINER_NAME }}-new || true
 
-            echo "⬇️ Pulling latest image..."
+            echo "Pulling latest image..."
             docker pull ${{ env.DOCKER_IMAGE }}:latest
 
-            echo "🆕 Starting new container..."
+            echo "Starting new container..."
             docker run -d \
               --name ${{ env.CONTAINER_NAME }}-new \
               --restart unless-stopped \
@@ -177,11 +180,10 @@ jobs:
               -e GOOGLE_REDIRECT_URI='${{ secrets.GOOGLE_REDIRECT_URI }}' \
               ${{ env.DOCKER_IMAGE }}:latest
 
-            echo "⏳ Waiting for container to start..."
             sleep 15
 
             if ! docker ps | grep -q "${{ env.CONTAINER_NAME }}-new"; then
-              echo "❌ Container failed to start"
+              echo "Container failed to start"
               docker logs ${{ env.CONTAINER_NAME }}-new
               exit 1
             fi
