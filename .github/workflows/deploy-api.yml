@@ -1,7 +1,12 @@
 name: Deploy API to Digital Ocean
 
 on:
-  workflow_call:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api/**'
+      - 'packages/shared/**'
+      - '.github/workflows/deploy-api.yml'
   workflow_dispatch:
 
 env:
