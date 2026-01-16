@@ -1,8 +1,10 @@
-# SalarySplit - Version 2
+# SalarySplit
 
 SalarySplit is a personal side project that helps me work out what to do with my money each month. I had found that I was constantly doing lots of maths every time I got paid, working out how much money needed to be sent to each bank and savings account depending on which bills were coming out and how much I was planning on saving. Most of the time, I'd forget some big expense I should've factored in which would ruin my plans to save each month, so it became clear I could benefit from some way of tracking all of this information, and the idea for this application was born! The site provides the functionality to manually track bank accounts, and linking these accounts to bills, expenses, and monthly savings goals in order to summarise in great detail how your salary should be split (hence the name!) between your various accounts each time you get paid.
 
-This repository is the frontend layer of the full stack application, written in React/Typescript and deployed to Vercel. The API layer is stored in [this repository](https://github.com/franciskershaw/salary-split-api), which serves data stored in a Mongo database hosted in Atlas through an ExpressJS REST API, also written in Typescript. The live website can be accessed [here](https://www.salarysplit.co.uk/) for free, with user account creation available through an email address and password or a google account. 
+A full stack application, I previously kept the frontend and backend in separate repositories to simplify my deployment process. However, I've worked to combine these two layers in order to streamline the development of future features and combine shared schemas, constants, and types across projects. As such, this repo contains a frontend project written in React/Typescript and deployed to Vercel, while the API layer is Hono app recently ported from Express.JS, serving data stored in a Mongo database hosted in Atlas.
+
+The live website can be accessed [here](https://www.salarysplit.co.uk/) for free, with user account creation available through an email address and password or a google account.
 
 ## Table of Contents
 
@@ -30,27 +32,30 @@ This repository is the frontend layer of the full stack application, written in 
 
 ## Tech Stack
 
-- **Frontend**: React 19, TypeScript, Vite
-- **Styling**: Tailwind CSS 4, ShadCN components
-- **State Management**: TanStack Query (React Query) and React Context
-- **Forms**: React Hook Form with Zod validation
-- **Routing**: React Router DOM
-- **Icons**: Lucide React, React Icons
-- **Animations**: Framer Motion
-- **HTTP Client**: Axios
-- **Theme**: Next-themes
-- **Notifications**: Sonner
+### Frontend
 
-## Project Structure
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS 4,
+- ShadCN components
+- TanStack Query
+- React Hook Form
+- Zod
+- React Router DOM
+- Lucide React, React Icons
+- Framer Motion
+- Axios
+- Next-themes
+- Sonner
 
-The application follows a feature-based architecture with clear separation of concerns:
+### Backend
 
-- **Components**: Reusable UI components and layout elements
-- **Pages**: Main application views (Dashboard, Accounts, Bills, etc.) and their page-specific components and hooks
-- **Types**: TypeScript type definitions
-- **Hooks**: Global custom React hooks for data fetching and state management, for use across several parts of the site
-- **Constants**: Application constants and configuration
-- **Lib**: Utility functions and helpers
+- Hono
+- Typescript
+- MongoDB / Mongoose
+- Zod
+- Docker
 
 ## Key Features Explained
 
