@@ -72,10 +72,10 @@ This is a monorepo containing:
 
 - `apps/frontend/` - React frontend application (deployed to Vercel)
 - `apps/api/` - Hono backend API (deployed via Docker)
-- `packages/shared/` - Shared TypeScript types, schemas, and constants
+- `packages/shared/src/` - Shared TypeScript types, schemas, and constants (source files only)
 - `scripts/` - Build and development utility scripts
 
-The shared package ensures type safety across frontend and backend by providing a single source of truth for data models and validation schemas.
+The shared package provides a single source of truth for data models and validation schemas. Source files are automatically synced to both frontend and API during development and build processes.
 
 ## Local Development
 
@@ -100,7 +100,7 @@ cd salary-split
 npm install
 ```
 
-This will install dependencies for the root project, frontend, API, and shared package.
+This will install dependencies for the root project, frontend, and API.
 
 3. Set up environment variables:
 
