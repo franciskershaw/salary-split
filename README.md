@@ -8,13 +8,20 @@ The live website can be accessed [here](https://www.salarysplit.co.uk/) for free
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
+- [Local Development](#local-development)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Project](#running-the-project)
+  - [Building for Production](#building-for-production)
 - [Key Features Explained](#key-features-explained)
+  - [Dashboard](#dashboard)
+  - [Accounts Page](#accounts-page)
+  - [Bills, Expenses, Savings Pages](#bills-expenses-savings-pages)
 - [Authentication](#authentication)
-- [Data Management](#data-management)
+- [Data and State Management](#data-and-state-management)
 - [Deployment](#deployment)
 
 ## Features
@@ -37,7 +44,7 @@ The live website can be accessed [here](https://www.salarysplit.co.uk/) for free
 - React 19
 - TypeScript
 - Vite
-- Tailwind CSS 4,
+- Tailwind CSS 4
 - ShadCN components
 - TanStack Query
 - React Hook Form
@@ -51,11 +58,123 @@ The live website can be accessed [here](https://www.salarysplit.co.uk/) for free
 
 ### Backend
 
-- Hono
-- Typescript
-- MongoDB / Mongoose
-- Zod
-- Docker
+- Hono (Node.js web framework)
+- TypeScript
+- MongoDB with Mongoose ODM
+- Zod for validation
+- Docker for containerization
+- JWT for authentication
+- bcrypt for password hashing
+
+## Project Structure
+
+This is a monorepo containing:
+
+- `apps/frontend/` - React frontend application (deployed to Vercel)
+- `apps/api/` - Hono backend API (deployed via Docker)
+- `packages/shared/` - Shared TypeScript types, schemas, and constants
+- `scripts/` - Build and development utility scripts
+
+The shared package ensures type safety across frontend and backend by providing a single source of truth for data models and validation schemas.
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 20+ and npm
+- MongoDB (local installation or MongoDB Atlas account)
+- Git
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/salary-split.git
+cd salary-split
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+This will install dependencies for the root project, frontend, API, and shared package.
+
+3. Set up environment variables:
+
+Create a `.env` file in `apps/api/`:
+
+```env
+PORT=5300
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+FRONTEND_URL=http://localhost:5173
+```
+
+Create a `.env.local` file in `apps/frontend/`:
+
+```env
+VITE_API_URL=http://localhost:5300
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
+```
+
+### Running the Project
+
+#### Run Both Frontend and Backend Simultaneously
+
+From the root directory:
+
+```bash
+npm run dev
+```
+
+This will:
+
+- Sync shared schemas/types
+- Start the API server on `http://localhost:5300`
+- Start the frontend dev server on `http://localhost:5173`
+
+#### Run Services Individually
+
+**Backend only:**
+
+```bash
+npm run dev:api
+# or
+cd apps/api && npm run dev
+```
+
+**Frontend only:**
+
+```bash
+npm run dev:frontend
+# or
+cd apps/frontend && npm run dev
+```
+
+**Sync shared package:**
+
+```bash
+npm run sync:shared
+```
+
+### Building for Production
+
+**Frontend:**
+
+```bash
+npm run build:frontend
+```
+
+**Backend:**
+
+```bash
+npm run build:api
+```
 
 ## Key Features Explained
 
@@ -81,7 +200,7 @@ Using the account categories that I've included in the project (current, savings
 
 This page is where you can add and manage bank accounts. Optionally store the amount that is on the account. This is a manual process and doesn't factor into the core salary splitting functionality, but it's useful in terms of tracking totals across the categories I've included in the project (current, savings, joint, investment).
 
-There must always be one 'default' account, which will automatically be attributed to the first account you create, although you can change this later on to another account if you like. This default account is where any leftover balance on your takehome salary is automatically allocated to as spending money on the summary page. Each account has a toggle for whether it can directly receive funds, which essentially means it can be transferred to directly via the account that has your salary in it - as opposed to through another account. This mostly for when you have savings accounts that don't have bank details you can send to through online banking.
+There must always be one 'default' account, which will automatically be attributed to the first account you create, although you can change this later on to another account if you like. This default account is where any leftover balance on your takehome salary is automatically allocated to as spending money on the summary page. Each account has a toggle for whether it can directly receive funds, which essentially means it can be transferred to directly via the account that has your salary in it - as opposed to through another account. This is mostly for when you have savings accounts that don't have bank details you can send to through online banking.
 
 A target amount can be attributed to an account, which essentially allows that account to always reach a specified value on a given month in the allocation summary regardless of what bills and savings are being added in. This is especially useful if you don't want to pay in the exact total based on bills, but rather add in a buffer that goes above the amount required by bills. My personal use case is with my partner on our joint account, so that the amount I'm being told to pay in matches the rounded amount we've agreed to go over the total of our bills
 
@@ -89,7 +208,7 @@ The user can reorder the accounts in order of their own preference and filter th
 
 ### Bills, Expenses, Savings pages
 
-These three pages all follow almost exactly the same pattern an structure as each other, which in turn is not too disimilar to the style laid out in the accounts page. The user stores a bill, expense, or saving, and links it to a bank account so that the summary will correctly factor it into the breakdown. These three features also allow the individual items in question to be split between more than 1 person so that the user is only paying their portion of a bill each month. As with accounts, the user can reorder all of these by their preference and filter the totals based on categories.
+These three pages all follow almost exactly the same pattern and structure as each other, which in turn is not too dissimilar to the style laid out in the accounts page. The user stores a bill, expense, or saving, and links it to a bank account so that the summary will correctly factor it into the breakdown. These three features also allow the individual items in question to be split between more than 1 person so that the user is only paying their portion of a bill each month. As with accounts, the user can reorder all of these by their preference and filter the totals based on categories.
 
 ## Authentication
 
