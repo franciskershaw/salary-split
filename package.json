@@ -1,23 +1,16 @@
 {
-  "name": "salary-split-monorepo",
+  "name": "salary-split-dev",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend:wait\" --names \"api,frontend\" --prefix-colors \"blue,magenta\" --kill-others",
-    "dev:api": "npm run dev --workspace=api",
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:frontend:wait": "wait-on http://localhost:5300 && npm run dev:frontend",
-    "build": "npm run build:shared && npm run build --workspaces --if-present",
-    "build:shared": "npm run build --workspace=@salary-split/shared",
-    "build:api": "npm run build:shared && npm run build --workspace=api",
-    "build:frontend": "npm run build:shared && npm run build --workspace=frontend",
-    "lint": "npm run lint --workspaces --if-present",
+    "sync:shared": "node scripts/sync-shared.js",
+    "dev": "npm run sync:shared && concurrently \"npm run dev:api\" \"npm run dev:frontend\" --names \"api,frontend\" --prefix-colors \"blue,magenta\" --kill-others",
+    "dev:api": "npm run dev --prefix apps/api",
+    "dev:frontend": "wait-on http://localhost:5300 && npm run dev --prefix apps/frontend",
+    "build:frontend": "npm run sync:shared && npm run build --prefix apps/frontend",
+    "build:api": "npm run sync:shared && npm run build --prefix apps/api",
     "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx,json,css,md}\"",
-    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules"
+    "prepare": "node scripts/setup-hooks.js || true"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",

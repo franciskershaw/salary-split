@@ -1,5 +1,5 @@
 // Re-export shared constants
-export * from "@salary-split/shared";
+export * from "../../shared";
 
 // Passport
 export const GOOGLE_PROVIDER = "google";

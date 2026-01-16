@@ -1,2 +1,2 @@
 // Re-export from shared package - single source of truth
-export { billSchema, type BillInput } from "@salary-split/shared";
+export { billSchema, type BillInput } from "../../../shared";

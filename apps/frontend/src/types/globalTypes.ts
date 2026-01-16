@@ -15,7 +15,7 @@ export type {
   AccountFilter,
   BillFilter,
   Currency,
-} from "@salary-split/shared";
+} from "@/shared";
 
 export type Feature =
   | typeof FEATURE_ACCOUNTS
