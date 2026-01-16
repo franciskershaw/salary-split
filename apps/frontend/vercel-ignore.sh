@@ -25,7 +25,7 @@ echo "$CHANGED_FILES"
 
 # Check if any frontend or shared files changed
 # Use patterns that work from any directory in the monorepo
-if echo "$CHANGED_FILES" | grep -qE '(^apps/frontend/|^packages/shared/)'; then
+if echo "$CHANGED_FILES" | grep -qE '(^apps/frontend/|^shared/)'; then
   echo "✅ Frontend or shared changes detected - BUILDING"
   exit 1
 else

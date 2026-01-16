@@ -72,10 +72,10 @@ This is a monorepo containing:
 
 - `apps/frontend/` - React frontend application (deployed to Vercel)
 - `apps/api/` - Hono backend API (deployed via Docker)
-- `packages/shared/src/` - Shared TypeScript types, schemas, and constants (source files only)
+- `shared/` - Shared TypeScript types, schemas, and constants
 - `scripts/` - Build and development utility scripts
 
-The shared package provides a single source of truth for data models and validation schemas. Source files are automatically synced to both frontend and API during development and build processes.
+The shared directory provides a single source of truth for data models and validation schemas. Source files are automatically synced to both frontend and API during development and build processes.
 
 ## Local Development
 
