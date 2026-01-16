@@ -1,13 +1,12 @@
 import { useCallback, useEffect } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
-// import { BILL_TYPES } from "@/constants/api";
 import { SAVINGS_FORM_ID } from "@/constants/features";
+import { resolver } from "@/lib/utils";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
@@ -32,7 +31,7 @@ const CreateSavingsForm = ({ onSuccess, savings }: CreateSavingsFormProps) => {
   ];
 
   const form = useForm<SavingsFormValues>({
-    resolver: zodResolver(savingsFormSchema),
+    resolver: resolver(savingsFormSchema),
     defaultValues: {
       _id: savings?._id,
       name: savings?.name ?? "",

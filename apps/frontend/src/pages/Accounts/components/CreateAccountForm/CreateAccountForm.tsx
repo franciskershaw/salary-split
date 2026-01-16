@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Form, FormInput } from "@/components/ui/form";
@@ -10,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { ACCOUNT_TYPES } from "@/constants/api";
 import { ACCOUNT_FORM_ID } from "@/constants/features";
 import useUser from "@/hooks/user/useUser";
+import { resolver } from "@/lib/utils";
 import type { Account } from "@/types/globalTypes";
 
 import useAddAccount from "../../hooks/useAddAccount";
@@ -39,7 +39,7 @@ const CreateAccountForm = ({ onSuccess, account }: CreateAccountFormProps) => {
   );
 
   const form = useForm<AccountFormValues>({
-    resolver: zodResolver(accountFormSchema),
+    resolver: resolver(accountFormSchema),
     defaultValues: {
       _id: account?._id,
       name: account?.name ?? "",

@@ -1,4 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { MoonIcon, UserIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CURRENCIES } from "@/constants/api";
 import { useTheme } from "@/contexts/Theme/ThemeContext";
 import useUser from "@/hooks/user/useUser";
+import { resolver } from "@/lib/utils";
 
 import useUpdateTheme from "./hooks/useUpdateTheme";
 import useUpdateUser from "./hooks/useUpdateUser";
@@ -40,7 +40,7 @@ const Settings = () => {
   const { updateUser, isPending } = useUpdateUser();
   const { updateTheme, isPending: isUpdatingTheme } = useUpdateTheme();
   const form = useForm<UserFormValues>({
-    resolver: zodResolver(userFormSchema),
+    resolver: resolver(userFormSchema),
     defaultValues: {
       firstName: user?.name.firstName ?? "",
       lastName: user?.name.lastName ?? "",

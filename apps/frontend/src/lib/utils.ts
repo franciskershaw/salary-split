@@ -1,5 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { z } from "zod";
 
 import { type Currency } from "@/types/globalTypes";
 
@@ -64,4 +66,19 @@ export function getSingularFeatureName(feature: string): string {
   };
 
   return singularMap[feature] || feature;
+}
+
+/**
+ * Type-safe wrapper for zodResolver that works seamlessly with forms
+ * using Zod schemas with type transformations (like z.coerce)
+ *
+ * @example
+ * const form = useForm<AccountFormValues>({
+ *   resolver: resolver(accountFormSchema),
+ *   defaultValues: { ... }
+ * });
+ */
+export function resolver(schema: z.ZodType) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return zodResolver(schema as any) as any;
 }

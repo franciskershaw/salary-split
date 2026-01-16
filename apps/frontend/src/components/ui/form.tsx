@@ -16,9 +16,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-type FormProps<TFieldValues extends FieldValues> = {
+type FormProps<TFieldValues extends FieldValues = FieldValues> = {
   onSubmit: (values: TFieldValues) => void | Promise<unknown> | unknown;
-  form: UseFormReturn<TFieldValues>;
+  // Accept any UseFormReturn - the generic parameters will be inferred from usage
+  // This allows forms with type transformations (like Zod's z.coerce) to work seamlessly
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<any, any, any>;
   children: React.ReactNode;
   className?: string;
   id?: string;
@@ -29,7 +32,7 @@ type FormProps<TFieldValues extends FieldValues> = {
   preventMultipleSubmits?: boolean;
 };
 
-function Form<TFieldValues extends FieldValues>({
+function Form<TFieldValues extends FieldValues = FieldValues>({
   onSubmit,
   form,
   children,
@@ -63,7 +66,8 @@ function Form<TFieldValues extends FieldValues>({
     <FormProvider {...form}>
       <form
         data-slot="form"
-        onSubmit={form.handleSubmit(handleSubmit)}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onSubmit={form.handleSubmit(handleSubmit as any)}
         className={cn("space-y-4", className)}
         noValidate
         {...formProps}

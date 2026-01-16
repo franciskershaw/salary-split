@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Form, FormInput } from "@/components/ui/form";
@@ -8,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { FormSelect } from "@/components/ui/select";
 import { BILL_TYPES } from "@/constants/api";
 import { EXPENSE_FORM_ID } from "@/constants/features";
+import { resolver } from "@/lib/utils";
 import type { Bill } from "@/types/globalTypes";
 
 import useGetAccounts from "../../../Accounts/hooks/useGetAccounts";
@@ -46,7 +46,7 @@ const CreateExpenseForm = ({ onSuccess, expense }: CreateExpenseFormProps) => {
   ];
 
   const form = useForm<ExpenseFormValues>({
-    resolver: zodResolver(expenseFormSchema),
+    resolver: resolver(expenseFormSchema),
     defaultValues: {
       _id: expense?._id,
       name: expense?.name ?? "",

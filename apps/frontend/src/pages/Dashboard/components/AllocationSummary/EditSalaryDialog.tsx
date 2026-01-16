@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,6 +18,7 @@ import {
 import { Form, FormInput } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import { resolver } from "@/lib/utils";
 
 import useUpdateSalary from "../../hooks/useUpdateSalary";
 
@@ -38,7 +38,7 @@ const EditSalaryDialog = ({
   const [open, setOpen] = useState(false);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: resolver(formSchema),
     defaultValues: {
       salary: value,
     },
