@@ -25,7 +25,6 @@ export const createApp = () => {
   app.use(securityHeaders);
 
   // CORS middleware
-
   app.use(
     cors({
       origin: isNetworkDevelopmentMode

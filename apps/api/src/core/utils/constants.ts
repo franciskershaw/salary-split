@@ -1,10 +1,6 @@
 // Re-export shared constants
 export * from "../../shared";
 
-// Passport
-export const GOOGLE_PROVIDER = "google";
-export const LOCAL_PROVIDER = "local";
-
 // Cookie
 export const REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
 export const REFRESH_TOKEN_COOKIE_OPTIONS = {
