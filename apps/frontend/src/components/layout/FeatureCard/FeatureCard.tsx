@@ -121,7 +121,7 @@ export function FeatureCard({
   return (
     <>
       <Card className={cardClassName}>
-        <CardContent className="p-0 flex-grow flex flex-col">
+        <CardContent className="p-0 grow flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div
               className={cn(
@@ -133,7 +133,7 @@ export function FeatureCard({
             </div>
             {finalTopRightContent}
           </div>
-          <div className="flex-grow">
+          <div className="grow">
             <h3 className="font-medium">{title}</h3>
             {secondaryInfo && (
               <p className="text-muted-foreground text-sm mb-3">

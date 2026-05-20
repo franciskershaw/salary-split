@@ -79,9 +79,7 @@ const PageHeader = ({
           )}
         </div>
         {totalComponent && (
-          <div className="hidden lg:block lg:flex-shrink-0">
-            {totalComponent}
-          </div>
+          <div className="hidden lg:block lg:shrink-0">{totalComponent}</div>
         )}
       </div>
     </header>

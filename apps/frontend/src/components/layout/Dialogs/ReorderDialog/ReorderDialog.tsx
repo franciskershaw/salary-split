@@ -107,7 +107,7 @@ const ReorderDialog = ({
           </Reorder.Group>
         </div>
 
-        <DialogFooter className="flex-shrink-0 border-t pt-3 mt-2">
+        <DialogFooter className="shrink-0 border-t pt-3 mt-2">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>

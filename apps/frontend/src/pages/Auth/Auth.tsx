@@ -22,7 +22,7 @@ const FeatureItem = ({
   description: string;
 }) => (
   <div className="flex items-start gap-4">
-    <div className="flex-shrink-0">{icon}</div>
+    <div className="shrink-0">{icon}</div>
     <div>
       <h3 className="text-xl font-semibold mb-1">{title}</h3>
       <p className="text-muted-foreground">{description}</p>

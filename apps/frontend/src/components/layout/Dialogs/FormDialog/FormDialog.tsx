@@ -70,7 +70,7 @@ export function FormDialog<T>({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] flex flex-col">
-        <DialogHeader className="flex-shrink-0">
+        <DialogHeader className="shrink-0">
           <DialogTitle>{isEditing ? editTitle || title : title}</DialogTitle>
           <DialogDescription className="sr-only">
             {isEditing ? editDescription || description : description}
@@ -81,7 +81,7 @@ export function FormDialog<T>({
           <FormComponent {...item} onSuccess={handleSuccess} />
         </div>
 
-        <DialogFooter className="flex-shrink-0 border-t pt-3 mt-2">
+        <DialogFooter className="shrink-0 border-t pt-3 mt-2">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>

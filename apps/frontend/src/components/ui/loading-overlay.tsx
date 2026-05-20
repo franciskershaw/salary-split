@@ -36,7 +36,7 @@ export const LoadingOverlay = ({
         fullPage
           ? "fixed inset-0 z-50"
           : fixedInDialog
-            ? "fixed inset-0 z-[100]"
+            ? "fixed inset-0 z-100"
             : "absolute inset-0",
         className
       )}
